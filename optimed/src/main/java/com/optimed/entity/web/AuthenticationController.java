@@ -18,4 +18,6 @@ public class AuthenticationController {
     public ModelAndView register() {
         return new ModelAndView("auth/register");
     }
+
+
 }
