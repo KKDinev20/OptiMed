@@ -19,7 +19,7 @@
                                 <p class="mb-0">Enter your email and password to register</p>
                             </div>
                             <div class="card-body">
-                                <form role="form" th:method="POST" th:action="@{/register}" th:object="${registerRequest}">
+                                <form role="form" th:method="POST" th:action="@{/auth/register}" th:object="${registerRequest}">
                                     <div class="input-group input-group-outline mb-3">
                                         <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="danger"></p>
                                         <input type="text" class="form-control" th:field="*{username}" placeholder="Enter your name" required>

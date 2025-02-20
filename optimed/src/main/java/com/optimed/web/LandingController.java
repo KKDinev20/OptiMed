@@ -1,4 +1,4 @@
-package com.optimed.entity.web;
+package com.optimed.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.optimed.entity.web;
+package com.optimed.web;
 
 import com.optimed.dto.RegisterRequest;
 import com.optimed.service.UserService;
