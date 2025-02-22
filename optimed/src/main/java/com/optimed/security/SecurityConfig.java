@@ -5,11 +5,10 @@ import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -35,26 +34,23 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutRequestMatcher(new AntPathRequestMatcher ("/logout"))
+                        .logoutSuccessUrl("/auth/login?logout")
                         .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
-                ) .sessionManagement(session -> session
+                )
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                         .maximumSessions(1)
-                        .expiredUrl("/login?expired=true")
                         .maxSessionsPreventsLogin(true)
+                        .expiredUrl("/auth/login?expired=true")
                         .sessionRegistry(sessionRegistry())
                 );
 
         http.csrf(csrf -> csrf.disable());
 
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -65,6 +61,11 @@ public class SecurityConfig {
             if (authenticateUserRole (response, authorities)) return;
             response.sendRedirect("/");
         };
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     protected static boolean authenticateUserRole (HttpServletResponse response, Collection<? extends GrantedAuthority> authorities) throws IOException {
@@ -89,9 +90,6 @@ public class SecurityConfig {
         return false;
     }
 
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl ();
-    }
+
 
 }

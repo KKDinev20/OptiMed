@@ -17,22 +17,26 @@ public class AuthenticationController {
 
     private final UserService userService;
 
-
-
     @GetMapping("/login")
     public String login() {
         return "auth/login";
     }
 
+    @GetMapping("/logout")
+    public String logoutPage(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
+
     @GetMapping("/register")
     public ModelAndView register() {
         ModelAndView mav = new ModelAndView("auth/register");
-        mav.addObject("registerRequest", new RegisterRequest ());
+        mav.addObject("registerRequest", new RegisterRequest());
         return mav;
     }
 
     @PostMapping("/register")
-    public ModelAndView registerUser(@Valid @ModelAttribute("registerRequest") RegisterRequest userRegistrationDto,
+    public ModelAndView registerUser(@Valid @ModelAttribute("registerRequest") RegisterRequest registerRequest,
                                      BindingResult bindingResult,
                                      HttpSession session) {
         ModelAndView mav = new ModelAndView();
@@ -42,19 +46,15 @@ public class AuthenticationController {
             return mav;
         }
 
-        if (userService.findByUsername (userRegistrationDto.getUsername ()).isPresent ()) {
+        if (userService.findByUsername(registerRequest.getUsername()).isPresent()) {
             mav.setViewName("auth/register");
             mav.addObject("errorMessage", "Username already exists");
             return mav;
         }
 
-        userService.registerUser(userRegistrationDto);
-
-        session.setAttribute("currentUser", userRegistrationDto.getUsername());
-
+        userService.registerUser(registerRequest);
+        session.setAttribute("currentUser", registerRequest.getUsername());
         mav.setViewName("redirect:/dashboard");
         return mav;
     }
-
-
 }
