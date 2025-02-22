@@ -9,4 +9,6 @@ import java.util.*;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
+
+    List<User> findTop10ByOrderByIdDesc();
 }
