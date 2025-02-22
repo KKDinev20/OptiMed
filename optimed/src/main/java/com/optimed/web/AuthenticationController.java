@@ -20,12 +20,8 @@ public class AuthenticationController {
 
 
     @GetMapping("/login")
-    public ModelAndView login(@RequestParam(value = "error", required = false) String error) {
-        ModelAndView mav = new ModelAndView("auth/login");
-        if (error != null) {
-            mav.addObject("errorMessage", "Invalid username or password.");
-        }
-        return mav;
+    public String login() {
+        return "auth/login";
     }
 
     @GetMapping("/register")

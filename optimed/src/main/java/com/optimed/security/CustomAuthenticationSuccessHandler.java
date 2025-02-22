@@ -19,25 +19,13 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException {
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
         String redirectUrl = "/dashboard";
 
-        for (GrantedAuthority authority : authorities) {
-            String role = authority.getAuthority();
-            if (role.equals(Role.ADMIN.name())) {
-                redirectUrl = "/admin/dashboard";
-                break;
-            } else if (role.equals(Role.DOCTOR.name())) {
-                redirectUrl = "/doctor/dashboard";
-                break;
-            } else if (role.equals(Role.PATIENT.name())) {
-                redirectUrl = "/patient/dashboard";
-                break;
-            }
-        }
+        if (SecurityConfig.authenticateUserRole (response, authorities)) return;
 
         System.out.println("Redirecting user to: " + redirectUrl);
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);

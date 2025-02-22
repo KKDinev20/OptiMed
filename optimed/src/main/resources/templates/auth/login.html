@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form role="form" class="text-start" th:method="POST" th:action="@{/login}">
+                            <form role="form" class="text-start" th:action="@{/perform_login}" th:method="POST">
                                 <div class="input-group input-group-outline my-3">
                                     <input type="text" class="form-control" name="username" placeholder="Enter your username or email">
                                 </div>
@@ -41,6 +41,7 @@
                                     <input type="password" class="form-control" name="password" placeholder="Enter your password">
                                 </div>
                                 <div class="text-center">
+                                    <div th:if="${error}" class="alert alert-danger mt-3 text-bg-dark" th:text="${error}"></div>
                                     <button type="submit" class="btn btn-lg bg-gradient-dark btn-lg w-100 mt-4 mb-0">Sign In</button>
                                 </div>
                                 <p class="mt-4 text-sm text-center">

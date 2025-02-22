@@ -1,7 +1,10 @@
 package com.optimed.web;
 
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -10,8 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class PatientController {
 
     @GetMapping("/dashboard")
-    @PreAuthorize("hasRole('PATIENT')")
-    public ModelAndView dashboard() {
+    public ModelAndView dashboard(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null && auth.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            model.addAttribute("username", userDetails.getUsername());
+        }
         ModelAndView mav = new ModelAndView("patient/dashboard");
         return mav;
     }
