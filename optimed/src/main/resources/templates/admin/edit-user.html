@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{dashboard_fragments/head :: head}"></div>
+<body class="g-sidenav-show bg-gray-100">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2" id="sidenav-main">
+    <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+</aside>
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- Navbar -->
+    <div th:replace="~{admin/fragments/navbar :: navbar}"></div>
+    <!-- End Navbar -->
+    <div class="container-fluid py-2">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">Edit User</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <form th:action="@{/edit-user/{userId}(userId=${user.id})}"
+                              th:object="${user}"
+                              method="POST"
+                              class="needs-validation"
+                              novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Username</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="username"
+                                               th:field="*{username}"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Email</label>
+                                        <input type="email"
+                                               class="form-control"
+                                               name="email"
+                                               th:field="*{email}"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Role</label>
+                                        <select class="form-control"
+                                                name="role"
+                                                th:field="*{role}"
+                                                required>
+                                            <option th:value="PATIENT" th:text="${'Patient'}">Patient</option>
+                                            <option th:value="ADMIN" th:text="${'Admin'}">Admin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Password</label>
+                                        <input type="password"
+                                               class="form-control"
+                                               name="password"
+                                               placeholder="Leave empty if no change">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-sm bg-gradient-primary btn-lg w-100 my-4 mb-2">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
+</main>
+<!--   Core JS Files   -->
+<div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+</body>
+</html>
