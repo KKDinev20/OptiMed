@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-center align-content-center p-2" th:fragment="pagination">
+    <nav>
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${users.first} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/admin/manage-users(page=0, size=${users.size})}">
+                    <i class="material-symbols-rounded">first_page</i>
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${users.first} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/admin/manage-users(page=${users.number - 1}, size=${users.size})}">
+                    <i class="material-symbols-rounded">keyboard_arrow_left</i>
+                </a>
+            </li>
+
+            <th:block th:if="${users.totalPages > 0}">
+                <li class="page-item" th:classappend="${0 == users.number} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/admin/manage-users(page=0, size=${users.size})}" th:text="1"></a>
+                </li>
+
+                <li class="page-item disabled" th:if="${users.number > 2}">
+                    <span class="page-link">...</span>
+                </li>
+
+                <th:block th:each="i : ${#numbers.sequence(
+                    T(java.lang.Math).max(1, users.number - 1),
+                    T(java.lang.Math).min(users.totalPages - 2, users.number + 1)
+                )}">
+                    <li class="page-item" th:classappend="${i == users.number} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/admin/manage-users(page=${i}, size=${users.size})}"
+                           th:text="${i + 1}"></a>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <li class="page-item disabled" th:if="${users.number < users.totalPages - 3}">
+                <span class="page-link">...</span>
+            </li>
+
+            <li class="page-item" th:classappend="${users.totalPages - 1 == users.number} ? 'active' : ''">
+                <a class="page-link" th:href="@{/admin/manage-users(page=${users.totalPages - 1}, size=${users.size})}"
+                   th:text="${users.totalPages}"></a>
+            </li>
+            </th:block>
+
+            <li class="page-item" th:classappend="${users.last} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/admin/manage-users(page=${users.number + 1}, size=${users.size})}">
+                    <i class="material-symbols-rounded">keyboard_arrow_right</i>
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${users.last} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/admin/manage-users(page=${users.totalPages - 1}, size=${users.size})}">
+                    <i class="material-symbols-rounded">last_page</i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
