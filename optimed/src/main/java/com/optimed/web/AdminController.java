@@ -46,27 +46,29 @@ public class AdminController {
     }
 
     @GetMapping("/edit-user/{userId}")
-    public ModelAndView editUser (@PathVariable UUID userId, Model model) {
-        model.addAttribute ("currentPage", "Edit User");
-        model.addAttribute ("user", userService.getUserById (userId));
-        return new ModelAndView ("admin/edit-user");
+    public ModelAndView editUser(@PathVariable UUID userId, Model model) {
+        User user = userService.getUserById(userId);
+        model.addAttribute("currentPage", "Edit User");
+        model.addAttribute("user", user);
+        return new ModelAndView("admin/edit-user");
     }
 
     @PostMapping("/edit-user/{userId}")
-    public String updateUser (
+    public String updateUser(
             @PathVariable UUID userId,
             @Valid @ModelAttribute("user") UserRequest userRequest,
             BindingResult bindingResult,
             Model model) {
 
-        if (bindingResult.hasErrors ()) {
-            model.addAttribute ("errors", bindingResult.getAllErrors ());
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
             return "admin/edit-user";
         }
 
-        User updatedUser = userService.updateUser (userId, userRequest);
+        userService.updateUser(userId, userRequest);
         return "redirect:/admin/manage-users?updated=true";
     }
+
     /*@GetMapping("/manage-appointments")
     public ModelAndView manageAppointments(Model model) {
         model.addAttribute("currentPage", "Manage Appointments");

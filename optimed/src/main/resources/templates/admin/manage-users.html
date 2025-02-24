@@ -57,13 +57,7 @@
                                               th:text="${user.role}"></span>
                                     </td>
                                     <td class="align-middle text-center">
-                                        <a class="text-secondary font-weight-bold text-xs"
-                                           data-original-title="Edit user"
-                                           data-toggle="tooltip"
-                                           th:href="@{/edit-user/{userId}(userId=${user.id})}"
-                                           th:title="${'Edit user ' + user.username}">
-                                            Edit
-                                        </a>
+                                        <a th:href="@{/admin/edit-user/{userId}(userId=${user.id})}">Edit</a>
                                     </td>
                                 </tr>
                                 </tbody>

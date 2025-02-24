@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <div th:replace="~{dashboard_fragments/head :: head}"></div>
 <body class="g-sidenav-show bg-gray-100">
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2" id="sidenav-main">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
+       id="sidenav-main">
     <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 </aside>
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
-    <!-- Navbar -->
     <div th:replace="~{admin/fragments/navbar :: navbar}"></div>
-    <!-- End Navbar -->
     <div class="container-fluid py-2">
         <div class="row">
             <div class="col-12">
@@ -19,60 +18,39 @@
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
-                        <form th:action="@{/edit-user/{userId}(userId=${user.id})}"
-                              th:object="${user}"
-                              method="POST"
-                              class="needs-validation"
-                              novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-control-label">Username</label>
-                                        <input type="text"
-                                               class="form-control"
-                                               name="username"
-                                               th:field="*{username}"
-                                               required>
+                        <div class="table-responsive p-0">
+                            <form th:action="@{/admin/edit-user/{userId}(userId=${user.id})}" th:object="${user}" method="post">
+                                <div class="p-3">
+                                    <div class="input-group input-group-outline mb-3">
+                                        <input type="text" id="username" th:field="*{username}" class="form-control">
+                                        <small class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</small>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-control-label">Email</label>
-                                        <input type="email"
-                                               class="form-control"
-                                               name="email"
-                                               th:field="*{email}"
-                                               required>
+                                    <div class="input-group input-group-outline mb-3">
+                                        <input type="email" id="email" th:field="*{email}" class="form-control">
+                                        <small class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Username error</small>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-control-label">Role</label>
-                                        <select class="form-control"
-                                                name="role"
-                                                th:field="*{role}"
-                                                required>
-                                            <option th:value="PATIENT" th:text="${'Patient'}">Patient</option>
-                                            <option th:value="ADMIN" th:text="${'Admin'}">Admin</option>
+                                    <div class="input-group input-group-outline mb-3">
+                                        <select id="role" th:field="*{role}" class="form-control" >
+                                            <option value="">Select Role</option>
+                                            <option th:each="role : ${T(com.optimed.entity.enums.Role).values()}"
+                                                    th:value="${role}"
+                                                    th:text="${role}"
+                                                    th:selected="${role == user.role}">
+                                            </option>
+                                            <small class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Username error</small>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-control-label">Password</label>
-                                        <input type="password"
-                                               class="form-control"
-                                               name="password"
-                                               placeholder="Leave empty if no change">
+                                    <div class="input-group input-group-outline mb-3">
+                                        <label for="password" class="form-label">Password (Leave blank to keep current password)</label>
+                                        <input type="password" id="password" th:field="*{password}" class="form-control">
+                                        <small class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</small>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <button type="submit" class="btn btn-primary">Update User</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-sm bg-gradient-primary btn-lg w-100 my-4 mb-2">Update</button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -80,7 +58,6 @@
     </div>
     <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
 </main>
-<!--   Core JS Files   -->
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
 </body>
 </html>

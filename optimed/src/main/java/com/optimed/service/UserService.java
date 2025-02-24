@@ -11,9 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,18 +20,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> findByUsername (String username) {
+        return userRepository.findByUsername (username);
     }
 
-    public User registerUser(RegisterRequest registrationDto) {
-        User user = User.builder()
-                .username(registrationDto.getUsername())
-                .password(passwordEncoder.encode(registrationDto.getPassword()))
-                .email(registrationDto.getEmail())
-                .role(Role.PATIENT)
-                .build();
-        return userRepository.save(user);
+    public void registerUser (RegisterRequest registrationDto) {
+        User user = User.builder ()
+                .username (registrationDto.getUsername ())
+                .password (passwordEncoder.encode (registrationDto.getPassword ()))
+                .email (registrationDto.getEmail ())
+                .role (Role.PATIENT)
+                .build ();
+        userRepository.save (user);
     }
 
     public long countUsers () {
@@ -41,29 +39,31 @@ public class UserService {
     }
 
     public List<User> getRecentUsers () {
-        return userRepository.findTop10ByOrderByIdDesc();
+        return userRepository.findTop10ByOrderByIdDesc ();
     }
 
-    public User getUserById(UUID id) {
-        return userRepository.findById(id).orElse(null);
+    public User getUserById (UUID userId) {
+        return userRepository.findById (userId)
+                .orElseThrow (() -> new EntityNotFoundException ("User not found with ID: " + userId));
     }
 
-    public Page<User> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<User> getAllUsers (Pageable pageable) {
+        return userRepository.findAll (pageable);
     }
 
-    public User updateUser(UUID userId, UserRequest userRequest) {
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException ("User not found with ID: " + userId));
+    public User updateUser (UUID userId, UserRequest userRequest) {
+        User existingUser = userRepository.findById (userId)
+                .orElseThrow (() -> new EntityNotFoundException ("User not found with ID: " + userId));
 
-        existingUser.setUsername(userRequest.getUsername());
-        existingUser.setEmail(userRequest.getEmail());
-        existingUser.setRole(userRequest.getRole());
+        existingUser.setUsername (userRequest.getUsername ());
+        existingUser.setEmail (userRequest.getEmail ());
+        existingUser.setRole (userRequest.getRole ());
 
-        if (userRequest.getPassword() != null && !userRequest.getPassword().isEmpty()) {
-            existingUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        if (userRequest.getPassword () != null && !userRequest.getPassword ().isEmpty ()) {
+            existingUser.setPassword (passwordEncoder.encode (userRequest.getPassword ()));
         }
 
-        return userRepository.save(existingUser);
+        return userRepository.save (existingUser);
     }
+
 }
