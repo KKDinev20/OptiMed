@@ -69,11 +69,20 @@ public class AdminController {
         return "redirect:/admin/manage-users?updated=true";
     }
 
-    /*@GetMapping("/manage-appointments")
-    public ModelAndView manageAppointments(Model model) {
+    @GetMapping("/manage-appointments")
+    public ModelAndView manageAppointments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
         model.addAttribute("currentPage", "Manage Appointments");
-        model.addAttribute("appointments", appointmentService.getAllAppointments());
+        model.addAttribute("appointments", appointmentService.getAllAppointments(PageRequest.of (page, size)));
         return new ModelAndView("admin/manage-appointments");
-    }*/
+    }
+
+    @PostMapping("/delete-user/{userId}")
+    public String deleteUser(@PathVariable UUID userId) {
+        userService.deleteUser(userId);
+        return "redirect:/admin/manage-users";
+    }
 
 }

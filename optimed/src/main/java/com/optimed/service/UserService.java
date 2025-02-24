@@ -51,7 +51,7 @@ public class UserService {
         return userRepository.findAll (pageable);
     }
 
-    public User updateUser (UUID userId, UserRequest userRequest) {
+    public void updateUser (UUID userId, UserRequest userRequest) {
         User existingUser = userRepository.findById (userId)
                 .orElseThrow (() -> new EntityNotFoundException ("User not found with ID: " + userId));
 
@@ -63,7 +63,11 @@ public class UserService {
             existingUser.setPassword (passwordEncoder.encode (userRequest.getPassword ()));
         }
 
-        return userRepository.save (existingUser);
+        userRepository.save (existingUser);
     }
 
+
+    public void deleteUser(UUID userId) {
+        userRepository.deleteById(userId);
+    }
 }
