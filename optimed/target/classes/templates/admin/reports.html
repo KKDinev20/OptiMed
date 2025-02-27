@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<div th:replace="~{dashboard_fragments/head :: head}"></div>
+<body class="g-sidenav-show bg-gray-100">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
+       id="sidenav-main">
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+</aside>
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+  <div th:replace="~{admin/fragments/navbar :: navbar}"></div>
+  <div class="container-fluid py-2">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">System Analytics & Reports</h6>
+            </div>
+          </div>
+          <div class="card-body px-4 pb-4">
+            <div class="row">
+              <div class="col-lg-6 mb-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h6>User Registrations (Last 30 Days)</h6>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="userRegistrationsChart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 mb-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h6>Appointments Over Time</h6>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="appointmentsChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12 text-center">
+                <h6>Generate Reports</h6>
+                <a th:href="@{/admin/reports/export/csv}" class="btn btn-success mx-2">Download CSV</a>
+                <a th:href="@{/admin/reports/export/pdf}" class="btn btn-danger mx-2">Download PDF</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
+</main>
+<div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+  const userRegistrationsData = /*[[${userRegistrations}]]*/ {};
+  const ctxUsers = document.getElementById('userRegistrationsChart').getContext('2d');
+  new Chart(ctxUsers, {
+    type: 'line',
+    data: {
+      labels: Object.keys(userRegistrationsData),
+      datasets: [{
+        label: 'Users Registered',
+        data: Object.values(userRegistrationsData),
+        borderColor: 'blue',
+        backgroundColor: 'rgba(0, 0, 255, 0.2)',
+        fill: true
+      }]
+    }
+  });
+
+  const appointmentsData = /*[[${appointmentsOverTime}]]*/ {};
+  const ctxAppointments = document.getElementById('appointmentsChart').getContext('2d');
+  new Chart(ctxAppointments, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(appointmentsData),
+      datasets: [{
+        label: 'Appointments Booked',
+        data: Object.values(appointmentsData),
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'red',
+        borderWidth: 1
+      }]
+    }
+  });
+</script>
+</body>
+</html>

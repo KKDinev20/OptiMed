@@ -3,7 +3,10 @@ package com.optimed.entity;
 import com.optimed.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
@@ -28,4 +31,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @Column(nullable = false, updatable = false, columnDefinition = "timestamp default current_timestamp")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
 }
