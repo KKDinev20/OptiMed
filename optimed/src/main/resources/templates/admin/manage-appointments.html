@@ -1,13 +1,123 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <div th:replace="~{dashboard_fragments/head :: head}"></div>
-<body class="g-sidenav-show  bg-gray-100">
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2  bg-white my-2"
+<body class="g-sidenav-show bg-gray-100">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
        id="sidenav-main">
     <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 </aside>
-<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
     <div th:replace="~{admin/fragments/navbar :: navbar}"></div>
+    <div class="container-fluid py-2">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">Appointments</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <!-- Search Input -->
+                        <form th:action="@{/admin/manage-appointments}" method="get" class="p-3">
+                            <div class="input-group input-group-outline mb-3">
+                                <input type="text" name="filter" th:value="${filter}" class="form-control" placeholder="Search appointments...">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+
+                        <!-- Appointments Table -->
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Doctor
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Patient
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Appointment Date
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Status
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Actions
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="appointment : ${appointments.content}">
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div>
+                                                <img src="../assets/img/team-2.jpg"
+                                                     class="avatar avatar-sm me-3 border-radius-lg" alt="doctor">
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm" th:text="${appointment.doctor.username}">Dr. John Doe</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div>
+                                                <img src="../assets/img/team-3.jpg"
+                                                     class="avatar avatar-sm me-3 border-radius-lg" alt="patient">
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm" th:text="${appointment.patient.username}">Jane Smith</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold"
+                                              th:text="${#temporals.format(appointment.appointmentDate, 'dd/MM/yyyy HH:mm')}"></span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold"
+                                              th:text="${appointment.status}"></span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                <i class="material-symbols-rounded">more_vert</i>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       th:href="@{/admin/edit-appointment/{id}(id=${appointment.id})}">Edit</a>
+                                                </li>
+                                                <li>
+                                                    <form th:action="@{/admin/delete-appointment/{id}(id=${appointment.id})}" method="post">
+                                                        <button type="submit" class="dropdown-item">Delete</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       th:href="@{/admin/reschedule-appointment/{id}(id=${appointment.id})}">Reschedule</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                       th:href="@{/admin/cancel-appointment/{id}(id=${appointment.id})}">Cancel</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- <div th:replace="~{admin/fragments/pagination :: pagination}"></div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
 </main>
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>

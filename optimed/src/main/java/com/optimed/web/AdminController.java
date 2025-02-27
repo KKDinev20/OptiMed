@@ -1,6 +1,7 @@
 package com.optimed.web;
 
 import com.optimed.dto.UserRequest;
+import com.optimed.entity.Appointment;
 import com.optimed.entity.User;
 import com.optimed.service.*;
 import jakarta.validation.Valid;
@@ -29,6 +30,9 @@ public class AdminController {
         model.addAttribute ("currentPage", "Dashboard");
         model.addAttribute ("recentUsers", userService.getRecentUsers ());
         model.addAttribute ("totalAppointments", appointmentService.countAppointments ());
+
+
+
         return new ModelAndView ("admin/dashboard");
     }
 
@@ -46,43 +50,49 @@ public class AdminController {
     }
 
     @GetMapping("/edit-user/{userId}")
-    public ModelAndView editUser(@PathVariable UUID userId, Model model) {
-        User user = userService.getUserById(userId);
-        model.addAttribute("currentPage", "Edit User");
-        model.addAttribute("user", user);
-        return new ModelAndView("admin/edit-user");
+    public ModelAndView editUser (@PathVariable UUID userId, Model model) {
+        User user = userService.getUserById (userId);
+        model.addAttribute ("currentPage", "Edit User");
+        model.addAttribute ("user", user);
+        return new ModelAndView ("admin/edit-user");
     }
 
     @PostMapping("/edit-user/{userId}")
-    public String updateUser(
+    public String updateUser (
             @PathVariable UUID userId,
             @Valid @ModelAttribute("user") UserRequest userRequest,
             BindingResult bindingResult,
             Model model) {
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errors", bindingResult.getAllErrors());
+        if (bindingResult.hasErrors ()) {
+            model.addAttribute ("errors", bindingResult.getAllErrors ());
             return "admin/edit-user";
         }
 
-        userService.updateUser(userId, userRequest);
+        userService.updateUser (userId, userRequest);
         return "redirect:/admin/manage-users?updated=true";
     }
+
+
+    @PostMapping("/delete-user/{userId}")
+    public String deleteUser (@PathVariable UUID userId) {
+        userService.deleteUser (userId);
+        return "redirect:/admin/manage-users";
+    }
+
 
     @GetMapping("/manage-appointments")
     public ModelAndView manageAppointments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String filter,
             Model model) {
-        model.addAttribute("currentPage", "Manage Appointments");
-        model.addAttribute("appointments", appointmentService.getAllAppointments(PageRequest.of (page, size)));
+
+        Page<Appointment> appointments = appointmentService.getAllAppointments(filter, PageRequest.of(page, size));
+
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("filter", filter);
+
         return new ModelAndView("admin/manage-appointments");
     }
-
-    @PostMapping("/delete-user/{userId}")
-    public String deleteUser(@PathVariable UUID userId) {
-        userService.deleteUser(userId);
-        return "redirect:/admin/manage-users";
-    }
-
 }

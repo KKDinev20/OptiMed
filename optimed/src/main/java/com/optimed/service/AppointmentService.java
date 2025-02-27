@@ -1,10 +1,10 @@
 package com.optimed.service;
 
 import com.optimed.entity.Appointment;
+import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 
@@ -19,7 +19,11 @@ public class AppointmentService {
         return appointmentRepository.count();
     }
 
-    public Page<Appointment> getAllAppointments (Pageable pageable) {
+    public Page<Appointment> getAllAppointments(String filter, Pageable pageable) {
+        if (filter != null && !filter.isEmpty()) {
+            return appointmentRepository.findByDoctorNameContainingOrPatientNameContainingOrStatus(
+                    filter, AppointmentStatus.valueOf(filter), pageable);
+        }
         return appointmentRepository.findAll(pageable);
     }
 }
