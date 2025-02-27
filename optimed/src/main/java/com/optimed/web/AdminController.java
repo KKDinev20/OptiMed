@@ -7,6 +7,8 @@ import com.optimed.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +32,6 @@ public class AdminController {
         model.addAttribute ("currentPage", "Dashboard");
         model.addAttribute ("recentUsers", userService.getRecentUsers ());
         model.addAttribute ("totalAppointments", appointmentService.countAppointments ());
-
 
 
         return new ModelAndView ("admin/dashboard");
@@ -82,17 +83,60 @@ public class AdminController {
 
 
     @GetMapping("/manage-appointments")
-    public ModelAndView manageAppointments(
+    public ModelAndView manageAppointments (
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String filter,
             Model model) {
 
-        Page<Appointment> appointments = appointmentService.getAllAppointments(filter, PageRequest.of(page, size));
+        Page<Appointment> appointments = appointmentService.getAllAppointments (filter, PageRequest.of (page, size));
 
-        model.addAttribute("appointments", appointments);
-        model.addAttribute("filter", filter);
+        model.addAttribute ("appointments", appointments);
+        model.addAttribute ("filter", filter);
 
-        return new ModelAndView("admin/manage-appointments");
+        return new ModelAndView ("admin/manage-appointments");
     }
+
+    @GetMapping("/settings")
+    public String getSettingsPage (@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String username = userDetails.getUsername ();
+        User user = userService.findByUsername (username)
+                .orElseThrow (() -> new RuntimeException ("User not found"));
+
+        UserRequest userRequest = new UserRequest ();
+        userRequest.setUsername (user.getUsername ());
+        userRequest.setEmail (user.getEmail ());
+        userRequest.setRole (user.getRole ());
+        model.addAttribute ("userRequest", userRequest);
+        return "admin/settings";
+    }
+
+
+    @PostMapping("/settings")
+    public String updateUser (@AuthenticationPrincipal UserDetails userDetails,
+                              @Valid @ModelAttribute("userRequest") UserRequest userRequest,
+                              BindingResult bindingResult, Model model) {
+
+        System.out.println ("Submitted data:");
+        System.out.println ("Username: " + userRequest.getUsername ());
+        System.out.println ("Email: " + userRequest.getEmail ());
+        System.out.println ("Password: " + userRequest.getPassword ());
+        System.out.println ("Role: " + userRequest.getRole ());
+
+        if (bindingResult.hasErrors ()) {
+            model.addAttribute ("errors", bindingResult.getAllErrors ());
+            return "admin/settings";
+        }
+
+        String username = userDetails.getUsername ();
+        User user = userService.findByUsername (username)
+                .orElseThrow (() -> new RuntimeException ("User not found"));
+
+        userService.updateUser (user.getId (), userRequest);
+
+        return "redirect:/admin/dashboard";
+    }
+
+
 }
+
