@@ -4,23 +4,21 @@ import com.optimed.dto.RegisterRequest;
 import com.optimed.dto.UserRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.Role;
-import com.optimed.repository.UserRepository;
+import com.optimed.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
+    private final DoctorProfileRepository doctorProfileRepository;
+    private final PatientProfileRepository patientProfileRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -28,16 +26,29 @@ public class UserService {
         return userRepository.findByUsername (username);
     }
 
-    public void registerUser (RegisterRequest registrationDto) {
+    public void registerUser(RegisterRequest registrationDto) {
+        Role selectedRole = registrationDto.getRole () != null ? registrationDto.getRole () : Role.PATIENT;
+
         User user = User.builder ()
                 .username (registrationDto.getUsername ())
                 .password (passwordEncoder.encode (registrationDto.getPassword ()))
                 .email (registrationDto.getEmail ())
-                .role (Role.PATIENT)
+                .role (selectedRole)
                 .build ();
         userRepository.save (user);
-    }
 
+        if (selectedRole == Role.DOCTOR) {
+            DoctorProfile doctorProfile = DoctorProfile.builder ()
+                    .user (user)
+                    .build ();
+            doctorProfileRepository.save (doctorProfile);
+        } else {
+            PatientProfile patientProfile = PatientProfile.builder ()
+                    .user (user)
+                    .build ();
+            patientProfileRepository.save (patientProfile);
+        }
+    }
     public long countUsers () {
         return userRepository.count ();
     }

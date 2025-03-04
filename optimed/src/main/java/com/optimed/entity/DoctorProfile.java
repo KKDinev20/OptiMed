@@ -3,7 +3,7 @@ package com.optimed.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Data
@@ -19,12 +19,12 @@ public class DoctorProfile {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
     private String fullName;
 
-    @Column(nullable = false)
     private String specialization;
 
-    @Column(nullable = false)
     private String contactInfo;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
 }

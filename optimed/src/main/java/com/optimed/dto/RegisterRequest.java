@@ -1,5 +1,6 @@
 package com.optimed.dto;
 
+import com.optimed.entity.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -16,4 +17,6 @@ public class RegisterRequest {
     @Email(message = "Invalid email format")
     @NotEmpty(message = "Email is required")
     private String email;
+
+    private Role role;
 }

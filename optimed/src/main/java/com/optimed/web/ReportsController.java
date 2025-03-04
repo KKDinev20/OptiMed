@@ -19,6 +19,7 @@ public class ReportsController {
     @GetMapping("/admin/reports")
     public String reportsPage(Model model) {
         model.addAttribute("appointmentsPerDay", reportService.getAppointmentsOverTime ());
+        model.addAttribute ("currentPage", "Reports");
         model.addAttribute("userRegistrations", reportService.getUserRegistrations());
         return "admin/reports";
     }

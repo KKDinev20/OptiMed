@@ -38,16 +38,19 @@ public class AdminController {
     }
 
     @GetMapping("/manage-users")
-    public ModelAndView manageUsers (
+    public ModelAndView manageUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             Model model) {
-        Page<User> users = userService.getAllUsers (PageRequest.of (page, size));
-        model.addAttribute ("users", users);
-        model.addAttribute ("currentPage", "Manage Users");
-        model.addAttribute ("pageSize", size);
-        model.addAttribute ("pageSizes", Arrays.asList (5, 10, 15, 20));
-        return new ModelAndView ("admin/manage-users");
+
+        Page<User> users = userService.getAllUsers(PageRequest.of(page, size));
+
+        model.addAttribute("users", users);
+        model.addAttribute("currentPage", "Manage Users");
+        model.addAttribute("pageSize", size);
+        model.addAttribute("pageSizes", Arrays.asList(5, 10, 15, 20));
+
+        return new ModelAndView("admin/manage-users");
     }
 
     @GetMapping("/edit-user/{userId}")
@@ -108,6 +111,8 @@ public class AdminController {
         userRequest.setEmail (user.getEmail ());
         userRequest.setRole (user.getRole ());
         model.addAttribute ("userRequest", userRequest);
+        model.addAttribute ("currentPage", "Settings");
+
         return "admin/settings";
     }
 
@@ -116,12 +121,6 @@ public class AdminController {
     public String updateUser (@AuthenticationPrincipal UserDetails userDetails,
                               @Valid @ModelAttribute("userRequest") UserRequest userRequest,
                               BindingResult bindingResult, Model model) {
-
-        System.out.println ("Submitted data:");
-        System.out.println ("Username: " + userRequest.getUsername ());
-        System.out.println ("Email: " + userRequest.getEmail ());
-        System.out.println ("Password: " + userRequest.getPassword ());
-        System.out.println ("Role: " + userRequest.getRole ());
 
         if (bindingResult.hasErrors ()) {
             model.addAttribute ("errors", bindingResult.getAllErrors ());

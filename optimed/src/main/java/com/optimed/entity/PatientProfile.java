@@ -20,12 +20,9 @@ public class PatientProfile {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
     private String fullName;
 
-    @Column(nullable = false)
     private LocalDateTime dateOfBirth;
 
-    @Column(nullable = false)
     private String contactInfo;
 }

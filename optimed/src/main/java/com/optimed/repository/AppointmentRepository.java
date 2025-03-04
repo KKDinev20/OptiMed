@@ -6,6 +6,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
@@ -15,7 +16,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             "OR LOWER(a.patient.fullName) LIKE LOWER(CONCAT('%', :filter, '%')) " +
             "OR a.status = :status")
     Page<Appointment> findByDoctorNameContainingOrPatientNameContainingOrStatus(
-            @Param("filter") String filter,
-            @Param("status") AppointmentStatus status,
-            Pageable pageable);
+            String doctorName, String patientName, AppointmentStatus status, Pageable pageable);
+
+    List<Appointment> findByDoctorId (UUID doctorId);
 }

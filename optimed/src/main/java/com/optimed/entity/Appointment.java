@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
