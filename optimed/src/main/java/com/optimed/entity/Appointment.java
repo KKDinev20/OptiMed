@@ -1,8 +1,11 @@
 package com.optimed.entity;
 
 import com.optimed.entity.enums.AppointmentStatus;
+import com.optimed.entity.enums.Specialization;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -32,4 +35,21 @@ public class Appointment {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AppointmentStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Specialization specialization;
+
+    @Column(nullable = false, length = 500)
+    private String reason;
+
+    @Column(length = 1000)
+    private String notes;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

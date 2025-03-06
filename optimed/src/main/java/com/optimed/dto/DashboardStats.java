@@ -1,7 +1,7 @@
 package com.optimed.dto;
 
-
 import lombok.Data;
+import java.util.Map;
 
 @Data
 public class DashboardStats {
@@ -10,5 +10,6 @@ public class DashboardStats {
     private long totalPatients;
     private long totalAppointments;
     private long pendingAppointments;
-    private long completedAppointments;
+    private long bookedAppointments;
+    private long confirmedAppointments;
 }

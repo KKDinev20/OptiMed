@@ -8,5 +8,5 @@ import java.util.*;
 
 @Repository
 public interface PatientRepository extends JpaRepository<PatientProfile, UUID> {
-    Optional<PatientProfile> findByUserId(UUID userId);
+    Optional<PatientProfile> findByUserUsername(String username);
 }

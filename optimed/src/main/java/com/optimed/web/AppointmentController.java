@@ -2,7 +2,9 @@ package com.optimed.web;
 
 import com.optimed.dto.AppointmentRequest;
 import com.optimed.entity.Appointment;
+import com.optimed.entity.PatientProfile;
 import com.optimed.service.AppointmentService;
+import com.optimed.service.PatientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import java.util.*;
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
+    private final PatientService patientService;
 
     @GetMapping
     public String listAppointments(@RequestParam(defaultValue = "0") int page,
@@ -47,11 +50,20 @@ public class AppointmentController {
 
     @PreAuthorize("hasAuthority('ROLE_PATIENT')")
     @PostMapping("/book")
-    public String bookAppointment(@ModelAttribute @Valid AppointmentRequest request, Principal principal) {
-        UUID patientId = UUID.fromString(principal.getName());
-        appointmentService.createAppointment(patientId, request);
+    public String bookAppointment(@ModelAttribute @Valid AppointmentRequest request, Principal principal, Model model) {
+        Optional<PatientProfile> patient = patientService.getPatientByUsername(principal.getName());
+
+        if (patient.isEmpty()) {
+            model.addAttribute("error", "Patient profile not found.");
+            return "patient/book-appointment";
+        }
+
+        request.setPatientId(patient.get().getId());
+        appointmentService.createAppointment(request);
+
         return "redirect:/patient/appointments/success";
     }
+
 
     @PreAuthorize("hasAuthority('ROLE_PATIENT')")
     @GetMapping("/success")

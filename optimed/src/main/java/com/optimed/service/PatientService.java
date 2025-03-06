@@ -1,8 +1,11 @@
 package com.optimed.service;
 
+import com.optimed.entity.PatientProfile;
 import com.optimed.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -11,5 +14,9 @@ public class PatientService {
 
     public long countPatients () {
         return patientRepository.count ();
+    }
+
+    public Optional<PatientProfile> getPatientByUsername(String username) {
+        return patientRepository.findByUserUsername(username);
     }
 }

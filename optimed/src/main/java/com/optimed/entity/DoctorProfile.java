@@ -1,5 +1,6 @@
 package com.optimed.entity;
 
+import com.optimed.entity.enums.Specialization;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +22,16 @@ public class DoctorProfile {
 
     private String fullName;
 
-    private String specialization;
+    @Enumerated(EnumType.STRING)
+    private Specialization specialization;
+
+    private int experienceYears;
+
+    @Column(length = 2000)
+    private String bio;
+
+    @Column(length = 500)
+    private String availabilitySchedule;
 
     private String contactInfo;
 

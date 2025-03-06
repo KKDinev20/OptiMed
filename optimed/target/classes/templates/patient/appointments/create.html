@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<div th:replace="~{dashboard_fragments/head :: head}"></div>
+<body class="g-sidenav-show bg-gray-100">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
+       id="sidenav-main">
+    <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+</aside>
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <div th:replace="~{admin/fragments/navbar :: navbar}"></div>
+    <div class="container-fluid py-2">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">Create Appointment</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <form th:action="@{/patient/appointments}" th:object="${appointmentRequest}" method="post">
+                                <div class="p-3">
+                                    <!-- Specialization Selection -->
+                                    <div class="input-group input-group-outline mb-3">
+                                        <select id="specialization" th:field="*{specialization}" class="form-control" onchange="loadDoctors()">
+                                            <option value="">Select Specialization</option>
+                                            <option th:each="spec : ${specializations}" th:value="${spec}" th:text="${spec}"></option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Doctor Selection -->
+                                    <div class="input-group input-group-outline mb-3">
+                                        <select id="doctor" th:field="*{doctorId}" class="form-control">
+                                            <option value="">Select Doctor</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Appointment Date -->
+                                    <div class="input-group input-group-outline mb-3">
+                                        <input type="datetime-local" id="appointmentDate" th:field="*{appointmentDate}" class="form-control">
+                                    </div>
+
+                                    <!-- Reason -->
+                                    <div class="input-group input-group-outline mb-3">
+                                        <textarea id="reason" th:field="*{reason}" class="form-control" placeholder="Reason for appointment"></textarea>
+                                    </div>
+
+                                    <div class="form-group text-center">
+                                        <button type="submit" class="btn btn-primary">Create Appointment</button>
+                                    </div>
+
+                                    <div th:if="${success != null}" class="alert alert-success">
+                                        <p th:text="${success}"></p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
+</main>
+<div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+
+<script>
+    function loadDoctors() {
+        let specialization = document.getElementById("specialization").value;
+        let doctorDropdown = document.getElementById("doctor");
+
+        doctorDropdown.innerHTML = "<option value=''>Select Doctor</option>";
+
+        if (specialization) {
+            fetch(`/patient/doctors/${specialization}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(doctor => {
+                        let option = document.createElement("option");
+                        option.value = doctor.id;
+                        option.textContent = doctor.fullName;
+                        doctorDropdown.appendChild(option);
+                    });
+                });
+        }
+    }
+</script>
+
+</body>
+</html>

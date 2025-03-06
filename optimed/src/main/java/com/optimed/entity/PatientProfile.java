@@ -1,9 +1,10 @@
 package com.optimed.entity;
 
+import com.optimed.entity.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +23,18 @@ public class PatientProfile {
 
     private String fullName;
 
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
-    private String contactInfo;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Column(length = 500)
+    private String address;
+
+    private String phoneNumber;
+
+    private String email;
+
+    @Column(length = 2000)
+    private String medicalHistory;
 }

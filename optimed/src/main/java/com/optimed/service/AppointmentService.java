@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,48 +21,48 @@ public class AppointmentService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
 
-    public long countAppointments() {
-        return appointmentRepository.count();
+    public long countAppointments () {
+        return appointmentRepository.count ();
     }
 
-    public Page<Appointment> getAllAppointments(String filter, Pageable pageable) {
-        if (filter != null && !filter.isEmpty()) {
-            return appointmentRepository.findByDoctorNameContainingOrPatientNameContainingOrStatus(
-                    filter, filter, AppointmentStatus.valueOf(filter), pageable);
+    public Page<Appointment> getAllAppointments (String filter, Pageable pageable) {
+        if (filter != null && !filter.isEmpty ()) {
+            return appointmentRepository.findByDoctorNameContainingOrPatientNameContainingOrStatus (
+                    filter, filter, AppointmentStatus.valueOf (filter), pageable);
         }
-        return appointmentRepository.findAll(pageable);
+        return appointmentRepository.findAll (pageable);
     }
 
-    public void createAppointment(UUID patientId, AppointmentRequest request) {
-        DoctorProfile doctor = doctorRepository.findById(request.getDoctorId())
-                .orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
-
-        PatientProfile patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
-
-        Appointment appointment = Appointment.builder()
-                .doctor(doctor)
-                .patient(patient)
-                .appointmentDate(request.getAppointmentDate())
-                .status(AppointmentStatus.BOOKED)
-                .build();
-
-        appointmentRepository.save(appointment);
+    public long countAppointmentsByStatus(AppointmentStatus status) {
+        return appointmentRepository.countByStatus(status);
     }
 
-    public void approveAppointment(UUID id) {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
-
-        appointment.setStatus(AppointmentStatus.CONFIRMED);
-        appointmentRepository.save(appointment);
+    public Map<String, Long> countAppointmentsByStatus() {
+        return Map.of(
+                "Pending", countAppointmentsByStatus(AppointmentStatus.CANCELED),
+                "Booked", countAppointmentsByStatus(AppointmentStatus.BOOKED),
+                "Confirmed", countAppointmentsByStatus(AppointmentStatus.CONFIRMED)
+        );
     }
 
-    public void cancelAppointment(UUID id) {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
 
-        appointment.setStatus(AppointmentStatus.CANCELED);
-        appointmentRepository.save(appointment);
+    public Appointment createAppointment(AppointmentRequest request) {
+        Optional<DoctorProfile> doctor = doctorRepository.findById(request.getDoctorId());
+        Optional<PatientProfile> patient = patientRepository.findById(request.getPatientId());
+
+        if (doctor.isPresent() && patient.isPresent()) {
+            Appointment appointment = Appointment.builder()
+                    .doctor(doctor.get())
+                    .patient(patient.get())
+                    .appointmentDate(request.getAppointmentDate())
+                    .specialization(request.getSpecialization())
+                    .reason(request.getReason())
+                    .status(AppointmentStatus.BOOKED)
+                    .build();
+
+            return appointmentRepository.save(appointment);
+        }
+
+        throw new RuntimeException("Doctor or Patient not found");
     }
 }

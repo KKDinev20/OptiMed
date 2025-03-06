@@ -84,7 +84,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <p class="text-sm mb-0 text-capitalize">Total Appointments</p>
-                                <h4 class="mb-0" id="ttotalAppointments" th:text="${totalAppointments}">0</h4>
+                                <h4 class="mb-0" id="totalAppointments" th:text="${totalAppointments}">0</h4>
                             </div>
                             <div class="icon icon-md icon-shape bg-gradient-primary shadow-primary text-center border-radius-lg">
                                 <i class="material-symbols-rounded opacity-10">group</i>
@@ -99,56 +99,45 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-6 mt-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="mb-0 "></h6>
-                        <p class="text-sm "></p>
-                        <div class="pe-2">
-                            <div class="chart">
-                                <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
+            <div class="row">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="mb-0">Appointments by Status</h6>
+                                <div class="pe-2">
+                                    <div class="chart">
+                                        <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
+                                    </div>
+                                </div>
+                                <hr class="dark horizontal">
                             </div>
-                        </div>
-                        <hr class="dark horizontal">
-                        <div class="d-flex ">
-                            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-                            <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mt-4 mb-4">
-                <div class="card ">
-                    <div class="card-body">
-                        <h6 class="mb-0 ">  </h6>
-                        <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
-                        <div class="pe-2">
-                            <div class="chart">
-                                <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
+                    <div class="col-lg-4 col-md-6 mt-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="mb-0">Booked Appointments</h6>
+                                <div class="pe-2">
+                                    <div class="chart">
+                                        <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
+                                    </div>
+                                </div>
+                                <hr class="dark horizontal">
                             </div>
-                        </div>
-                        <hr class="dark horizontal">
-                        <div class="d-flex ">
-                            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-                            <p class="mb-0 text-sm"> updated 4 min ago </p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mt-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="mb-0 "></h6>
-                        <p class="text-sm ">Last Campaign Performance</p>
-                        <div class="pe-2">
-                            <div class="chart">
-                                <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
+                    <div class="col-lg-4 mt-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="mb-0">Confirmed Appointments</h6>
+                                <div class="pe-2">
+                                    <div class="chart">
+                                        <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
+                                    </div>
+                                </div>
+                                <hr class="dark horizontal">
                             </div>
-                        </div>
-                        <hr class="dark horizontal">
-                        <div class="d-flex ">
-                            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-                            <p class="mb-0 text-sm">just updated</p>
                         </div>
                     </div>
                 </div>
@@ -163,5 +152,6 @@
 </main>
 <!--   Core JS Files   -->
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+<div th:replace="~{admin/fragments/charts-scripts :: charts-scripts}"></div>
 </body>
 </html>

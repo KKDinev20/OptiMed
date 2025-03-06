@@ -1,6 +1,7 @@
 package com.optimed.service;
 
 import com.optimed.dto.DashboardStats;
+import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ public class DashboardService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
+    private final AppointmentService appointmentService;
 
     public DashboardStats getDashboardStats() {
         DashboardStats stats = new DashboardStats();
@@ -20,8 +22,9 @@ public class DashboardService {
         stats.setTotalDoctors(doctorRepository.count());
         stats.setTotalPatients(patientRepository.count());
         stats.setTotalAppointments(appointmentRepository.count());
-        stats.setPendingAppointments(appointmentRepository.countByStatus("PENDING"));
-        stats.setCompletedAppointments(appointmentRepository.countByStatus("COMPLETED"));
+        stats.setTotalAppointments(appointmentService.countAppointments());
+        stats.setPendingAppointments(appointmentService.countAppointmentsByStatus(AppointmentStatus.valueOf ("BOOKED")));
+
         return stats;
     }
 }

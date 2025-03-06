@@ -1,0 +1,165 @@
+<div th:fragment="charts-scripts">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        async function loadDashboardStats() {
+            const response = await fetch('/admin/stats');
+            const stats = await response.json();
+
+            renderBarChart(stats.appointmentsByStatus);
+
+            renderLineChart(stats.bookedAppointments, "booked-appointments", "Booked Appointments");
+
+            renderLineChart(stats.confirmedAppointments, "chart-line-tasks", "Confirmed Appointments");
+        }
+
+        function renderBarChart(data) {
+            const ctx = document.getElementById("chart-bars").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: "Appointments",
+                        data: Object.values(data),
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: false,
+                                borderDash: [5, 5],
+                                color: '#e5e5e5'
+                            },
+                            ticks: {
+                                suggestedMin: 0,
+                                suggestedMax: 500,
+                                beginAtZero: true,
+                                padding: 10,
+                                font: {
+                                    size: 14,
+                                    lineHeight: 2
+                                },
+                                color: "#737373"
+                            },
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                color: '#737373',
+                                padding: 10,
+                                font: {
+                                    size: 14,
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                    },
+                },
+            });
+        }
+
+        function renderLineChart(data, chartId, label) {
+            const ctx = document.getElementById(chartId).getContext("2d");
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        label: label,
+                        data: Object.values(data),
+                        borderColor: "#43A047",
+                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    const fullMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                                    return fullMonths[context[0].dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: false,
+                                borderDash: [4, 4],
+                                color: '#e5e5e5'
+                            },
+                            ticks: {
+                                display: true,
+                                color: '#737373',
+                                padding: 10,
+                                font: {
+                                    size: 12,
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                color: '#737373',
+                                padding: 10,
+                                font: {
+                                    size: 12,
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                    },
+                },
+            });
+        }
+
+        window.onload = loadDashboardStats;
+    </script>
+
+</div>

@@ -2,6 +2,7 @@ package com.optimed.web;
 
 import com.optimed.dto.*;
 import com.optimed.entity.*;
+import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +46,15 @@ public class AdminController {
     @GetMapping("/stats")
     @ResponseBody
     public DashboardStats getDashboardStats() {
-        return dashboardService.getDashboardStats();
-    }
+        DashboardStats stats = dashboardService.getDashboardStats();
 
+        Map<String, Long> statusStats = appointmentService.countAppointmentsByStatus();
+        stats.setPendingAppointments(statusStats.get("Pending"));
+        stats.setBookedAppointments(statusStats.get("Booked"));
+        stats.setConfirmedAppointments(statusStats.get("Confirmed"));
+
+        return stats;
+    }
 
     @GetMapping("/manage-users")
     public ModelAndView manageUsers(
