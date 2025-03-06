@@ -1,10 +1,7 @@
 package com.optimed.web;
 
-import com.optimed.dto.DoctorRequest;
-import com.optimed.entity.DoctorProfile;
-import com.optimed.service.DoctorProfileService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,15 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/doctor")
+@PreAuthorize("hasRole('ROLE_DOCTOR')")
 @RequiredArgsConstructor
 public class DoctorController {
-
-    private final DoctorProfileService doctorProfileService;
-
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -31,15 +25,4 @@ public class DoctorController {
         return "doctor/dashboard";
     }
 
-    @GetMapping("/{doctorId}")
-    public String getDoctorProfile(@PathVariable UUID doctorId, Model model) {
-        doctorProfileService.getDoctorByUserId(doctorId).ifPresent(doctor -> model.addAttribute("doctor", doctor));
-        return "doctor/profile";
-    }
-
-    @PutMapping("/{doctorId}")
-    @ResponseBody
-    public DoctorProfile updateDoctorProfile(@PathVariable UUID doctorId, @Valid @RequestBody DoctorRequest doctorProfileRequest) {
-        return doctorProfileService.updateDoctorProfile(doctorId, doctorProfileRequest);
-    }
 }

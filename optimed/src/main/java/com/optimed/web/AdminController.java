@@ -1,12 +1,12 @@
 package com.optimed.web;
 
-import com.optimed.dto.UserRequest;
-import com.optimed.entity.Appointment;
-import com.optimed.entity.User;
+import com.optimed.dto.*;
+import com.optimed.entity.*;
 import com.optimed.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,22 +20,34 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class AdminController {
 
     private final UserService userService;
+    private final DoctorService doctorService;
+    private final PatientService patientService;
     private final AppointmentService appointmentService;
+    private final DashboardService dashboardService;
+
 
     @GetMapping("/dashboard")
-    public ModelAndView dashboard (Model model) {
-        model.addAttribute ("totalUsers", userService.countUsers ());
-        model.addAttribute ("currentPage", "Dashboard");
-        model.addAttribute ("recentUsers", userService.getRecentUsers ());
-        model.addAttribute ("totalAppointments", appointmentService.countAppointments ());
+    public ModelAndView dashboard(Model model) {
+        model.addAttribute("totalUsers", userService.countUsers());
+        model.addAttribute("totalDoctors", doctorService.countDoctors());
+        model.addAttribute("totalPatients", patientService.countPatients());
+        model.addAttribute("totalAppointments", appointmentService.countAppointments());
+        model.addAttribute("currentPage", "Dashboard");
 
-
-        return new ModelAndView ("admin/dashboard");
+        return new ModelAndView("admin/dashboard");
     }
+
+    @GetMapping("/stats")
+    @ResponseBody
+    public DashboardStats getDashboardStats() {
+        return dashboardService.getDashboardStats();
+    }
+
 
     @GetMapping("/manage-users")
     public ModelAndView manageUsers(

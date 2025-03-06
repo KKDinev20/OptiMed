@@ -17,8 +17,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final DoctorProfileRepository doctorProfileRepository;
-    private final PatientProfileRepository patientProfileRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -41,12 +41,12 @@ public class UserService {
             DoctorProfile doctorProfile = DoctorProfile.builder ()
                     .user (user)
                     .build ();
-            doctorProfileRepository.save (doctorProfile);
+            doctorRepository.save (doctorProfile);
         } else {
             PatientProfile patientProfile = PatientProfile.builder ()
                     .user (user)
                     .build ();
-            patientProfileRepository.save (patientProfile);
+            patientRepository.save (patientProfile);
         }
     }
     public long countUsers () {

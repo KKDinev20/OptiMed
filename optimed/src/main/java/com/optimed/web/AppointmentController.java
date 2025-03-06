@@ -1,18 +1,22 @@
 package com.optimed.web;
 
+import com.optimed.dto.AppointmentRequest;
 import com.optimed.entity.Appointment;
 import com.optimed.service.AppointmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.*;
 
 @Controller
-@RequestMapping("/doctor/appointments")
+@RequestMapping("/appointments")
 @RequiredArgsConstructor
 public class AppointmentController {
 
@@ -34,15 +38,25 @@ public class AppointmentController {
         return "doctor/appointments";
     }
 
-    @PostMapping("/approve/{id}")
-    public String approveAppointment(@PathVariable UUID id) {
-        appointmentService.approveAppointment(id);
-        return "redirect:/doctor/appointments";
+    @PreAuthorize("hasAuthority('ROLE_PATIENT')")
+    @GetMapping("/book")
+    public String showBookingForm(Model model) {
+        model.addAttribute("appointmentRequest", new AppointmentRequest ());
+        return "patient/book-appointment";
     }
 
-    @PostMapping("/cancel/{id}")
-    public String cancelAppointment(@PathVariable UUID id) {
-        appointmentService.cancelAppointment(id);
-        return "redirect:/doctor/appointments";
+    @PreAuthorize("hasAuthority('ROLE_PATIENT')")
+    @PostMapping("/book")
+    public String bookAppointment(@ModelAttribute @Valid AppointmentRequest request, Principal principal) {
+        UUID patientId = UUID.fromString(principal.getName());
+        appointmentService.createAppointment(patientId, request);
+        return "redirect:/patient/appointments/success";
     }
+
+    @PreAuthorize("hasAuthority('ROLE_PATIENT')")
+    @GetMapping("/success")
+    public String showSuccessPage() {
+        return "patient/appointment-success";
+    }
+
 }

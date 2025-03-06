@@ -19,4 +19,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             String doctorName, String patientName, AppointmentStatus status, Pageable pageable);
 
     List<Appointment> findByDoctorId (UUID doctorId);
+
+    @Query("SELECT a FROM Appointment a " +
+    "WHERE a.status = 'PENDING'")
+    long countByStatus (String status);
 }

@@ -1,21 +1,18 @@
 package com.optimed.dto;
 
-import com.optimed.entity.*;
-import com.optimed.entity.enums.AppointmentStatus;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.UUID;
 
 @Data
 public class AppointmentRequest {
-    private UUID id;
 
-    private DoctorProfile doctor;
+    @NotNull(message = "Doctor is required")
+    private UUID doctorId;
 
-    private PatientProfile patient;
-
+    @NotNull(message = "Appointment date is required")
+    @Future(message = "Appointment date must be in the future")
     private LocalDateTime appointmentDate;
-
-    private AppointmentStatus status;
 }

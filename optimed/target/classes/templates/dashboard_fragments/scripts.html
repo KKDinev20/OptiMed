@@ -4,6 +4,34 @@
   <script src="/dashboard/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="/dashboard/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="/dashboard/js/plugins/chartjs.min.js"></script>
+
+  <script>
+    async function loadDashboardStats() {
+      const response = await fetch('/admin/stats');
+      const stats = await response.json();
+
+      document.getElementById('totalUsers').innerText = stats.totalUsers;
+      document.getElementById('totalAppointments').innerText = stats.totalAppointments;
+
+      renderChart(stats);
+    }
+
+    function renderChart(stats) {
+      const ctx = document.getElementById('appointmentChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Pending', 'Completed'],
+          datasets: [{
+            data: [stats.pendingAppointments, stats.completedAppointments],
+            backgroundColor: ['#FF6384', '#36A2EB'],
+          }]
+        }
+      });
+    }
+
+    window.onload = loadDashboardStats;
+  </script>
   <script>
     var ctx = document.getElementById("chart-bars").getContext("2d");
 
