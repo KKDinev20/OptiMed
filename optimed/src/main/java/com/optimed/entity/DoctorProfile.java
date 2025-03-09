@@ -1,5 +1,6 @@
 package com.optimed.entity;
 
+import com.optimed.entity.enums.Gender;
 import com.optimed.entity.enums.Specialization;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,9 @@ public class DoctorProfile {
 
     private int experienceYears;
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     @Column(length = 2000)
     private String bio;
 
@@ -37,4 +41,5 @@ public class DoctorProfile {
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
+
 }

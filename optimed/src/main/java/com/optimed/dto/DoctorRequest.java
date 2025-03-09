@@ -1,16 +1,31 @@
 package com.optimed.dto;
 
+import com.optimed.entity.enums.Gender;
+import com.optimed.entity.enums.Specialization;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class DoctorRequest {
-    @NotBlank(message = "Full name is required")
+    @NotBlank
     private String fullName;
 
-    @NotBlank(message = "Specialization is required")
-    private String specialization;
+    private Specialization specialization;
 
-    @NotBlank(message = "Contact info is required")
+    private int experienceYears;
+
+    private MultipartFile avatarFile;
+    private Gender gender;
+
+
+    @NotBlank
+    private String bio;
+
+    @NotBlank
+    private String availabilitySchedule;
+
     private String contactInfo;
+
+    private String avatarUrl;
 }

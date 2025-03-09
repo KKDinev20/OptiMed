@@ -37,4 +37,7 @@ public class PatientProfile {
 
     @Column(length = 2000)
     private String medicalHistory;
+
+    private String avatarUrl;
+
 }

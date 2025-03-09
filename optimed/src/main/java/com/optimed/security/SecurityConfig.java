@@ -1,8 +1,14 @@
 package com.optimed.security;
 
+import com.optimed.entity.User;
+import com.optimed.entity.enums.Role;
+import com.optimed.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.*;
 import org.springframework.security.web.SecurityFilterChain;
@@ -11,10 +17,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.*;
 
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final UserService userService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,7 +58,7 @@ public class SecurityConfig {
                         .sessionRegistry(sessionRegistry())
                 );
 
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
@@ -56,12 +66,23 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
         return (request, response, authentication) -> {
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            String username = authentication.getName();
+            Optional<User> user = userService.findByUsername(username);
 
-            if (authenticateUserRole (response, authorities)) return;
-            response.sendRedirect("/");
+            if (user.isPresent() && !user.get().isProfileCompleted() && user.get().getRole() != Role.ADMIN) {
+                response.sendRedirect("/complete-profile");
+                return;
+            }
+
+            switch (user.get().getRole()) {
+                case ADMIN -> response.sendRedirect("/admin/dashboard");
+                case DOCTOR -> response.sendRedirect("/doctor/dashboard");
+                case PATIENT -> response.sendRedirect("/patient/dashboard");
+            }
         };
     }
+
+
 
     @Bean
     public SessionRegistry sessionRegistry() {
@@ -89,7 +110,5 @@ public class SecurityConfig {
         }
         return false;
     }
-
-
 
 }

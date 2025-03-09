@@ -1,7 +1,6 @@
 package com.optimed.service;
 
-import com.optimed.dto.RegisterRequest;
-import com.optimed.dto.UserRequest;
+import com.optimed.dto.*;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.Role;
 import com.optimed.repository.*;
@@ -33,6 +32,7 @@ public class UserService {
                 .username (registrationDto.getUsername ())
                 .password (passwordEncoder.encode (registrationDto.getPassword ()))
                 .email (registrationDto.getEmail ())
+                .isProfileCompleted (false)
                 .role (selectedRole)
                 .build ();
         userRepository.save (user);
@@ -52,6 +52,7 @@ public class UserService {
     public long countUsers () {
         return userRepository.count ();
     }
+
 
     public List<User> getRecentUsers () {
         return userRepository.findTop10ByOrderByIdDesc ();
@@ -81,6 +82,45 @@ public class UserService {
         userRepository.save (existingUser);
     }
 
+
+    public void completeDoctorProfile(String username, DoctorRequest request) {
+        User user = findByUsername(username).orElseThrow();
+        DoctorProfile profile = doctorRepository.findByUserId(user.getId()).orElseThrow();
+
+        profile.setFullName(request.getFullName());
+        profile.setSpecialization(request.getSpecialization());
+        profile.setExperienceYears(request.getExperienceYears());
+        profile.setBio(request.getBio());
+        profile.setAvailabilitySchedule(request.getAvailabilitySchedule());
+        profile.setContactInfo(request.getContactInfo());
+
+        user.setProfileCompleted(true);
+
+        doctorRepository.save(profile);
+        userRepository.save(user);
+    }
+
+    public void completePatientProfile(String username, PatientRequest request) {
+        User user = findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found: " + username));
+
+        PatientProfile profile = patientRepository.findByUserId(user.getId())
+                .orElseGet(() -> {
+                    PatientProfile newProfile = new PatientProfile();
+                    newProfile.setUser(user);
+                    return newProfile;
+                });
+
+        profile.setFullName(request.getFullName());
+        profile.setAvatarUrl(request.getAvatarUrl());
+        profile.setAddress(request.getAddress());
+        profile.setPhoneNumber(request.getPhoneNumber());
+        profile.setMedicalHistory(request.getMedicalHistory());
+
+        user.setProfileCompleted(true);
+
+        patientRepository.save(profile);
+        userRepository.save(user);
+    }
 
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);

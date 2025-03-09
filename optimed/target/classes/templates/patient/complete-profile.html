@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Complete Patient Profile</title>
+    <div th:replace="~{dashboard_fragments/head :: head}"></div>
+</head>
+<body class="bg-light">
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+        <h3 class="text-center">Complete Your Patient Profile</h3>
+        <form th:action="@{/complete-profile/patient}" method="post" enctype="multipart/form-data" th:object="${patientRequest}">
+
+            <div class="mb-3">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input type="text" id="fullName" th:field="*{fullName}" class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select id="gender" th:field="*{gender}" class="form-control">
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" id="address" th:field="*{address}" class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="medicalHistory" class="form-label">Medical History</label>
+                <textarea id="medicalHistory" th:field="*{medicalHistory}" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="avatarFile" class="form-label">Profile Image</label>
+                <input type="file" id="avatarFile" name="avatarFile" class="form-control" accept="image/*"/>
+                <small class="text-muted">Upload an image (JPG, PNG, JPEG only)</small>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Complete Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+</body>
+</html>
