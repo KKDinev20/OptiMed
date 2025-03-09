@@ -7,7 +7,9 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
@@ -30,7 +32,10 @@ public class Appointment {
     private PatientProfile patient;
 
     @Column(nullable = false)
-    private LocalDateTime appointmentDate;
+    private LocalDate appointmentDate;
+
+    @Column(nullable = false)
+    private LocalTime appointmentTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

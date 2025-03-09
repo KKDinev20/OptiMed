@@ -88,7 +88,10 @@ public class UserService {
         DoctorProfile profile = doctorRepository.findByUserId(user.getId()).orElseThrow();
 
         profile.setFullName(request.getFullName());
+        profile.setEmail (user.getEmail ());
+        profile.setAvatarUrl(request.getAvatarUrl());
         profile.setSpecialization(request.getSpecialization());
+        profile.setGender (request.getGender());
         profile.setExperienceYears(request.getExperienceYears());
         profile.setBio(request.getBio());
         profile.setAvailabilitySchedule(request.getAvailabilitySchedule());
@@ -112,8 +115,11 @@ public class UserService {
 
         profile.setFullName(request.getFullName());
         profile.setAvatarUrl(request.getAvatarUrl());
+        profile.setEmail (user.getEmail ());
+        profile.setGender (request.getGender());
         profile.setAddress(request.getAddress());
         profile.setPhoneNumber(request.getPhoneNumber());
+        profile.setDateOfBirth (request.getDateOfBirth());
         profile.setMedicalHistory(request.getMedicalHistory());
 
         user.setProfileCompleted(true);

@@ -28,6 +28,8 @@ public class DoctorProfile {
 
     private int experienceYears;
 
+    private String email;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -42,4 +44,5 @@ public class DoctorProfile {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
 
+    private String avatarUrl;
 }

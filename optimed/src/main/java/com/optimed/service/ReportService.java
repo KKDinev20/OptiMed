@@ -30,7 +30,7 @@ public class ReportService {
 
     public Map<String, Long> getAppointmentsOverTime () {
         return appointmentRepository.findAll ().stream ()
-                .collect (Collectors.groupingBy (appointment -> appointment.getAppointmentDate ().toLocalDate ().format (DATE_FORMATTER), Collectors.counting ()));
+                .collect (Collectors.groupingBy (appointment -> appointment.getAppointmentTime().format (DATE_FORMATTER), Collectors.counting ()));
     }
 
     public ByteArrayInputStream generateCsvReport () {

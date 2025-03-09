@@ -55,6 +55,7 @@ public class AppointmentService {
                     .doctor(doctor.get())
                     .patient(patient.get())
                     .appointmentDate(request.getAppointmentDate())
+                    .appointmentTime (request.getAppointmentTime ())
                     .specialization(request.getSpecialization())
                     .reason(request.getReason())
                     .status(AppointmentStatus.BOOKED)

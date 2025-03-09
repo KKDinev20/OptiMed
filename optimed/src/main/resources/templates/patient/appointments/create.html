@@ -21,7 +21,6 @@
                         <div class="table-responsive p-0">
                             <form th:action="@{/patient/appointments}" th:object="${appointmentRequest}" method="post">
                                 <div class="p-3">
-                                    <!-- Specialization Selection -->
                                     <div class="input-group input-group-outline mb-3">
                                         <select id="specialization" th:field="*{specialization}" class="form-control" onchange="loadDoctors()">
                                             <option value="">Select Specialization</option>
@@ -29,19 +28,20 @@
                                         </select>
                                     </div>
 
-                                    <!-- Doctor Selection -->
                                     <div class="input-group input-group-outline mb-3">
                                         <select id="doctor" th:field="*{doctorId}" class="form-control">
                                             <option value="">Select Doctor</option>
                                         </select>
                                     </div>
 
-                                    <!-- Appointment Date -->
                                     <div class="input-group input-group-outline mb-3">
-                                        <input type="datetime-local" id="appointmentDate" th:field="*{appointmentDate}" class="form-control">
+                                        <input type="date" id="appointmentDate" th:field="*{appointmentDate}" class="form-control">
                                     </div>
 
-                                    <!-- Reason -->
+                                    <div class="input-group input-group-outline mb-3">
+                                        <input type="time" id="appointmentTime" th:field="*{appointmentTime}" class="form-control">
+                                    </div>
+
                                     <div class="input-group input-group-outline mb-3">
                                         <textarea id="reason" th:field="*{reason}" class="form-control" placeholder="Reason for appointment"></textarea>
                                     </div>

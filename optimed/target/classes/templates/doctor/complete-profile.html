@@ -1,10 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Complete Doctor Profile</title>
+    <div th:replace="~{dashboard_fragments/head :: head}"></div>
 </head>
-<body>
+<body class="bg-gray-200">
+<main class="main-content mt-0">
+    <div class="page-header align-items-start min-vh-100"
+         style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+        <div class="container my-auto">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 col-12 mx-auto">
+                    <div class="card z-index-0 fadeIn3 fadeInBottom">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                                <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Complete Your Profile</h4>
+                                <p class="text-white text-center text-sm mb-0">Please provide your professional information</p>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <form th:action="@{/complete-profile/doctor}" method="post" enctype="multipart/form-data" th:object="${doctorRequest}">
+                                <div class="text-center mb-4">
+                                    <div id="preview"
+                                         style="width: 100px; height: 100px; border-radius: 50%; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);">
+                                        <i class="fas fa-user text-primary opacity-6" style="font-size: 30px;"></i>
+                                    </div>
+                                    <label for="avatarFile" class="btn btn-outline-primary btn-sm mt-3"
+                                           style="font-size: 0.8rem;">
+                                        <i class="fas fa-upload me-2"></i>Upload Photo
+                                    </label>
+                                    <input type="file" id="avatarFile" name="avatarFile" class="d-none" accept="image/*"
+                                           onchange="previewImage(this)"/>
+                                    <small class="d-block mt-1 text-secondary">JPG, PNG or JPEG only</small>
+                                </div>
 
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <div class="input-group input-group-outline">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" th:field="*{fullName}" class="form-control" required/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Specialization</label>
+                                            <select th:field="*{specialization}" class="form-control">
+                                                <option th:each="spec : ${T(com.optimed.entity.enums.Specialization).values()}"
+                                                        th:value="${spec}" th:text="${spec}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Years of Experience</label>
+                                            <input type="number" th:field="*{experienceYears}" class="form-control" required/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Gender</label>
+                                            <select th:field="*{gender}" class="form-control">
+                                                <option value="MALE">Male</option>
+                                                <option value="FEMALE">Female</option>
+                                                <option value="OTHER">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Bio</label>
+                                            <textarea th:field="*{bio}" class="form-control" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Availability Schedule</label>
+                                            <input type="text" th:field="*{availabilitySchedule}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Contact Information</label>
+                                            <input type="text" th:field="*{contactInfo}" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn bg-gradient-primary btn-lg w-100 my-4 mb-2">
+                                        Complete Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
 </body>
 </html>

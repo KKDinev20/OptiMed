@@ -15,9 +15,11 @@ public class DoctorRequest {
 
     private int experienceYears;
 
-    private MultipartFile avatarFile;
-    private Gender gender;
+    private String email;
 
+    private MultipartFile avatarFile;
+
+    private Gender gender;
 
     @NotBlank
     private String bio;

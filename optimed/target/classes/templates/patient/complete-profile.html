@@ -4,53 +4,121 @@
     <title>Complete Patient Profile</title>
     <div th:replace="~{dashboard_fragments/head :: head}"></div>
 </head>
-<body class="bg-light">
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
-        <h3 class="text-center">Complete Your Patient Profile</h3>
-        <form th:action="@{/complete-profile/patient}" method="post" enctype="multipart/form-data" th:object="${patientRequest}">
+<body class="bg-gray-200">
+<main class="main-content mt-0">
+    <div class="page-header align-items-start min-vh-100"
+         style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+        <div class="container my-auto">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 col-12 mx-auto">
+                    <div class="card z-index-0 fadeIn3 fadeInBottom">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                                <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Complete Your
+                                    Profile</h4>
+                                <p class="text-white text-center text-sm mb-0">Please provide your personal
+                                    information</p>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <form th:action="@{/complete-profile/patient}" method="post" enctype="multipart/form-data"
+                                  th:object="${patientRequest}">
+                                <div class="text-center mb-4">
+                                    <div id="preview"
+                                         style="width: 100px; height: 100px; border-radius: 50%; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 5px 15px rgba(233, 30, 99, 0.2);">
+                                        <i class="fas fa-user text-primary opacity-6" style="font-size: 30px;"></i>
+                                    </div>
+                                    <label for="avatarFile" class="btn btn-outline-primary btn-sm mt-3"
+                                           style="font-size: 0.8rem;">
+                                        <i class="fas fa-upload me-2"></i>Upload Photo
+                                    </label>
+                                    <input type="file" id="avatarFile" name="avatarFile" class="d-none" accept="image/*"
+                                           onchange="previewImage(this)"/>
+                                    <small class="d-block mt-1 text-secondary">JPG, PNG or JPEG only</small>
+                                </div>
 
-            <div class="mb-3">
-                <label for="fullName" class="form-label">Full Name</label>
-                <input type="text" id="fullName" th:field="*{fullName}" class="form-control" required/>
-            </div>
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <div class="input-group input-group-outline">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" th:field="*{fullName}" class="form-control" required/>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="mb-3">
-                <label for="gender" class="form-label">Gender</label>
-                <select id="gender" th:field="*{gender}" class="form-control">
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                    <option value="OTHER">Other</option>
-                </select>
-            </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Gender</label>
+                                            <select th:field="*{gender}" class="form-control">
+                                                <option value="">Select gender</option>
+                                                <option value="MALE">Male</option>
+                                                <option value="FEMALE">Female</option>
+                                                <option value="OTHER">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
-            <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" id="address" th:field="*{address}" class="form-control"/>
-            </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">Date of Birth</label>
+                                            <input type="date" th:field="*{dateOfBirth}" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="mb-3">
-                <label for="phoneNumber" class="form-label">Phone Number</label>
-                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control"/>
-            </div>
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <div class="input-group input-group-outline">
+                                            <label class="form-label">Address</label>
+                                            <input type="text" th:field="*{address}" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="mb-3">
-                <label for="medicalHistory" class="form-label">Medical History</label>
-                <textarea id="medicalHistory" th:field="*{medicalHistory}" class="form-control" rows="3"></textarea>
-            </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-outline">
+                                            <label class="form-label">Phone Number</label>
+                                            <input type="text" th:field="*{phoneNumber}" class="form-control"/>
+                                        </div>
+                                    </div>
 
-            <div class="mb-3">
-                <label for="avatarFile" class="form-label">Profile Image</label>
-                <input type="file" id="avatarFile" name="avatarFile" class="form-control" accept="image/*"/>
-                <small class="text-muted">Upload an image (JPG, PNG, JPEG only)</small>
-            </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-group-outline">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary w-100">Complete Profile</button>
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <div class="input-group input-group-outline">
+                                            <label class="form-label">Medical History</label>
+                                            <textarea th:field="*{medicalHistory}" class="form-control"
+                                                      rows="4"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn bg-gradient-primary btn-lg w-100 my-4 mb-2">
+                                        Complete Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</main>
+
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+<div th:replace="~{patient/fragments/scripts :: scripts}"></div>
+
 </body>
 </html>
