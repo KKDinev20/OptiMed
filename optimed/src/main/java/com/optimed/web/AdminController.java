@@ -104,21 +104,6 @@ public class AdminController {
     }
 
 
-    @GetMapping("/manage-appointments")
-    public ModelAndView manageAppointments (
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String filter,
-            Model model) {
-
-        Page<Appointment> appointments = appointmentService.getAllAppointments (filter, PageRequest.of (page, size));
-
-        model.addAttribute ("appointments", appointments);
-        model.addAttribute ("filter", filter);
-
-        return new ModelAndView ("admin/manage-appointments");
-    }
-
     @GetMapping("/settings")
     public String getSettingsPage (@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String username = userDetails.getUsername ();

@@ -1,6 +1,7 @@
 package com.optimed.service;
 
 import com.optimed.entity.PatientProfile;
+import com.optimed.entity.User;
 import com.optimed.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,9 @@ public class PatientService {
     public Optional<PatientProfile> getPatientByUsername(String username) {
         return patientRepository.findByUserUsername(username);
     }
+
+    public Optional<PatientProfile> findByUser(User user) {
+        return patientRepository.findByUser(user);
+    }
+
 }

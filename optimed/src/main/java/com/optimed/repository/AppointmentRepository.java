@@ -22,4 +22,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.status = :status")
     long countByStatus(@Param("status") AppointmentStatus status);
 
+
+    Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);
 }

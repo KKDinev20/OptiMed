@@ -1,17 +1,23 @@
 package com.optimed.web;
 
 import com.optimed.dto.AppointmentRequest;
+import com.optimed.entity.Appointment;
 import com.optimed.entity.DoctorProfile;
 import com.optimed.entity.PatientProfile;
+import com.optimed.entity.User;
 import com.optimed.entity.enums.Specialization;
 import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -22,6 +28,7 @@ public class PatientController {
 
     private final AppointmentService appointmentService;
     private final DoctorProfileService doctorProfileService;
+    private final UserService userService;
     private final PatientService patientService;
 
     @GetMapping("/appointments/new")
@@ -54,8 +61,39 @@ public class PatientController {
         return doctorProfileService.findDoctorsBySpecialization(specialization);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_PATIENT')")
+    @GetMapping("/appointments")
+    public String getPatientAppointments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model,
+            Principal principal) {
+
+        User user = userService.findByUsername(principal.getName()).orElseThrow();
+        PatientProfile patient = patientService.findByUser(user).orElseThrow();
+        UUID patientId = patient.getId();
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Appointment> appointments = appointmentService.getAppointmentsByPatientId(patientId, pageable);
+
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("patientId", patientId);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", appointments.getTotalPages());
+        model.addAttribute("size", size);
+
+        return "patient/appointments/list-appointments";
+    }
+
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow();
+        PatientProfile patient = patientService.findByUser(user).orElseThrow();
+
+        UUID patientId = patient.getId();
+        model.addAttribute("patientId", patientId);
+
         return "patient/dashboard";
     }
+
 }

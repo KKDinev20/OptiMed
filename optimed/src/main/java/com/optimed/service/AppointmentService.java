@@ -1,6 +1,7 @@
 package com.optimed.service;
 
 import com.optimed.dto.AppointmentRequest;
+import com.optimed.dto.ListAppointmentRequest;
 import com.optimed.entity.Appointment;
 import com.optimed.entity.DoctorProfile;
 import com.optimed.entity.PatientProfile;
@@ -25,13 +26,10 @@ public class AppointmentService {
         return appointmentRepository.count ();
     }
 
-    public Page<Appointment> getAllAppointments (String filter, Pageable pageable) {
-        if (filter != null && !filter.isEmpty ()) {
-            return appointmentRepository.findByDoctorNameContainingOrPatientNameContainingOrStatus (
-                    filter, filter, AppointmentStatus.valueOf (filter), pageable);
-        }
-        return appointmentRepository.findAll (pageable);
+    public Page<Appointment> getAppointmentsByPatientId(UUID patientId, Pageable pageable) {
+        return appointmentRepository.findByPatientId(patientId, pageable);
     }
+
 
     public long countAppointmentsByStatus(AppointmentStatus status) {
         return appointmentRepository.countByStatus(status);

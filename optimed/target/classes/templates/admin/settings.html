@@ -8,48 +8,80 @@
 </aside>
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
     <div th:replace="~{admin/fragments/navbar :: navbar}"></div>
-    <div class="container-fluid py-2">
+    <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
-                <div class="card my-4">
+                <div class="card my-4 shadow-sm">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Settings</h6>
+                        <div class="bg-gradient-dark shadow-primary border-radius-lg pt-4 pb-3 d-flex align-items-center">
+                            <h5 class="text-white text-capitalize mb-0 ps-3">Account Settings</h5>
                         </div>
                     </div>
-                    <div class="card-body px-4 pb-4">
-                        <form th:action="@{/admin/settings}" th:object="${userRequest}" method="post">
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" id="username" th:field="*{username}" class="form-control">
+                    <div class="card-body px-4 py-4">
+                        <p class="text-muted mb-4">Update your account information and preferences below</p>
+
+                        <form th:action="@{/admin/settings}" th:object="${userRequest}" method="post" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-group">
+                                        <label for="username" class="form-label fw-bold">Username</label>
+                                        <div class="input-group input-group-outline">
+                                            <input type="text" id="username" th:field="*{username}" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-group">
+                                        <label for="email" class="form-label fw-bold">Email Address</label>
+                                        <div class="input-group input-group-outline">
+                                            <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                                        </div>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                            Please enter a valid email address
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" th:field="*{email}" class="form-control">
-                                <small class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</small>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-group">
+                                        <label for="password" class="form-label fw-bold">Password</label>
+                                        <div class="input-group input-group-outline">
+                                            <input type="password" id="password" th:field="*{password}" class="form-control"
+                                                   placeholder="Leave blank to keep current password">
+                                        </div>
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                                            Password error
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <div class="form-group">
+                                        <label for="role" class="form-label fw-bold">User Role</label>
+                                        <div class="input-group input-group-outline">
+                                            <select th:field="*{role}" class="form-select" id="role" required>
+                                                <option value="">-- Select Role --</option>
+                                                <option value="PATIENT">Patient</option>
+                                                <option value="DOCTOR">Doctor</option>
+                                                <option value="ADMIN">Administrator</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="password">Password (Leave blank to keep current password)</label>
-                                <input type="password" id="password" th:field="*{password}" class="form-control">
-                                <small class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <select th:field="*{role}" class="form-control">
-                                    <option value="PATIENT">Patient</option>
-                                    <option value="ADMIN">Admin</option>
-                                    <option value="DOCTOR">Doctor</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group text-center">
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <div class="row mt-4">
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-secondary me-2">Cancel</button>
+                                    <button type="submit" class="btn bg-gradient-success px-5">
+                                        <i class="material-icons opacity-10 me-1">save</i> Save Changes
+                                    </button>
+                                </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -58,5 +90,24 @@
     <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
 </main>
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+
+<script>
+    (function() {
+        'use strict';
+
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
 </body>
 </html>
