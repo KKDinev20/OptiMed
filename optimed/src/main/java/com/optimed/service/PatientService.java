@@ -2,6 +2,7 @@ package com.optimed.service;
 
 import com.optimed.entity.PatientProfile;
 import com.optimed.entity.User;
+import com.optimed.repository.AppointmentRepository;
 import com.optimed.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

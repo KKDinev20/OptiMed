@@ -18,15 +18,12 @@
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
-                        <!-- Search Input (optional) -->
                         <form th:action="@{/patient/appointments}" method="get" class="p-3">
                             <div class="input-group input-group-outline mb-3">
                                 <input type="text" name="filter" th:value="${filter}" class="form-control" placeholder="Search appointments...">
                                 <button type="submit" class="btn btn-primary">Search</button>
                             </div>
                         </form>
-
-                        <!-- Appointments Table -->
                         <div class="table-responsive p-0">
                             <table class="table align-items-center mb-0">
                                 <thead>

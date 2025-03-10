@@ -64,4 +64,11 @@ public class AppointmentService {
 
         throw new RuntimeException("Doctor or Patient not found");
     }
+
+
+    public void cancelAppointment(UUID appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
+        appointment.setStatus(AppointmentStatus.CANCELED);
+        appointmentRepository.save (appointment);
+    }
 }

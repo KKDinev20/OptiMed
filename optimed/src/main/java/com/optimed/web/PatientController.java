@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.*;
@@ -34,6 +35,7 @@ public class PatientController {
     @GetMapping("/appointments/new")
     public String showAppointmentForm(Model model) {
         model.addAttribute("appointmentRequest", new AppointmentRequest());
+        model.addAttribute("currentUserPage", "Add Appointment");
         model.addAttribute("specializations", Specialization.values());
         return "patient/appointments/create";
     }
@@ -51,9 +53,21 @@ public class PatientController {
         appointmentService.createAppointment(request);
 
         model.addAttribute("success", "Appointment created successfully.");
-        return "redirect:/patient/dashboard";
+        return "redirect:/patient/appointments";
     }
 
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow();
+        PatientProfile patient = patientService.findByUser(user).orElseThrow();
+
+        UUID patientId = patient.getId();
+        model.addAttribute("currentUserPage", "Dashboard");
+        model.addAttribute("patientId", patientId);
+
+        return "patient/dashboard";
+    }
 
     @GetMapping("/doctors/{specialization}")
     @ResponseBody
@@ -79,21 +93,19 @@ public class PatientController {
         model.addAttribute("appointments", appointments);
         model.addAttribute("patientId", patientId);
         model.addAttribute("currentPage", page);
+        model.addAttribute("currentUserPage", "My Appointments");
         model.addAttribute("totalPages", appointments.getTotalPages());
         model.addAttribute("size", size);
 
         return "patient/appointments/list-appointments";
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(Model model, Principal principal) {
-        User user = userService.findByUsername(principal.getName()).orElseThrow();
-        PatientProfile patient = patientService.findByUser(user).orElseThrow();
-
-        UUID patientId = patient.getId();
-        model.addAttribute("patientId", patientId);
-
-        return "patient/dashboard";
+    @PostMapping("/cancel-appointment/{appointmentId}")
+    public String cancelAppointment(
+            @PathVariable UUID appointmentId,
+            RedirectAttributes redirectAttrs
+    ) {
+        appointmentService.cancelAppointment(appointmentId);
+        return "redirect:/patient/appointments";
     }
-
 }
