@@ -1,16 +1,11 @@
 package com.optimed.web;
 
 import com.optimed.dto.AppointmentRequest;
-import com.optimed.entity.Appointment;
-import com.optimed.entity.DoctorProfile;
-import com.optimed.entity.PatientProfile;
-import com.optimed.entity.User;
+import com.optimed.entity.*;
 import com.optimed.entity.enums.Specialization;
 import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

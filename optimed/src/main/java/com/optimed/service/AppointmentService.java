@@ -1,7 +1,6 @@
 package com.optimed.service;
 
 import com.optimed.dto.AppointmentRequest;
-import com.optimed.dto.ListAppointmentRequest;
 import com.optimed.entity.Appointment;
 import com.optimed.entity.DoctorProfile;
 import com.optimed.entity.PatientProfile;
@@ -44,7 +43,7 @@ public class AppointmentService {
     }
 
 
-    public Appointment createAppointment(AppointmentRequest request) {
+    public void createAppointment(AppointmentRequest request) {
         Optional<DoctorProfile> doctor = doctorRepository.findById(request.getDoctorId());
         Optional<PatientProfile> patient = patientRepository.findById(request.getPatientId());
 
@@ -59,7 +58,8 @@ public class AppointmentService {
                     .status(AppointmentStatus.BOOKED)
                     .build();
 
-            return appointmentRepository.save(appointment);
+            appointmentRepository.save (appointment);
+            return;
         }
 
         throw new RuntimeException("Doctor or Patient not found");
@@ -71,4 +71,19 @@ public class AppointmentService {
         appointment.setStatus(AppointmentStatus.CANCELED);
         appointmentRepository.save (appointment);
     }
+
+    public List<Appointment> getRecentAppointments () {
+        return appointmentRepository.findTop10ByOrderByIdDesc();
+    }
+
+    public Page<Appointment> getAppointmentsByDoctorId(UUID doctorId, Pageable pageable) {
+        return appointmentRepository.findByDoctorId(doctorId, pageable);
+    }
+
+    public void updateAppointmentStatus(UUID appointmentId, AppointmentStatus status) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
+        appointment.setStatus(status);
+        appointmentRepository.save(appointment);
+    }
+
 }

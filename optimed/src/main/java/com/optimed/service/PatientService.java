@@ -5,6 +5,8 @@ import com.optimed.entity.User;
 import com.optimed.repository.AppointmentRepository;
 import com.optimed.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,5 +27,4 @@ public class PatientService {
     public Optional<PatientProfile> findByUser(User user) {
         return patientRepository.findByUser(user);
     }
-
 }

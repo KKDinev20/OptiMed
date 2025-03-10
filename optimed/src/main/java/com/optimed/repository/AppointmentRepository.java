@@ -1,6 +1,6 @@
 package com.optimed.repository;
 
-import com.optimed.entity.Appointment;
+import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
@@ -22,6 +22,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.status = :status")
     long countByStatus(@Param("status") AppointmentStatus status);
 
-
+    List<Appointment> findTop10ByOrderByIdDesc();
     Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);
+
+    Page<Appointment> findByDoctorId(UUID doctorId, Pageable pageable);
 }

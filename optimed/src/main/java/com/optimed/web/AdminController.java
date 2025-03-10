@@ -37,6 +37,8 @@ public class AdminController {
         model.addAttribute("totalUsers", userService.countUsers());
         model.addAttribute("totalDoctors", doctorService.countDoctors());
         model.addAttribute("totalPatients", patientService.countPatients());
+        model.addAttribute("recentUsers", userService.getRecentUsers());
+        model.addAttribute("recentAppointments", appointmentService.getRecentAppointments());
         model.addAttribute("totalAppointments", appointmentService.countAppointments());
         model.addAttribute("currentPage", "Dashboard");
 
