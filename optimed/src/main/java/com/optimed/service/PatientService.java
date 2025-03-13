@@ -3,6 +3,7 @@ package com.optimed.service;
 import com.optimed.entity.PatientProfile;
 import com.optimed.entity.User;
 import com.optimed.repository.PatientRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +24,10 @@ public class PatientService {
 
     public Optional<PatientProfile> findByUser(User user) {
         return patientRepository.findByUser(user);
+    }
+
+    public PatientProfile getPatientById(UUID id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException ("Patient not found"));
     }
 }

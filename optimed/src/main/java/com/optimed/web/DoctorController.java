@@ -26,6 +26,7 @@ public class DoctorController {
 
     private final AppointmentService appointmentService;
     private final DoctorService doctorService;
+    private final PatientService patientService;
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, @PageableDefault(size = 10, sort = "appointmentDate", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -100,14 +101,12 @@ public class DoctorController {
         return "redirect:/doctor/appointments";
     }
 
-    @GetMapping("/appointments/{appointmentId}/patient")
-    public String viewPatientDetails(@PathVariable UUID appointmentId, Model model) {
-        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
-        model.addAttribute("patient", appointment.getPatient());
-        return "doctor/patients/view-patient";
+    @GetMapping("/patient/{id}")
+    public String viewPatientDetails(@PathVariable UUID id, Model model) {
+        PatientProfile patient = patientService.getPatientById(id);
+        model.addAttribute("patient", patient);
+        return "doctor/patients/patient-details";
     }
-
-
 
     @GetMapping("/patients")
     public String getDoctorPatients(Model model, Authentication authentication) {
@@ -117,6 +116,6 @@ public class DoctorController {
         List<PatientProfile> patients = appointmentService.getPatientsByDoctor(doctor.getId());
         model.addAttribute("patients", patients);
 
-        return "doctor/patients/list-patients";
+        return "doctor/patients/patient-list";
     }
 }

@@ -18,7 +18,6 @@
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
-                        <!-- Search Input -->
                         <form method="get" action="/doctor/appointments">
                             <input type="text" name="patientName" placeholder="Search by patient name">
                             <select name="status">
@@ -33,8 +32,6 @@
                             <button type="submit">Search</button>
                         </form>
 
-
-                        <!-- Appointments Table -->
                         <div class="table-responsive p-0">
                             <table class="table align-items-center mb-0">
                                 <thead>
@@ -77,16 +74,24 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
                                                 <li>
-                                                    <form th:action="@{/doctor/appointments/approve/{id}(id=${appointment.id})}"
-                                                          method="post">
-                                                        <button type="submit" class="dropdown-item">Approve</button>
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/approve">
+                                                        <button type="submit">Approve</button>
+                                                    </form>
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reject">
+                                                        <button type="submit">Reject</button>
                                                     </form>
                                                 </li>
                                                 <li>
-                                                    <form th:action="@{/doctor/appointments/cancel/{id}(id=${appointment.id})}"
-                                                          method="post">
-                                                        <button type="submit" class="dropdown-item">Cancel</button>
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/cancel">
+                                                        <button type="submit">Cancel</button>
                                                     </form>
+
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reschedule">
+                                                        <input type="date" name="newDate" required>
+                                                        <input type="time" name="newTime" required>
+                                                        <button type="submit">Reschedule</button>
+                                                    </form>
+
                                                 </li>
                                             </ul>
                                         </div>
