@@ -74,14 +74,26 @@
 
         if (specialization) {
             fetch(`/patient/doctors/${specialization}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log("Fetched doctors:", data);
+                    if (data.length === 0) {
+                        alert("No doctors available for this specialization.");
+                    }
                     data.forEach(doctor => {
                         let option = document.createElement("option");
-                        option.value = doctor.id;
                         option.textContent = doctor.fullName;
                         doctorDropdown.appendChild(option);
                     });
+                })
+                .catch(error => {
+                    console.error("Error fetching doctors:", error);
+                    alert("Failed to load doctors.");
                 });
         }
     }

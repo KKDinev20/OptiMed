@@ -19,13 +19,20 @@
                     </div>
                     <div class="card-body px-0 pb-2">
                         <!-- Search Input -->
-                        <form th:action="@{/doctor/appointments}" method="get" class="p-3">
-                            <div class="input-group input-group-outline mb-3">
-                                <input type="text" name="filter" th:value="${filter}" class="form-control"
-                                       placeholder="Filter by Doctor Name, Patient Name, or Status">
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                            </div>
+                        <form method="get" action="/doctor/appointments">
+                            <input type="text" name="patientName" placeholder="Search by patient name">
+                            <select name="status">
+                                <option value="">All</option>
+                                <option value="PENDING">Pending</option>
+                                <option value="CONFIRMED">Confirmed</option>
+                                <option value="CANCELED">Canceled</option>
+                                <option value="RESCHEDULED">Rescheduled</option>
+                            </select>
+                            <input type="date" name="startDate">
+                            <input type="date" name="endDate">
+                            <button type="submit">Search</button>
                         </form>
+
 
                         <!-- Appointments Table -->
                         <div class="table-responsive p-0">

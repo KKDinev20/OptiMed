@@ -67,8 +67,15 @@ public class PatientController {
     @GetMapping("/doctors/{specialization}")
     @ResponseBody
     public List<DoctorProfile> getDoctorsBySpecialization(@PathVariable Specialization specialization) {
-        return doctorProfileService.findDoctorsBySpecialization(specialization);
+        List<DoctorProfile> doctors = doctorProfileService.findDoctorsBySpecialization(specialization);
+
+        if (doctors.isEmpty()) {
+            System.out.println("No doctors found for specialization: " + specialization);
+        }
+
+        return doctors;
     }
+
 
     @PreAuthorize("hasAuthority('ROLE_PATIENT')")
     @GetMapping("/appointments")

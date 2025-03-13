@@ -52,21 +52,28 @@ public class AppointmentService {
         Optional<PatientProfile> patient = patientRepository.findById(request.getPatientId());
 
         if (doctor.isPresent() && patient.isPresent()) {
+            boolean exists = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(
+                    request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());
+
+            if (exists) {
+                throw new RuntimeException("This doctor is already booked at the selected date and time.");
+            }
+
             Appointment appointment = Appointment.builder()
                     .doctor(doctor.get())
                     .patient(patient.get())
                     .appointmentDate(request.getAppointmentDate())
-                    .appointmentTime (request.getAppointmentTime ())
+                    .appointmentTime(request.getAppointmentTime())
                     .reason(request.getReason())
                     .status(AppointmentStatus.BOOKED)
                     .build();
 
-            appointmentRepository.save (appointment);
-            return;
+            appointmentRepository.save(appointment);
+        } else {
+            throw new RuntimeException("Doctor or Patient not found");
         }
-
-        throw new RuntimeException("Doctor or Patient not found");
     }
+
 
     public long getCanceledAppointments() {
         return appointmentRepository.countByStatus (AppointmentStatus.CANCELED);
@@ -83,10 +90,19 @@ public class AppointmentService {
     }
 
     public void cancelAppointment(UUID appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
         appointment.setStatus(AppointmentStatus.CANCELED);
-        appointmentRepository.save (appointment);
+        appointmentRepository.save(appointment);
     }
+
+    public void rescheduleAppointment(UUID appointmentId, LocalDate newDate, LocalTime newTime) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
+        appointment.setAppointmentDate(newDate);
+        appointment.setAppointmentTime(newTime);
+        appointment.setStatus(AppointmentStatus.RESCHEDULED);
+        appointmentRepository.save(appointment);
+    }
+
 
     public Page<Appointment> getUpcomingAppointmentsForMonth(Pageable pageable) {
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
@@ -94,6 +110,11 @@ public class AppointmentService {
 
         return appointmentRepository.findByAppointmentDateBetween (firstDayOfMonth, lastDayOfMonth, pageable);
     }
+
+    public Page<Appointment> searchAppointments(UUID doctorId, AppointmentStatus status, String patientName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return appointmentRepository.searchAppointments(doctorId, status, patientName, startDate, endDate, pageable);
+    }
+
 
 
     public List<Appointment> getRecentAppointments () {
@@ -110,4 +131,12 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    public List<PatientProfile> getPatientsByDoctor(UUID doctorId) {
+        return appointmentRepository.findPatientsByDoctor(doctorId);
+    }
+
+
+    public Appointment getAppointmentById (UUID appointmentId) {
+        return appointmentRepository.findById(appointmentId).orElseThrow();
+    }
 }
