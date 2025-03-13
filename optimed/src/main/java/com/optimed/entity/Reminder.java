@@ -16,7 +16,9 @@ public class Reminder {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private UUID appointmentId;
+    @OneToOne
+    @JoinColumn(name = "appointment_id", referencedColumnName = "id", nullable = false)
+    private Appointment appointment;
 
     @Column(nullable = false)
     private LocalDateTime reminderDate;

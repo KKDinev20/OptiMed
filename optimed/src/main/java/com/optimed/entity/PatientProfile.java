@@ -4,8 +4,8 @@ import com.optimed.entity.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.util.UUID;
+import java.time.*;
+import java.util.*;
 
 @Entity
 @Data
@@ -18,7 +18,7 @@ public class PatientProfile {
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
     private String fullName;
@@ -28,16 +28,18 @@ public class PatientProfile {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(length = 500)
+    @Column(length = 500, nullable = true)
     private String address;
 
+    @Column(unique = true)
     private String phoneNumber;
 
+    @Column(unique = true)
     private String email;
 
-    @Column(length = 2000)
+    @Column(length = 2000, nullable = true)
     private String medicalHistory;
 
+    @Column(nullable = true)
     private String avatarUrl;
-
 }

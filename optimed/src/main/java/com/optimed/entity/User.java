@@ -5,9 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -32,9 +31,10 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean enabled;
+
     @Column(nullable = false, updatable = false, columnDefinition = "timestamp default current_timestamp")
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    private boolean isProfileCompleted;
 }

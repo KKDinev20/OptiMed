@@ -1,17 +1,16 @@
 package com.optimed.service;
 
 import com.optimed.dto.AppointmentRequest;
-import com.optimed.entity.Appointment;
-import com.optimed.entity.DoctorProfile;
-import com.optimed.entity.PatientProfile;
-import com.optimed.entity.User;
+import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.*;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.*;
 import java.util.*;
 
 @Service
@@ -58,7 +57,6 @@ public class AppointmentService {
                     .patient(patient.get())
                     .appointmentDate(request.getAppointmentDate())
                     .appointmentTime (request.getAppointmentTime ())
-                    .specialization(request.getSpecialization())
                     .reason(request.getReason())
                     .status(AppointmentStatus.BOOKED)
                     .build();
@@ -70,12 +68,33 @@ public class AppointmentService {
         throw new RuntimeException("Doctor or Patient not found");
     }
 
+    public long getCanceledAppointments() {
+        return appointmentRepository.countByStatus (AppointmentStatus.CANCELED);
+    }
+
+    public long getBookedAppointments() {
+        return appointmentRepository.countByStatus (AppointmentStatus.BOOKED);
+    }
+
+    public long getTodaysAppointments() {
+        return appointmentRepository.countByAppointmentDate(
+                LocalDate.from(Instant.now().atZone(ZoneId.systemDefault()))
+        );
+    }
 
     public void cancelAppointment(UUID appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(EntityNotFoundException::new);
         appointment.setStatus(AppointmentStatus.CANCELED);
         appointmentRepository.save (appointment);
     }
+
+    public Page<Appointment> getUpcomingAppointmentsForMonth(Pageable pageable) {
+        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate lastDayOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+
+        return appointmentRepository.findByAppointmentDateBetween (firstDayOfMonth, lastDayOfMonth, pageable);
+    }
+
 
     public List<Appointment> getRecentAppointments () {
         return appointmentRepository.findTop10ByOrderByIdDesc();

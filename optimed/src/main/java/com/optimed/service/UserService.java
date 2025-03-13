@@ -32,7 +32,7 @@ public class UserService {
                 .username (registrationDto.getUsername ())
                 .password (passwordEncoder.encode (registrationDto.getPassword ()))
                 .email (registrationDto.getEmail ())
-                .isProfileCompleted (false)
+                .enabled (false)
                 .role (selectedRole)
                 .build ();
         userRepository.save (user);
@@ -97,7 +97,7 @@ public class UserService {
         profile.setAvailabilitySchedule(request.getAvailabilitySchedule());
         profile.setContactInfo(request.getContactInfo());
 
-        user.setProfileCompleted(true);
+        user.setEnabled (true);
 
         doctorRepository.save(profile);
         userRepository.save(user);
@@ -122,7 +122,7 @@ public class UserService {
         profile.setDateOfBirth (request.getDateOfBirth());
         profile.setMedicalHistory(request.getMedicalHistory());
 
-        user.setProfileCompleted(true);
+        user.setEnabled (true);
 
         patientRepository.save(profile);
         userRepository.save(user);

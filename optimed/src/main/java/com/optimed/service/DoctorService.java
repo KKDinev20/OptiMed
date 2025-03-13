@@ -1,7 +1,6 @@
 package com.optimed.service;
 
 import com.optimed.entity.DoctorProfile;
-import com.optimed.entity.PatientProfile;
 import com.optimed.repository.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,4 +19,11 @@ public class DoctorService {
     public Optional<DoctorProfile> findByUsername(String username) {
         return doctorRepository.findByUserUsername(username);
     }
+
+    public String getDoctorFullName(String username) {
+        return findByUsername(username)
+                .map(DoctorProfile::getFullName)
+                .orElseThrow(() -> new RuntimeException("Doctor not found for username: " + username));
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.optimed.entity;
 
-import com.optimed.entity.enums.Gender;
-import com.optimed.entity.enums.Specialization;
+import com.optimed.entity.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +17,7 @@ public class DoctorProfile {
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
     private String fullName;
@@ -28,12 +27,13 @@ public class DoctorProfile {
 
     private int experienceYears;
 
+    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(length = 2000)
+    @Column(length = 2000, nullable = true)
     private String bio;
 
     @Column(length = 500)
@@ -41,8 +41,9 @@ public class DoctorProfile {
 
     private String contactInfo;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments;
 
+    @Column(nullable = true)
     private String avatarUrl;
 }

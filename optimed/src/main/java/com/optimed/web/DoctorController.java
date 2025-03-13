@@ -5,6 +5,7 @@ import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/doctor")
@@ -25,14 +26,24 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, @PageableDefault(size = 10, sort = "appointmentDate", direction = Sort.Direction.ASC) Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth != null && auth.getPrincipal() instanceof UserDetails userDetails) {
-            model.addAttribute("username", userDetails.getUsername());
+            String doctor = doctorService.getDoctorFullName(userDetails.getUsername());
+            model.addAttribute("doctor", doctor);
         }
+
+        model.addAttribute("cancelledAppointments", appointmentService.getCanceledAppointments());
+        model.addAttribute("todaysAppointments", appointmentService.getTodaysAppointments());
+        model.addAttribute("bookedAppointments", appointmentService.getBookedAppointments());
+
+        Page<Appointment> upcomingAppointments = appointmentService.getUpcomingAppointmentsForMonth(pageable);
+        model.addAttribute("upcomingAppointments", upcomingAppointments.getContent());
+
         return "doctor/dashboard";
     }
+
 
     @GetMapping("/appointments")
     public String getDoctorAppointments(

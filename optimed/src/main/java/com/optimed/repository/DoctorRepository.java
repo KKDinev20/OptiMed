@@ -10,5 +10,4 @@ import java.util.*;
 public interface DoctorRepository extends JpaRepository<DoctorProfile, UUID> {
     Optional<DoctorProfile> findByUserId(UUID userId);
     Optional<DoctorProfile> findByUserUsername(String username);
-
 }

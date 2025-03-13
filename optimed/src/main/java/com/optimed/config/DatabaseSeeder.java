@@ -31,7 +31,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .email("admin@optimed.com")
                     .password(passwordEncoder.encode("admin123"))
                     .role(Role.ADMIN)
-                    .isProfileCompleted (true)
+                    .enabled (true)
                     .build();
 
             userRepository.save(admin);

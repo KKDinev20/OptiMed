@@ -2,11 +2,13 @@ package com.optimed.repository;
 
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Repository
@@ -26,4 +28,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);
 
     Page<Appointment> findByDoctorId(UUID doctorId, Pageable pageable);
-}
+
+    long countByAppointmentDate (LocalDate appointmentDate);
+
+    Page<Appointment> findByAppointmentDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);}

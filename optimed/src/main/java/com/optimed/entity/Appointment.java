@@ -1,33 +1,28 @@
 package com.optimed.entity;
 
 import com.optimed.entity.enums.AppointmentStatus;
-import com.optimed.entity.enums.Specialization;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.UUID;
+import java.time.*;
+import java.util.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", nullable = false)
     private DoctorProfile doctor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     private PatientProfile patient;
 
@@ -37,18 +32,17 @@ public class Appointment {
     @Column(nullable = false)
     private LocalTime appointmentTime;
 
+    @Column(nullable = false)
+    private int durationMinutes;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AppointmentStatus status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Specialization specialization;
-
-    @Column(nullable = false, length = 500)
+    @Column(length = 500, nullable = true)
     private String reason;
 
-    @Column(length = 1000)
+    @Column(length = 1000, nullable = true)
     private String notes;
 
     @CreationTimestamp

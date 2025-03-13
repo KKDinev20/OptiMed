@@ -69,7 +69,7 @@ public class SecurityConfig {
             String username = authentication.getName();
             Optional<User> user = userService.findByUsername(username);
 
-            if (user.isPresent() && !user.get().isProfileCompleted() && user.get().getRole() != Role.ADMIN) {
+            if (user.isPresent() && !user.get().isEnabled () && user.get().getRole() != Role.ADMIN) {
                 response.sendRedirect("/complete-profile");
                 return;
             }
