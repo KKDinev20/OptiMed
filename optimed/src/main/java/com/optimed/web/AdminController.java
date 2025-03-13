@@ -74,6 +74,22 @@ public class AdminController {
         return new ModelAndView("admin/manage-users");
     }
 
+    @GetMapping("/manage-appointments")
+    public ModelAndView manageAppointments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
+
+        Page<Appointment> appointments = appointmentService.getAllAppointments(PageRequest.of(page, size));
+
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("currentPage", "Manage Appointments");
+        model.addAttribute("pageSize", size);
+        model.addAttribute("pageSizes", Arrays.asList(5, 10, 15, 20));
+
+        return new ModelAndView("admin/manage-appointments");
+    }
+
     @GetMapping("/edit-user/{userId}")
     public ModelAndView editUser (@PathVariable UUID userId, Model model) {
         User user = userService.getUserById (userId);

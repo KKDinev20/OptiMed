@@ -4,6 +4,7 @@ import com.optimed.dto.AppointmentRequest;
 import com.optimed.entity.Appointment;
 import com.optimed.entity.DoctorProfile;
 import com.optimed.entity.PatientProfile;
+import com.optimed.entity.User;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,6 +33,10 @@ public class AppointmentService {
 
     public long countAppointmentsByStatus(AppointmentStatus status) {
         return appointmentRepository.countByStatus(status);
+    }
+
+    public Page<Appointment> getAllAppointments (Pageable pageable) {
+        return appointmentRepository.findAll (pageable);
     }
 
     public Map<String, Long> countAppointmentsByStatus() {
