@@ -51,6 +51,7 @@ public class AppointmentService {
         Optional<DoctorProfile> doctor = doctorRepository.findById(request.getDoctorId());
         Optional<PatientProfile> patient = patientRepository.findById(request.getPatientId());
 
+
         if (doctor.isPresent() && patient.isPresent()) {
             boolean exists = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(
                     request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());

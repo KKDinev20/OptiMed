@@ -133,50 +133,47 @@
 
                                     <td class="align-middle text-center">
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            <button class="btn btn-secondary" type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false">
+                                                Actions
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
+                                            <ul class="dropdown-menu">
                                                 <li>
-                                                    <a th:href="@{/doctor/patient/{id}(id=${appointment.patient.id})}">View Patient</a>
-
+                                                    <a class="dropdown-item" th:href="@{/doctor/patient/{id}(id=${appointment.patient.id})}">
+                                                        View Patient
+                                                    </a>
                                                 </li>
-                                                <li th:if="${appointment.status != 'CANCELED'}">
-                                                    <form th:action="@{/doctor/cancel-appointment/{id}(id=${appointment.id})}"
+
+                                                <li th:if="${appointment.status == appointment.status.BOOKED}">
+                                                    <form th:action="@{/doctor/appointments/{appointmentId}/approve(appointmentId=${appointment.id})}"
                                                           method="post">
-                                                        <button type="submit" class="dropdown-item">Cancel</button>
+                                                        <button type="submit" class="dropdown-item text-success">Approve</button>
+                                                    </form>
+                                                    <form th:action="@{/doctor/appointments/{appointmentId}/reject(appointmentId=${appointment.id})}"
+                                                          method="post">
+                                                        <button type="submit" class="dropdown-item text-danger">Reject</button>
                                                     </form>
                                                 </li>
-                                                <li th:if="${appointment.status == 'BOOKED'}">
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/approve">
-                                                        <button type="submit">Approve</button>
-                                                    </form>
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reject">
-                                                        <button type="submit">Reject</button>
-                                                    </form>
-                                                </li>
-                                                <li th:if="${appointment.status == 'CONFIRMED'}">
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/cancel">
-                                                        <button type="submit">Cancel</button>
-                                                    </form>
 
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reschedule">
-                                                        <input type="date" name="newDate" required>
-                                                        <input type="time" name="newTime" required>
-                                                        <button type="submit">Reschedule</button>
+                                                <li th:if="${appointment.status == appointment.status.CONFIRMED}">
+                                                    <form th:action="@{/doctor/appointments/{appointmentId}/cancel(appointmentId=${appointment.id})}"
+                                                          method="post">
+                                                        <button type="submit" class="dropdown-item text-warning">Cancel</button>
                                                     </form>
-
+                                                    <form th:action="@{/doctor/appointments/{appointmentId}/reschedule(appointmentId=${appointment.id})}" method="get">
+                                                        <button type="submit" class="dropdown-item text-warning">Reschedule</button>
+                                                    </form>
                                                 </li>
                                             </ul>
                                         </div>
                                     </td>
+
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- Pagination -->
                         <div class="d-flex justify-content-center mt-3">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination">
@@ -187,7 +184,6 @@
                                         </a>
                                     </li>
 
-                                    <!-- Page Numbers -->
                                     <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                                         th:classappend="${i == currentPage ? 'active' : ''}">
                                         <a class="page-link"

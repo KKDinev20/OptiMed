@@ -93,6 +93,14 @@ public class DoctorController {
         return "redirect:/doctor/appointments";
     }
 
+    @GetMapping("/appointments/{appointmentId}/reschedule")
+    public String showRescheduleForm(@PathVariable("appointmentId") UUID appointmentId, Model model) {
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+        model.addAttribute("appointment", appointment);
+        return "doctor/appointments/reschedule-appointment";
+    }
+
+
     @PostMapping("/appointments/{appointmentId}/reschedule")
     public String rescheduleAppointment(@PathVariable UUID appointmentId,
                                         @RequestParam("newDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate newDate,
@@ -101,13 +109,13 @@ public class DoctorController {
         return "redirect:/doctor/appointments";
     }
 
+
     @GetMapping("/patient/{id}")
     public String viewPatientDetails(@PathVariable UUID id, Model model) {
         PatientProfile patient = patientService.getPatientById(id);
         model.addAttribute("patient", patient);
         return "doctor/patients/patient-details";
     }
-
     @GetMapping("/patients")
     public String getDoctorPatients(Model model, Authentication authentication) {
         String username = authentication.getName();
