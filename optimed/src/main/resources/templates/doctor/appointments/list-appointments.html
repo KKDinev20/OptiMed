@@ -39,10 +39,9 @@
                                         aria-label="Appointment status filter"
                                 >
                                     <option value="">All</option>
-                                    <option value="PENDING">Pending</option>
+                                    <option value="BOOKED">Booked</option>
                                     <option value="CONFIRMED">Confirmed</option>
                                     <option value="CANCELED">Canceled</option>
-                                    <option value="RESCHEDULED">Rescheduled</option>
                                 </select>
                             </div>
 
@@ -77,7 +76,6 @@
                         </form>
                     </div>
 
-                        <!-- Table -->
                         <div class="table-responsive p-0">
                             <table class="table align-items-center mb-0">
                                 <thead>
@@ -102,7 +100,6 @@
 
                                 <tbody>
                                 <tr th:each="appointment : ${appointments}">
-                                    <!-- Patient Info -->
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div>
@@ -117,19 +114,16 @@
                                         </div>
                                     </td>
 
-                                    <!-- Date -->
                                     <td>
                                         <p class="text-xs font-weight-bold mb-0"
                                            th:text="${#temporals.format(appointment.appointmentDate, 'yyyy-MM-dd')}">2023-12-15</p>
                                     </td>
 
-                                    <!-- Time -->
                                     <td class="align-middle text-center">
                                         <span class="text-secondary text-xs font-weight-bold"
                                               th:text="${#temporals.format(appointment.appointmentTime, 'HH:mm')}">14:30</span>
                                     </td>
 
-                                    <!-- Status -->
                                     <td class="align-middle text-center">
                                         <span th:classappend="${appointment.status == 'CONFIRMED' ? 'badge badge-sm bg-gradient-success' :
                                                                 (appointment.status == 'PENDING' ? 'badge badge-sm bg-gradient-warning' :
@@ -137,7 +131,6 @@
                                               th:text="${appointment.status}">CONFIRMED</span>
                                     </td>
 
-                                    <!-- Actions Dropdown -->
                                     <td class="align-middle text-center">
                                         <div class="dropdown">
                                             <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -146,7 +139,7 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
                                                 <li>
-                                                    <a th:href="@{/doctor/appointments/{appointmentId}/patient(appointmentId=${appointment.id})}">View Patient</a>
+                                                    <a th:href="@{/doctor/patient/{id}(id=${appointment.patient.id})}">View Patient</a>
 
                                                 </li>
                                                 <li th:if="${appointment.status != 'CANCELED'}">
@@ -155,7 +148,7 @@
                                                         <button type="submit" class="dropdown-item">Cancel</button>
                                                     </form>
                                                 </li>
-                                                <li th:if="${appointment.status == 'PENDING'}">
+                                                <li th:if="${appointment.status == 'BOOKED'}">
                                                     <form method="post" action="/doctor/appointments/{appointmentId}/approve">
                                                         <button type="submit">Approve</button>
                                                     </form>
