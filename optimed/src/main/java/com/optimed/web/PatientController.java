@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @Controller
@@ -133,11 +134,27 @@ public class PatientController {
 
 
     @PostMapping("/cancel-appointment/{appointmentId}")
-    public String cancelAppointment (
-            @PathVariable UUID appointmentId,
-            RedirectAttributes redirectAttrs
-    ) {
-        appointmentService.cancelAppointment (appointmentId);
+    public String cancelAppointment(@PathVariable UUID appointmentId, RedirectAttributes redirectAttrs) {
+        appointmentService.cancelAppointment(appointmentId);
+        redirectAttrs.addFlashAttribute("success", "Appointment canceled successfully.");
         return "redirect:/patient/appointments";
     }
+
+    @GetMapping("/appointments/{appointmentId}/reschedule")
+    public String showRescheduleForm(@PathVariable("appointmentId") UUID appointmentId, Model model) {
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+        model.addAttribute("appointment", appointment);
+        return "patient/appointments/reschedule-appointment";
+    }
+
+
+    @PostMapping("/appointments/{appointmentId}/reschedule")
+    public String rescheduleAppointment(@PathVariable UUID appointmentId,
+                                        @RequestParam("newDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate newDate,
+                                        @RequestParam("newTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime newTime) {
+        appointmentService.rescheduleAppointment(appointmentId, newDate, newTime);
+        return "redirect:/patient/appointments";
+    }
+
+
 }

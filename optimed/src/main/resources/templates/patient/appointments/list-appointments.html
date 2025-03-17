@@ -147,23 +147,24 @@
                                             <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
                                                 <li>
                                                     <a class="dropdown-item"
-                                                       th:href="@{/doctor/appointment-details/{id}(id=${appointment.id})}">Details</a>
+                                                       th:href="@{/patients/appointment-details/{id}(id=${appointment.id})}">Details</a>
                                                 </li>
                                                 <li th:if="${appointment.status != appointment.status.CANCELED}">
-                                                    <form th:action="@{/doctor/cancel-appointment/{id}(id=${appointment.id})}"
+                                                    <form th:action="@{/patient/cancel-appointment/{id}(id=${appointment.id})}"
                                                           method="post">
                                                         <button type="submit" class="dropdown-item">Cancel</button>
                                                     </form>
                                                 </li>
                                                 <li th:if="${appointment.status == appointment.status.BOOKED}">
-                                                    <form th:action="@{/doctor/appointments/{appointmentId}/approve(appointmentId=${appointment.id})}"
+                                                    <form th:action="@{/patient/appointments/{appointmentId}/approve(appointmentId=${appointment.id})}"
                                                           method="post">
                                                         <button type="submit" class="dropdown-item">Approve</button>
                                                     </form>
                                                 </li>
                                                 <li th:if="${appointment.status == appointment.status.CONFIRMED}">
-                                                    <a class="dropdown-item"
-                                                       th:href="@{/doctor/reschedule-appointment/{id}(id=${appointment.id})}">Reschedule</a>
+                                                    <form th:action="@{/patient/appointments/{appointmentId}/reschedule(appointmentId=${appointment.id})}" method="get">
+                                                        <button type="submit" class="dropdown-item text-warning">Reschedule</button>
+                                                    </form>
                                                 </li>
                                             </ul>
                                         </div>
