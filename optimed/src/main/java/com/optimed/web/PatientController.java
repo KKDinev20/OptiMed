@@ -28,86 +28,109 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping("/appointments/new")
-    public String showAppointmentForm(Model model) {
-        model.addAttribute("appointmentRequest", new AppointmentRequest());
-        model.addAttribute("currentUserPage", "Add Appointment");
-        model.addAttribute("specializations", Specialization.values());
+    public String showAppointmentForm (Model model) {
+        model.addAttribute ("appointmentRequest", new AppointmentRequest ());
+        model.addAttribute ("currentUserPage", "Add Appointment");
+        model.addAttribute ("specializations", Specialization.values ());
         return "patient/appointments/create";
     }
 
     @PostMapping("/appointments")
-    public String addAppointment(@ModelAttribute AppointmentRequest request, Authentication authentication, Model model) {
-        Optional<PatientProfile> patient = patientService.getPatientByUsername(authentication.getName());
+    public String addAppointment (@ModelAttribute AppointmentRequest request,
+                                  Authentication authentication,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            Optional<PatientProfile> patient = patientService.getPatientByUsername (authentication.getName ());
 
-        if (patient.isEmpty()) {
-            model.addAttribute("error", "Patient not found.");
+            if (patient.isEmpty ()) {
+                model.addAttribute ("error", "Patient not found.");
+                model.addAttribute ("specializations", Specialization.values ());
+                return "patient/appointments/create";
+            }
+
+            boolean isAvailable = appointmentService.isDoctorAvailable (request.getDoctorId (),
+                    request.getAppointmentDate (),
+                    request.getAppointmentTime ());
+            if (!isAvailable) {
+                model.addAttribute ("error", "Doctor is not available at the selected time.");
+                model.addAttribute ("specializations", Specialization.values ());
+                if (request.getSpecialization () != null) {
+                    model.addAttribute ("doctors",
+                            doctorProfileService.findDoctorsBySpecialization (request.getSpecialization ()));
+                }
+                return "patient/appointments/create";
+            }
+
+            request.setPatientId (patient.get ().getId ());
+            appointmentService.createAppointment (request);
+
+            redirectAttributes.addFlashAttribute ("success", "Appointment created successfully.");
+            return "redirect:/patient/appointments";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute ("error", "Invalid doctor ID format. Please select a doctor from the dropdown.");
+            model.addAttribute ("specializations", Specialization.values ());
+            return "patient/appointments/create";
+        } catch (Exception e) {
+            model.addAttribute ("error", "An error occurred: " + e.getMessage ());
+            model.addAttribute ("specializations", Specialization.values ());
             return "patient/appointments/create";
         }
-
-        request.setPatientId(patient.get().getId());
-        appointmentService.createAppointment(request);
-
-        model.addAttribute("success", "Appointment created successfully.");
-        return "redirect:/patient/appointments";
     }
 
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model, Principal principal) {
-        User user = userService.findByUsername(principal.getName()).orElseThrow();
-        PatientProfile patient = patientService.findByUser(user).orElseThrow();
+    public String dashboard (Model model, Principal principal) {
+        User user = userService.findByUsername (principal.getName ()).orElseThrow ();
+        PatientProfile patient = patientService.findByUser (user).orElseThrow ();
 
-        UUID patientId = patient.getId();
-        model.addAttribute("currentUserPage", "Dashboard");
-        model.addAttribute("patientId", patientId);
+        UUID patientId = patient.getId ();
+        model.addAttribute ("currentUserPage", "Dashboard");
+        model.addAttribute ("patientId", patientId);
 
         return "patient/dashboard";
     }
 
     @GetMapping("/doctors/{specialization}")
     @ResponseBody
-    public List<DoctorProfile> getDoctorsBySpecialization(@PathVariable Specialization specialization) {
-        List<DoctorProfile> doctors = doctorProfileService.findDoctorsBySpecialization(specialization);
+    public List<DoctorProfile> getDoctorsBySpecialization (
+            @PathVariable Specialization specialization) {
 
-        if (doctors.isEmpty()) {
-            System.out.println("No doctors found for specialization: " + specialization);
-        }
-
-        return doctors;
+        return doctorProfileService.findDoctorsBySpecialization (specialization);
     }
 
 
     @PreAuthorize("hasAuthority('ROLE_PATIENT')")
     @GetMapping("/appointments")
-    public String getPatientAppointments(
+    public String getPatientAppointments (
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             Model model,
             Principal principal) {
 
-        User user = userService.findByUsername(principal.getName()).orElseThrow();
-        PatientProfile patient = patientService.findByUser(user).orElseThrow();
-        UUID patientId = patient.getId();
+        User user = userService.findByUsername (principal.getName ()).orElseThrow ();
+        PatientProfile patient = patientService.findByUser (user).orElseThrow ();
+        UUID patientId = patient.getId ();
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Appointment> appointments = appointmentService.getAppointmentsByPatientId(patientId, pageable);
+        Pageable pageable = PageRequest.of (page, size);
+        Page<Appointment> appointments = appointmentService.getAppointmentsByPatientId (patientId, pageable);
 
-        model.addAttribute("appointments", appointments);
-        model.addAttribute("patientId", patientId);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("currentUserPage", "My Appointments");
-        model.addAttribute("totalPages", appointments.getTotalPages());
-        model.addAttribute("size", size);
+        model.addAttribute ("appointments", appointments);
+        model.addAttribute ("patientId", patientId);
+        model.addAttribute ("currentPage", page);
+        model.addAttribute ("currentUserPage", "My Appointments");
+        model.addAttribute ("totalPages", appointments.getTotalPages ());
+        model.addAttribute ("size", size);
 
         return "patient/appointments/list-appointments";
     }
 
     @PostMapping("/cancel-appointment/{appointmentId}")
-    public String cancelAppointment(
+    public String cancelAppointment (
             @PathVariable UUID appointmentId,
             RedirectAttributes redirectAttrs
     ) {
-        appointmentService.cancelAppointment(appointmentId);
+        appointmentService.cancelAppointment (appointmentId);
         return "redirect:/patient/appointments";
     }
 }

@@ -55,6 +55,13 @@ public class DoctorProfile {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments;
 
+    @ManyToMany
+    @JoinTable(
+            name = "patient_doctor_appointments",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id"))
+    private List<PatientProfile> patients;
+
     @Column(nullable = true)
     private String avatarUrl;
 

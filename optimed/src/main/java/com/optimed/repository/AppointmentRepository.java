@@ -49,6 +49,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     @Query("SELECT DISTINCT a.patient FROM Appointment a WHERE a.doctor.id = :doctorId")
     List<PatientProfile> findPatientsByDoctor(@Param("doctorId") UUID doctorId);
 
+    List<Appointment> findByDoctorIdAndAppointmentDateAndAppointmentTime(UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
 
+    boolean existsByPatientIdAndDoctorIdAndAppointmentDateAndAppointmentTime(UUID patientId, UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
     boolean existsByDoctorIdAndAppointmentDateAndAppointmentTime(UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
     Page<Appointment> findByAppointmentDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);}

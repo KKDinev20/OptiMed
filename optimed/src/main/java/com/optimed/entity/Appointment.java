@@ -1,5 +1,6 @@
 package com.optimed.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.optimed.entity.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +13,7 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"doctor"})
 @Builder
 public class Appointment {
     @Id

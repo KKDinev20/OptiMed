@@ -50,7 +50,7 @@ public class ProfileCompletionController {
         }
 
         userService.completeDoctorProfile (userDetails.getUsername(), doctorRequest);
-        return "redirect:/patient/dashboard";
+        return "redirect:/doctor/dashboard";
     }
 
 

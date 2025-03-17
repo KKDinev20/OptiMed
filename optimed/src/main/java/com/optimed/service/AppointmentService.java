@@ -51,13 +51,19 @@ public class AppointmentService {
         Optional<DoctorProfile> doctor = doctorRepository.findById(request.getDoctorId());
         Optional<PatientProfile> patient = patientRepository.findById(request.getPatientId());
 
-
         if (doctor.isPresent() && patient.isPresent()) {
-            boolean exists = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(
+            boolean doctorBooked = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(
                     request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());
 
-            if (exists) {
+            if (doctorBooked) {
                 throw new RuntimeException("This doctor is already booked at the selected date and time.");
+            }
+
+            boolean patientBooked = appointmentRepository.existsByPatientIdAndDoctorIdAndAppointmentDateAndAppointmentTime(
+                    request.getPatientId(), request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());
+
+            if (patientBooked) {
+                throw new RuntimeException("You have already booked an appointment with this doctor at the selected date and time.");
             }
 
             Appointment appointment = Appointment.builder()
@@ -74,6 +80,7 @@ public class AppointmentService {
             throw new RuntimeException("Doctor or Patient not found");
         }
     }
+
 
 
     public long getCanceledAppointments() {
@@ -136,7 +143,10 @@ public class AppointmentService {
         return appointmentRepository.findPatientsByDoctor(doctorId);
     }
 
-
+    public boolean isDoctorAvailable(UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime) {
+        List<Appointment> existingAppointments = appointmentRepository.findByDoctorIdAndAppointmentDateAndAppointmentTime(doctorId, appointmentDate, appointmentTime);
+        return existingAppointments.isEmpty();
+    }
     public Appointment getAppointmentById (UUID appointmentId) {
         return appointmentRepository.findById(appointmentId).orElseThrow();
     }
