@@ -4,13 +4,12 @@ import com.optimed.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
-import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ReportsController {
 

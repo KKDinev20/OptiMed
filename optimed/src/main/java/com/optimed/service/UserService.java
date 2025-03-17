@@ -63,8 +63,8 @@ public class UserService {
                 .orElseThrow (() -> new EntityNotFoundException ("User not found with ID: " + userId));
     }
 
-    public Page<User> getAllUsers (Pageable pageable) {
-        return userRepository.findAll (pageable);
+    public Page<User> getAllNonAdminUsers (Pageable pageable) {
+        return userRepository.findAllNonAdminUsers (pageable);
     }
 
     public void updateUser (UUID userId, UserRequest userRequest) {
@@ -85,8 +85,12 @@ public class UserService {
 
     public void completeDoctorProfile(String username, DoctorRequest request) {
         User user = findByUsername(username).orElseThrow();
-        DoctorProfile profile = doctorRepository.findByUserId(user.getId()).orElseThrow();
-
+        DoctorProfile profile = doctorRepository.findByUserId(user.getId())
+                .orElseGet(() -> {
+                    DoctorProfile newProfile = new DoctorProfile();
+                    newProfile.setUser(user);
+                    return newProfile;
+                });
         profile.setFullName(request.getFullName());
         profile.setEmail (user.getEmail ());
         profile.setAvatarUrl(request.getAvatarUrl());
@@ -94,7 +98,9 @@ public class UserService {
         profile.setGender (request.getGender());
         profile.setExperienceYears(request.getExperienceYears());
         profile.setBio(request.getBio());
-        profile.setAvailabilitySchedule(request.getAvailabilitySchedule());
+        profile.setStartTime (request.getStartTime ());
+        profile.setEndTime (request.getEndTime ());
+        profile.setAvailableDays (request.getAvailableDays ());
         profile.setContactInfo(request.getContactInfo());
 
         user.setEnabled (true);

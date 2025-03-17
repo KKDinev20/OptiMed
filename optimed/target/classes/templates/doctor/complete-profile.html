@@ -87,11 +87,24 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static mb-4">
-                                            <label class="ms-0">Availability Schedule</label>
-                                            <input type="text" th:field="*{availabilitySchedule}" class="form-control" required/>
+                                            <label class="ms-0">Available Days</label>
+                                            <input type="text" name="availableDays" th:field="*{availableDays}" class="form-control" required/>
                                         </div>
                                     </div>
 
+                                    <div class="col-md-3 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">From (Hour)</label>
+                                            <input type="time" th:field="*{startTime}" class="form-control" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="ms-0">To (Hour)</label>
+                                            <input type="time" th:field="*{endTime}" class="form-control" required/>
+                                        </div>
+                                    </div>
                                     <div class="col-md-6 mb-3">
                                         <div class="input-group input-group-static mb-4">
                                             <label class="ms-0">Contact Information</label>

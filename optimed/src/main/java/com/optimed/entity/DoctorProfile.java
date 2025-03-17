@@ -40,8 +40,14 @@ public class DoctorProfile {
     @Column(length = 2000, nullable = true)
     private String bio;
 
-    @Column(length = 500, nullable = false)
-    private String availabilitySchedule;
+    @Column(nullable = false)
+    private String availableDays;
+
+    @Column(nullable = false)
+    private String startTime;
+
+    @Column(nullable = false)
+    private String endTime;
 
     @Column(nullable = false)
     private String contactInfo;
@@ -51,4 +57,8 @@ public class DoctorProfile {
 
     @Column(nullable = true)
     private String avatarUrl;
+
+    public String getAvailableDays() {
+        return "Available on " + availableDays + ", from " + startTime + " to " + endTime;
+    }
 }

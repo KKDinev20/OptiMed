@@ -2,7 +2,6 @@ package com.optimed.web;
 
 import com.optimed.dto.*;
 import com.optimed.entity.*;
-import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -64,12 +63,11 @@ public class AdminController {
             @RequestParam(defaultValue = "10") int size,
             Model model) {
 
-        Page<User> users = userService.getAllUsers(PageRequest.of(page, size));
+        Page<User> users = userService.getAllNonAdminUsers(PageRequest.of(page, size));
 
         model.addAttribute("users", users);
         model.addAttribute("currentPage", "Manage Users");
         model.addAttribute("pageSize", size);
-        model.addAttribute("pageSizes", Arrays.asList(5, 10, 15, 20));
 
         return new ModelAndView("admin/manage-users");
     }

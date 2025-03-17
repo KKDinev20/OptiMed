@@ -31,7 +31,9 @@
                                     <div class="input-group input-group-outline mb-3">
                                         <select id="doctor" th:field="*{doctorId}" class="form-control">
                                             <option value="">Select Doctor</option>
+                                            <option th:each="doc : ${doctors}" th:value="${doc.id}" th:text="${doc.fullName}"></option>
                                         </select>
+
                                     </div>
 
                                     <div class="input-group input-group-outline mb-3">
@@ -88,8 +90,10 @@
                     data.forEach(doctor => {
                         let option = document.createElement("option");
                         option.textContent = doctor.fullName;
+                        option.value = doctor.id; // Ensure the UUID is set as value
                         doctorDropdown.appendChild(option);
                     });
+
                 })
                 .catch(error => {
                     console.error("Error fetching doctors:", error);

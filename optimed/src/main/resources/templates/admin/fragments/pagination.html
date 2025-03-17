@@ -35,16 +35,6 @@
     </div>
 </div>
 
-<div class="mb-3">
-    <select class="form-select" id="pageSizeSelect"
-            onchange="changePageSize(this.value)">
-        <option value="5" th:selected="${pageSize == 5}">5 entries</option>
-        <option value="10" th:selected="${pageSize == 10}">10 entries</option>
-        <option value="15" th:selected="${pageSize == 15}">15 entries</option>
-        <option value="20" th:selected="${pageSize == 20}">20 entries</option>
-    </select>
-</div>
-
 <script>
     function changePageSize(size) {
         window.location.href = '/admin/manage-users?page=0&size=' + size;

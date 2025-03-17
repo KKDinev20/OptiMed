@@ -37,18 +37,22 @@ public class ProfileCompletionController {
     }
 
     @PostMapping("/doctor")
-    public String completeDoctorProfile(@ModelAttribute @Valid DoctorRequest doctorRequest, @AuthenticationPrincipal UserDetails userDetails) {
-        String imageUrl;
-        if (doctorRequest.getAvatarFile() != null && !doctorRequest.getAvatarFile().isEmpty()) {
-            imageUrl = storeImage(doctorRequest.getAvatarFile());
-        } else {
-            imageUrl = "/dashboard/img/default.png";
-        }
-        doctorRequest.setAvatarUrl(imageUrl);
+    public String completeDoctorProfile(
+            @ModelAttribute DoctorRequest doctorRequest,
+            @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
+            @AuthenticationPrincipal UserDetails userDetails) {
 
-        userService.completeDoctorProfile(userDetails.getUsername(), doctorRequest);
-        return "redirect:/doctor/dashboard";
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            String imageUrl = storeImage(avatarFile);
+            doctorRequest.setAvatarUrl(imageUrl);
+        } else {
+            doctorRequest.setAvatarUrl("/dashboard/img/default.png");
+        }
+
+        userService.completeDoctorProfile (userDetails.getUsername(), doctorRequest);
+        return "redirect:/patient/dashboard";
     }
+
 
     @PostMapping("/patient")
     public String completePatientProfile(
