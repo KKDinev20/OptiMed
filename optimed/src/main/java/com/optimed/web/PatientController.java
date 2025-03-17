@@ -2,10 +2,12 @@ package com.optimed.web;
 
 import com.optimed.dto.AppointmentRequest;
 import com.optimed.entity.*;
+import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.entity.enums.Specialization;
 import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -100,30 +103,34 @@ public class PatientController {
     }
 
 
-    @PreAuthorize("hasAuthority('ROLE_PATIENT')")
     @GetMapping("/appointments")
     public String getPatientAppointments (
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String doctorName,
+            @RequestParam(required = false) AppointmentStatus status,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             Model model,
             Principal principal) {
 
-        User user = userService.findByUsername (principal.getName ()).orElseThrow ();
-        PatientProfile patient = patientService.findByUser (user).orElseThrow ();
-        UUID patientId = patient.getId ();
+        User user = userService.findByUsername(principal.getName()).orElseThrow();
+        PatientProfile patient = patientService.findByUser(user).orElseThrow();
+        UUID patientId = patient.getId();
 
-        Pageable pageable = PageRequest.of (page, size);
-        Page<Appointment> appointments = appointmentService.getAppointmentsByPatientId (patientId, pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Appointment> appointments = appointmentService.getAppointmentsByPatientId(patientId, pageable, doctorName, status, startDate, endDate);
 
-        model.addAttribute ("appointments", appointments);
-        model.addAttribute ("patientId", patientId);
-        model.addAttribute ("currentPage", page);
-        model.addAttribute ("currentUserPage", "My Appointments");
-        model.addAttribute ("totalPages", appointments.getTotalPages ());
-        model.addAttribute ("size", size);
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("patientId", patientId);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("currentUserPage", "My Appointments");
+        model.addAttribute("totalPages", appointments.getTotalPages());
+        model.addAttribute("size", size);
 
         return "patient/appointments/list-appointments";
     }
+
 
     @PostMapping("/cancel-appointment/{appointmentId}")
     public String cancelAppointment (

@@ -125,9 +125,9 @@
                                     </td>
 
                                     <td class="align-middle text-center">
-                                        <span th:classappend="${appointment.status == 'CONFIRMED' ? 'badge badge-sm bg-gradient-success' :
-                                                                (appointment.status == 'PENDING' ? 'badge badge-sm bg-gradient-warning' :
-                                                                (appointment.status == 'CANCELED' ? 'badge badge-sm bg-gradient-danger' : 'badge badge-sm bg-gradient-secondary'))}"
+                                        <span th:classappend="${appointment.status == appointment.status.CONFIRMED ? 'badge badge-sm bg-gradient-success' :
+                                                                (appointment.status == appointment.status.BOOKED ? 'badge badge-sm bg-gradient-warning' :
+                                                                (appointment.status == appointment.status.CANCELED ? 'badge badge-sm bg-gradient-danger' : 'badge badge-sm bg-gradient-secondary'))}"
                                               th:text="${appointment.status}">CONFIRMED</span>
                                     </td>
 

@@ -46,6 +46,18 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             Pageable pageable
     );
 
+    @Query("SELECT a FROM Appointment a WHERE a.patient.id = :patientId " +
+            "AND (:doctorName IS NULL OR a.doctor.fullName LIKE %:doctorName%) " +
+            "AND (:status IS NULL OR a.status = :status) " +
+            "AND (:startDate IS NULL OR a.appointmentDate >= :startDate) " +
+            "AND (:endDate IS NULL OR a.appointmentDate <= :endDate)")
+    Page<Appointment> findAppointmentsByFilters(UUID patientId,
+                                                @Param("doctorName") String doctorName,
+                                                @Param("status") AppointmentStatus status,
+                                                @Param("startDate") LocalDate startDate,
+                                                @Param("endDate") LocalDate endDate,
+                                                Pageable pageable);
+
     @Query("SELECT DISTINCT a.patient FROM Appointment a WHERE a.doctor.id = :doctorId")
     List<PatientProfile> findPatientsByDoctor(@Param("doctorId") UUID doctorId);
 

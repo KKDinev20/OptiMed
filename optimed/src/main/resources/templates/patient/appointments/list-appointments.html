@@ -20,14 +20,62 @@
                     </div>
 
                     <div class="card-body px-0 pb-2">
-                        <!-- Search Form -->
-                        <form th:action="@{/doctor/appointments}" method="get" class="p-3">
-                            <div class="input-group input-group-outline mb-3">
-                                <input type="text" name="filter" th:value="${filter}" class="form-control"
-                                       placeholder="Search appointments...">
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </div>
-                        </form>
+                        <div class="card-body px-0 pb-2">
+                            <form method="get" action="/patient/appointments" class="row g-2 px-3 pb-3">
+                                <div class="col-md-4">
+                                    <input
+                                            type="text"
+                                            name="doctorName"
+                                    placeholder="Search by doctor name"
+                                    class="form-control border-2 rounded-3 shadow-sm"
+                                    aria-label="Doctor name search"
+                                    >
+                                </div>
+
+                                <div class="col-md-2">
+                                    <select
+                                            name="status"
+                                            class="form-select border-2 rounded-3 shadow-sm"
+                                            aria-label="Appointment status filter"
+                                    >
+                                        <option value="">All</option>
+                                        <option value="BOOKED">Booked</option>
+                                        <option value="CONFIRMED">Confirmed</option>
+                                        <option value="CANCELED">Canceled</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="d-flex gap-2">
+                                        <input
+                                                type="date"
+                                                name="startDate"
+                                                class="form-control border-2 rounded-3 shadow-sm"
+                                                placeholder="From date"
+                                                aria-label="Start date filter"
+                                        >
+                                        <input
+                                                type="date"
+                                                name="endDate"
+                                                class="form-control border-2 rounded-3 shadow-sm"
+                                                placeholder="To date"
+                                                aria-label="End date filter"
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 d-flex justify-content-end align-items-center">
+                                    <button
+                                            type="submit"
+                                            class="btn btn-primary rounded-3 px-4 hover-shadow"
+                                            aria-label="Apply filters"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
 
                         <!-- Table -->
                         <div class="table-responsive p-0">
@@ -83,37 +131,37 @@
 
                                     <!-- Status -->
                                     <td class="align-middle text-center">
-                                        <span th:classappend="${appointment.status == 'CONFIRMED' ? 'badge badge-sm bg-gradient-success' :
-                                                                (appointment.status == 'PENDING' ? 'badge badge-sm bg-gradient-warning' :
-                                                                (appointment.status == 'CANCELED' ? 'badge badge-sm bg-gradient-danger' : 'badge badge-sm bg-gradient-secondary'))}"
+                                        <span th:classappend="${appointment.status == appointment.status.CONFIRMED ? 'badge badge-sm bg-gradient-success' :
+                                                                (appointment.status == appointment.status.BOOKED ? 'badge badge-sm bg-gradient-warning' :
+                                                                (appointment.status == appointment.status.CANCELED ? 'badge badge-sm bg-gradient-danger' : 'badge badge-sm bg-gradient-secondary'))}"
                                               th:text="${appointment.status}">CONFIRMED</span>
                                     </td>
 
-                                    <!-- Actions Dropdown -->
                                     <td class="align-middle text-center">
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            <button class="btn btn-secondary" type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false">
+                                                Actions
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
                                                 <li>
                                                     <a class="dropdown-item"
                                                        th:href="@{/doctor/appointment-details/{id}(id=${appointment.id})}">Details</a>
                                                 </li>
-                                                <li th:if="${appointment.status != 'CANCELED'}">
+                                                <li th:if="${appointment.status != appointment.status.CANCELED}">
                                                     <form th:action="@{/doctor/cancel-appointment/{id}(id=${appointment.id})}"
                                                           method="post">
                                                         <button type="submit" class="dropdown-item">Cancel</button>
                                                     </form>
                                                 </li>
-                                                <li th:if="${appointment.status == 'PENDING'}">
+                                                <li th:if="${appointment.status == appointment.status.BOOKED}">
                                                     <form th:action="@{/doctor/appointments/{appointmentId}/approve(appointmentId=${appointment.id})}"
                                                           method="post">
                                                         <button type="submit" class="dropdown-item">Approve</button>
                                                     </form>
                                                 </li>
-                                                <li th:if="${appointment.status == 'CONFIRMED'}">
+                                                <li th:if="${appointment.status == appointment.status.CONFIRMED}">
                                                     <a class="dropdown-item"
                                                        th:href="@{/doctor/reschedule-appointment/{id}(id=${appointment.id})}">Reschedule</a>
                                                 </li>
@@ -130,7 +178,7 @@
                             <nav aria-label="Page navigation">
                                 <ul class="pagination">
                                     <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-                                        <a class="page-link" th:href="@{/doctor/appointments(page=${currentPage - 1}, size=${size})}"
+                                        <a class="page-link" th:href="@{/patient/appointments(page=${currentPage - 1}, size=${size})}"
                                            aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
@@ -140,12 +188,12 @@
                                     <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                                         th:classappend="${i == currentPage ? 'active' : ''}">
                                         <a class="page-link"
-                                           th:href="@{/doctor/appointments(page=${i}, size=${size})}"
+                                           th:href="@{/patient/appointments(page=${i}, size=${size})}"
                                            th:text="${i + 1}"></a>
                                     </li>
 
                                     <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                                        <a class="page-link" th:href="@{/doctor/appointments(page=${currentPage + 1}, size=${size})}"
+                                        <a class="page-link" th:href="@{/patient/appointments(page=${currentPage + 1}, size=${size})}"
                                            aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
@@ -153,6 +201,7 @@
                                 </ul>
                             </nav>
                         </div>
+
 
                     </div>
                 </div>

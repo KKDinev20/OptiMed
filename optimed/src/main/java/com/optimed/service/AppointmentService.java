@@ -25,8 +25,13 @@ public class AppointmentService {
         return appointmentRepository.count ();
     }
 
-    public Page<Appointment> getAppointmentsByPatientId(UUID patientId, Pageable pageable) {
-        return appointmentRepository.findByPatientId(patientId, pageable);
+    public Page<Appointment> getAppointmentsByPatientId(UUID patientId, Pageable pageable,
+                                                        String doctorName,
+                                                        AppointmentStatus status,
+                                                        LocalDate startDate,
+                                                        LocalDate endDate) {
+
+        return appointmentRepository.findAppointmentsByFilters(patientId, doctorName, status, startDate, endDate, pageable);
     }
 
 
