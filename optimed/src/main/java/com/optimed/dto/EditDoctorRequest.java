@@ -2,12 +2,12 @@ package com.optimed.dto;
 
 import com.optimed.entity.enums.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class DoctorRequest {
-
+@Builder
+public class EditDoctorRequest {
     @NotBlank(message = "Full name is required")
     @Size(min = 2, max = 50, message = "Full name must be between 2 and 50 characters")
     private String fullName;

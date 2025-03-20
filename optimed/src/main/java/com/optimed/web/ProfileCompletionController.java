@@ -13,10 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.*;
 
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.*;
-
 @Controller
 @RequestMapping("/complete-profile")
 @RequiredArgsConstructor
@@ -43,7 +39,7 @@ public class ProfileCompletionController {
             @AuthenticationPrincipal UserDetails userDetails) {
 
         if (avatarFile != null && !avatarFile.isEmpty()) {
-            String imageUrl = storeImage(avatarFile);
+            String imageUrl = userService.storeImage(avatarFile);
             doctorRequest.setAvatarUrl(imageUrl);
         } else {
             doctorRequest.setAvatarUrl("/dashboard/img/default.png");
@@ -61,7 +57,7 @@ public class ProfileCompletionController {
             @AuthenticationPrincipal UserDetails userDetails) {
 
         if (avatarFile != null && !avatarFile.isEmpty()) {
-            String imageUrl = storeImage(avatarFile);
+            String imageUrl = userService.storeImage(avatarFile);
             patientRequest.setAvatarUrl(imageUrl);
         } else {
             patientRequest.setAvatarUrl("/dashboard/img/default.png");
@@ -71,31 +67,5 @@ public class ProfileCompletionController {
         return "redirect:/patient/dashboard";
     }
 
-    private String storeImage(MultipartFile file) {
-        if (file == null || file.isEmpty()) {
-            return "/dashboard/img/default.png";
-        }
-
-        try {
-            String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                throw new IllegalArgumentException("Only image files are allowed.");
-            }
-
-            String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
-            Path uploadDir = Paths.get("D:/OptiMed/optimed/src/main/resources/static/dashboard/img");
-
-            if (!Files.exists(uploadDir)) {
-                Files.createDirectories(uploadDir);
-            }
-
-            Path filePath = uploadDir.resolve(fileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            return "/dashboard/img/" + fileName;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to store image file", e);
-        }
-    }
 
 }

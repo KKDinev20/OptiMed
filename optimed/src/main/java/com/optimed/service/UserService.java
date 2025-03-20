@@ -9,7 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 @Service
@@ -137,4 +143,32 @@ public class UserService {
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
     }
+
+    public String storeImage(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return "/dashboard/img/default.png";
+        }
+
+        try {
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                throw new IllegalArgumentException("Only image files are allowed.");
+            }
+
+            String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+            Path uploadDir = Paths.get("D:/OptiMed/optimed/src/main/resources/static/dashboard/img");
+
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+
+            Path filePath = uploadDir.resolve(fileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            return "/dashboard/img/" + fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store image file", e);
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.optimed.scheduler;
 
-import com.optimed.dto.CancelAppointmentRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.AppointmentRepository;
@@ -19,16 +18,14 @@ public class AppointmentScheduler {
 
     @Scheduled(cron = "0 0 * * * ?")
     public void autoCancelExpiredAppointments() {
-        LocalTime threshold = LocalTime.now().minusHours (24);
-        List<Appointment> expiredAppointments = appointmentRepository
-                .findByStatusAndAppointmentTimeBefore(AppointmentStatus.BOOKED, threshold);
+        LocalDateTime threshold = LocalDateTime.now().minusHours(24);
+        List<Appointment> expiredAppointments = appointmentRepository.findExpiredAppointments(AppointmentStatus.BOOKED, threshold);
 
         for (Appointment appointment : expiredAppointments) {
             appointment.setStatus(AppointmentStatus.CANCELED);
             appointmentRepository.save(appointment);
         }
 
-        CancelAppointmentRequest logEntry = new CancelAppointmentRequest (expiredAppointments.size(), LocalTime.now());
-        System.out.println("✅ Auto-canceled " + logEntry.getCanceledAppointments () + " expired appointments at " + logEntry.getExecutedAt());
+        System.out.println("✅ Auto-canceled " + expiredAppointments.size() + " expired appointments at " + LocalDateTime.now());
     }
 }

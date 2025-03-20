@@ -18,7 +18,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.status = :status")
     long countByStatus(@Param("status") AppointmentStatus status);
 
-    List<Appointment> findByStatusAndAppointmentTimeBefore(AppointmentStatus status, LocalTime dateTime);
+    @Query("SELECT a FROM Appointment a " +
+            "WHERE a.status = :status " +
+            "AND FUNCTION('TIMESTAMP', a.appointmentDate, a.appointmentTime) < :threshold")
+    List<Appointment> findExpiredAppointments(
+            @Param("status") AppointmentStatus status,
+            @Param("threshold") LocalDateTime threshold
+    );
 
     List<Appointment> findTop10ByOrderByIdDesc();
     Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);

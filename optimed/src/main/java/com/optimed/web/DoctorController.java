@@ -1,7 +1,11 @@
 package com.optimed.web;
 
+import com.optimed.dto.DoctorRequest;
+import com.optimed.dto.EditDoctorRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
+import com.optimed.entity.enums.Specialization;
+import com.optimed.mapper.DoctorMapper;
 import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -9,11 +13,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.*;
 import java.util.*;
@@ -26,6 +32,7 @@ public class DoctorController {
 
     private final AppointmentService appointmentService;
     private final DoctorService doctorService;
+    private final UserService userService;
     private final PatientService patientService;
 
     @GetMapping("/dashboard")
@@ -109,6 +116,43 @@ public class DoctorController {
         return "redirect:/doctor/appointments";
     }
 
+    @GetMapping("/settings")
+    public String getDoctorSettings(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        DoctorProfile doctorProfile = doctorService.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        EditDoctorRequest editDoctorRequest = DoctorMapper.mapToEditDoctorRequest(doctorProfile);
+
+        model.addAttribute("doctor", editDoctorRequest);
+        model.addAttribute("specializations", Specialization.values());
+
+        return "doctor/settings";
+    }
+
+
+
+
+    @PostMapping("/settings")
+    public String completeDoctorProfile(
+            @ModelAttribute EditDoctorRequest editDoctorRequest,
+            @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            String imageUrl = userService.storeImage(avatarFile);
+            editDoctorRequest.setAvatarUrl(imageUrl);
+        } else {
+            editDoctorRequest.setAvatarUrl("/dashboard/img/default.png");
+        }
+
+        doctorService.updateDoctorProfile(userDetails.getUsername(), editDoctorRequest);
+        return "redirect:/doctor/dashboard";
+    }
+
+
+
+
+
 
     @GetMapping("/patient/{id}")
     public String viewPatientDetails(@PathVariable UUID id, Model model) {
@@ -116,6 +160,8 @@ public class DoctorController {
         model.addAttribute("patient", patient);
         return "doctor/patients/patient-details";
     }
+
+
     @GetMapping("/patients")
     public String getDoctorPatients(Model model, Authentication authentication) {
         String username = authentication.getName();
