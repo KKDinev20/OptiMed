@@ -1,10 +1,8 @@
 package com.optimed.web;
 
-import com.optimed.dto.DoctorRequest;
 import com.optimed.dto.EditDoctorRequest;
 import com.optimed.entity.*;
-import com.optimed.entity.enums.AppointmentStatus;
-import com.optimed.entity.enums.Specialization;
+import com.optimed.entity.enums.*;
 import com.optimed.mapper.DoctorMapper;
 import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +47,7 @@ public class DoctorController {
         model.addAttribute("bookedAppointments", appointmentService.getBookedAppointments());
 
         Page<Appointment> upcomingAppointments = appointmentService.getUpcomingAppointmentsForMonth(pageable);
+        model.addAttribute ("currentUserPage", "Dashboard");
         model.addAttribute("upcomingAppointments", upcomingAppointments.getContent());
 
         return "doctor/dashboard";
@@ -75,6 +74,7 @@ public class DoctorController {
         model.addAttribute("appointments", appointmentPage.getContent());
         model.addAttribute("totalPages", appointmentPage.getTotalPages());
         model.addAttribute("totalItems", appointmentPage.getTotalElements());
+        model.addAttribute ("currentUserPage", "Appointments");
         model.addAttribute("currentPage", appointmentPage.getNumber());
         model.addAttribute("pageSize", appointmentPage.getSize());
 
@@ -103,6 +103,7 @@ public class DoctorController {
     @GetMapping("/appointments/{appointmentId}/reschedule")
     public String showRescheduleForm(@PathVariable("appointmentId") UUID appointmentId, Model model) {
         Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+        model.addAttribute ("currentUserPage", "Reschedule Appointment");
         model.addAttribute("appointment", appointment);
         return "doctor/appointments/reschedule-appointment";
     }
@@ -124,6 +125,7 @@ public class DoctorController {
         EditDoctorRequest editDoctorRequest = DoctorMapper.mapToEditDoctorRequest(doctorProfile);
 
         model.addAttribute("doctor", editDoctorRequest);
+        model.addAttribute ("currentUserPage", "Settings");
         model.addAttribute("specializations", Specialization.values());
 
         return "doctor/settings";
@@ -157,6 +159,7 @@ public class DoctorController {
     @GetMapping("/patient/{id}")
     public String viewPatientDetails(@PathVariable UUID id, Model model) {
         PatientProfile patient = patientService.getPatientById(id);
+        model.addAttribute ("currentUserPage", "Patients");
         model.addAttribute("patient", patient);
         return "doctor/patients/patient-details";
     }
@@ -166,9 +169,9 @@ public class DoctorController {
     public String getDoctorPatients(Model model, Authentication authentication) {
         String username = authentication.getName();
         DoctorProfile doctor = doctorService.findByUsername(username).orElseThrow();
-
         List<PatientProfile> patients = appointmentService.getPatientsByDoctor(doctor.getId());
         model.addAttribute("patients", patients);
+        model.addAttribute ("currentUserPage", "Patients");
 
         return "doctor/patients/patient-list";
     }

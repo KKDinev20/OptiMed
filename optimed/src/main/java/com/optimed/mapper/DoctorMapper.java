@@ -12,7 +12,7 @@ public class DoctorMapper {
                 .fullName(doctorProfile.getFullName())
                 .specialization(doctorProfile.getSpecialization())
                 .experienceYears(doctorProfile.getExperienceYears())
-                .email(doctorProfile.getUser().getEmail()) // Ensure `DoctorProfile` has a `User` entity with email
+                .email(doctorProfile.getUser().getEmail())
                 .bio(doctorProfile.getBio())
                 .availableDays(doctorProfile.getAvailableDays())
                 .startTime(doctorProfile.getStartTime())

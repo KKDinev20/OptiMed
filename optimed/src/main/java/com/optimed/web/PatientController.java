@@ -1,18 +1,23 @@
 package com.optimed.web;
 
 import com.optimed.dto.AppointmentRequest;
+import com.optimed.dto.EditPatientRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.entity.enums.Specialization;
+import com.optimed.mapper.PatientMapper;
 import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -143,8 +148,45 @@ public class PatientController {
     @GetMapping("/appointments/{appointmentId}/reschedule")
     public String showRescheduleForm(@PathVariable("appointmentId") UUID appointmentId, Model model) {
         Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+
+        model.addAttribute ("currentUserPage", "Reschedule");
         model.addAttribute("appointment", appointment);
         return "patient/appointments/reschedule-appointment";
+    }
+
+    @GetMapping("/settings")
+    public String getPatientSettings(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        PatientProfile patientProfile = patientService.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        EditPatientRequest editPatientRequest = PatientMapper.mapToEditPatient (patientProfile);
+
+        model.addAttribute("patient", editPatientRequest);
+        model.addAttribute ("currentUserPage", "Settings");
+
+        model.addAttribute("specializations", Specialization.values());
+
+        return "patient/settings";
+    }
+
+
+
+
+    @PostMapping("/settings")
+    public String completePatientProfile(
+            @ModelAttribute EditPatientRequest editPatientRequest,
+            @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            String imageUrl = userService.storeImage(avatarFile);
+            editPatientRequest.setAvatarUrl(imageUrl);
+        } else {
+            editPatientRequest.setAvatarUrl("/dashboard/img/default.png");
+        }
+
+        patientService.updatePatientProfile(userDetails.getUsername(), editPatientRequest);
+        return "redirect:/patient/dashboard";
     }
 
 
