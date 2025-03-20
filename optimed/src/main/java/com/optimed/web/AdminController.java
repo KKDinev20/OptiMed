@@ -50,12 +50,16 @@ public class AdminController {
         DashboardStats stats = dashboardService.getDashboardStats();
 
         Map<String, Long> statusStats = appointmentService.countAppointmentsByStatus();
-        stats.setPendingAppointments(statusStats.get("Pending"));
-        stats.setBookedAppointments(statusStats.get("Booked"));
-        stats.setConfirmedAppointments(statusStats.get("Confirmed"));
+
+        stats.setPendingAppointments(statusStats.getOrDefault("Pending", 0L));
+        stats.setBookedAppointments(statusStats.getOrDefault("Booked", 0L));
+        stats.setConfirmedAppointments(statusStats.getOrDefault("Confirmed", 0L));
+
+        stats.setAppointmentsByStatus(statusStats);
 
         return stats;
     }
+
 
     @GetMapping("/manage-users")
     public ModelAndView manageUsers(

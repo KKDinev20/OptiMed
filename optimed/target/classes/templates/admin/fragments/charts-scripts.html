@@ -6,12 +6,18 @@
             const response = await fetch('/admin/stats');
             const stats = await response.json();
 
+            console.log("Fetched stats:", stats); // Debugging line
+
+            if (!stats || !stats.appointmentsByStatus) {
+                console.error("Error: appointmentsByStatus is undefined.");
+                return;
+            }
+
             renderBarChart(stats.appointmentsByStatus);
-
-            renderLineChart(stats.bookedAppointments, "booked-appointments", "Booked Appointments");
-
+            renderLineChart(stats.bookedAppointments, "chart-booked-line", "Booked Appointments");
             renderLineChart(stats.confirmedAppointments, "chart-line-tasks", "Confirmed Appointments");
         }
+
 
         function renderBarChart(data) {
             const ctx = document.getElementById("chart-bars").getContext("2d");
@@ -83,7 +89,13 @@
         }
 
         function renderLineChart(data, chartId, label) {
-            const ctx = document.getElementById(chartId).getContext("2d");
+            const canvas = document.getElementById(chartId);
+            if (!canvas) {
+                console.error(`Error: Element with ID '${chartId}' not found.`);
+                return;
+            }
+
+            const ctx = canvas.getContext("2d");
             new Chart(ctx, {
                 type: "line",
                 data: {
@@ -100,66 +112,25 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false,
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(context) {
-                                    const fullMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                                    return fullMonths[context[0].dataIndex];
-                                }
-                            }
-                        }
+                        legend: { display: false },
                     },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index',
-                    },
+                    interaction: { intersect: false, mode: 'index' },
                     scales: {
                         y: {
-                            grid: {
-                                drawBorder: false,
-                                display: true,
-                                drawOnChartArea: true,
-                                drawTicks: false,
-                                borderDash: [4, 4],
-                                color: '#e5e5e5'
-                            },
-                            ticks: {
-                                display: true,
-                                color: '#737373',
-                                padding: 10,
-                                font: {
-                                    size: 12,
-                                    lineHeight: 2
-                                },
-                            }
+                            grid: { drawBorder: false, color: '#e5e5e5' },
+                            ticks: { color: '#737373' },
                         },
                         x: {
-                            grid: {
-                                drawBorder: false,
-                                display: false,
-                                drawOnChartArea: false,
-                                drawTicks: false,
-                                borderDash: [5, 5]
-                            },
-                            ticks: {
-                                display: true,
-                                color: '#737373',
-                                padding: 10,
-                                font: {
-                                    size: 12,
-                                    lineHeight: 2
-                                },
-                            }
+                            grid: { drawBorder: false },
+                            ticks: { color: '#737373' },
                         },
                     },
                 },
             });
         }
 
-        window.onload = loadDashboardStats;
+
+            document.addEventListener("DOMContentLoaded", loadDashboardStats);
     </script>
 
 </div>

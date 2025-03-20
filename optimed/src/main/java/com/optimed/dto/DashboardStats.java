@@ -12,4 +12,5 @@ public class DashboardStats {
     private long pendingAppointments;
     private long bookedAppointments;
     private long confirmedAppointments;
+    private Map<String, Long> appointmentsByStatus;
 }

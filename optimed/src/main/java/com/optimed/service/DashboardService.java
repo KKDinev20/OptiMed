@@ -6,6 +6,8 @@ import com.optimed.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class DashboardService {
@@ -18,13 +20,21 @@ public class DashboardService {
 
     public DashboardStats getDashboardStats() {
         DashboardStats stats = new DashboardStats();
+
         stats.setTotalUsers(userRepository.count());
         stats.setTotalDoctors(doctorRepository.count());
         stats.setTotalPatients(patientRepository.count());
-        stats.setTotalAppointments(appointmentRepository.count());
         stats.setTotalAppointments(appointmentService.countAppointments());
-        stats.setPendingAppointments(appointmentService.countAppointmentsByStatus(AppointmentStatus.valueOf ("BOOKED")));
+
+        Map<String, Long> statusCounts = appointmentService.countAppointmentsByStatus();
+
+        stats.setPendingAppointments(statusCounts.getOrDefault("Pending", 0L));
+        stats.setBookedAppointments(statusCounts.getOrDefault("Booked", 0L));
+        stats.setConfirmedAppointments(statusCounts.getOrDefault("Confirmed", 0L));
+
+        stats.setAppointmentsByStatus(statusCounts);
 
         return stats;
     }
+
 }
