@@ -1,0 +1,22 @@
+package com.optimednotifications.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.util.*;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Recipient {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    private String email;
+
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+}

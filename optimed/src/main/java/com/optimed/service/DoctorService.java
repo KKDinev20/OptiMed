@@ -1,19 +1,25 @@
 package com.optimed.service;
 
-import com.optimed.dto.DoctorRequest;
+import com.optimed.client.NotificationClient;
 import com.optimed.dto.EditDoctorRequest;
-import com.optimed.entity.DoctorProfile;
-import com.optimed.mapper.DoctorMapper;
-import com.optimed.repository.DoctorRepository;
+import com.optimed.entity.*;
+import com.optimed.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final NotificationClient notificationClient;
+
+
     public long countDoctors () {
         return doctorRepository.count ();
     }
@@ -49,4 +55,14 @@ public class DoctorService {
     }
 
 
+    @Scheduled(cron = "0 0 8 * * ?")
+    public void notifyDoctorsOfUpcomingAppointments() {
+        LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
+        List<Appointment> appointments = appointmentRepository.findByAppointmentDate(tomorrow.toLocalDate());
+
+        for (Appointment appointment : appointments) {
+            notificationClient.sendNotification(appointment.getDoctor().getEmail(),
+                    "Reminder: You have an appointment tomorrow at " + appointment.getAppointmentTime());
+        }
+    }
 }

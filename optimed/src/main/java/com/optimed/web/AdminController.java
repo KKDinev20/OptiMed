@@ -3,6 +3,7 @@ package com.optimed.web;
 import com.optimed.dto.*;
 import com.optimed.entity.*;
 import com.optimed.service.*;
+import com.optimed.client.NotificationClient;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.management.Notification;
 import java.util.*;
 
 
@@ -26,6 +28,7 @@ public class AdminController {
 
     private final UserService userService;
     private final DoctorService doctorService;
+    private final NotificationClient notificationClient;
     private final PatientService patientService;
     private final AppointmentService appointmentService;
     private final DashboardService dashboardService;
@@ -160,6 +163,9 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
-
+    /*@GetMapping("/{recipientId}")
+    public List<Notification> getNotifications(@PathVariable UUID recipientId) {
+        return notificationClient.getNotificationsForRecipient(recipientId);
+    }*/
 }
 

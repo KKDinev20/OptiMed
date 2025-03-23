@@ -81,10 +81,6 @@ public class UserService {
         existingUser.setEmail (userRequest.getEmail ());
         existingUser.setRole (userRequest.getRole ());
 
-        if (userRequest.getPassword () != null && !userRequest.getPassword ().isEmpty ()) {
-            existingUser.setPassword (passwordEncoder.encode (userRequest.getPassword ()));
-        }
-
         userRepository.save (existingUser);
     }
 

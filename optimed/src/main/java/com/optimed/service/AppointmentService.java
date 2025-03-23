@@ -1,11 +1,10 @@
 package com.optimed.service;
 
+import com.optimed.client.NotificationClient;
 import com.optimed.dto.AppointmentRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.*;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final NotificationClient notificationClient;
 
     public long countAppointments () {
         return appointmentRepository.count ();
@@ -106,6 +106,9 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
         appointment.setStatus(AppointmentStatus.CANCELED);
         appointmentRepository.save(appointment);
+
+        notificationClient.sendNotification(appointment.getPatient().getEmail(),
+                "Your appointment on " + appointment.getAppointmentDate() + " has been canceled.");
     }
 
     public void rescheduleAppointment(UUID appointmentId, LocalDate newDate, LocalTime newTime) {
