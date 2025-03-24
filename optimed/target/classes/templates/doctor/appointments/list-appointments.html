@@ -143,8 +143,8 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a class="dropdown-item" th:href="@{/doctor/patient/{id}(id=${appointment.patient.id})}">
-                                                        View Patient
+                                                    <a th:href="@{/doctor/appointments/{id}(id=${appointment.id})}" class="btn btn-primary">
+                                                        View Details
                                                     </a>
                                                 </li>
 

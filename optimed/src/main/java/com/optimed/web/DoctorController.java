@@ -117,6 +117,22 @@ public class DoctorController {
         return "redirect:/doctor/appointments";
     }
 
+    @GetMapping("/appointments/{appointmentId}")
+    public String getAppointmentDetails(@PathVariable UUID appointmentId, Model model) {
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+            model.addAttribute("appointment", appointment);
+            return "doctor/appointments/appointment-details";
+        } catch (NoSuchElementException e) {
+            model.addAttribute("error", "Appointment not found.");
+            return "error/404";
+        } catch (Exception e) {
+            model.addAttribute("error", "An unexpected error occurred.");
+            return "error/500";
+        }
+    }
+
+
     @GetMapping("/settings")
     public String getDoctorSettings(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         DoctorProfile doctorProfile = doctorService.findByUsername(userDetails.getUsername())

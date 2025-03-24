@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <div th:replace="~{dashboard_fragments/head :: head}"></div>
+  <title>Appointment Details</title>
+</head>
+<body class="g-sidenav-show bg-gray-100">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
+       id="sidenav-main">
+  <div th:replace="~{doctor/fragments/sidebar :: sidebar}"></div>
+</aside>
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+  <div th:replace="~{doctor/fragments/navbar :: navbar}"></div>
+  <div class="container-fluid py-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-gradient-primary-to-secondary">
+        <h4 class="text-white mb-0">Appointment Details</h4>
+      </div>
+      <div class="card-body">
+        <h5 class="mb-4">Patient Information</h5>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <strong>Name:</strong>
+            <span class="text-muted ms-2" th:text="${appointment.patient.fullName}"></span>
+          </div>
+          <div class="col-md-6">
+            <strong>Email:</strong>
+            <span class="text-muted ms-2" th:text="${appointment.patient.email}"></span>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <strong>Phone:</strong>
+            <span class="text-muted ms-2" th:text="${appointment.patient.phoneNumber}"></span>
+          </div>
+        </div>
+
+        <h5 class="mb-4 mt-4">Appointment Details</h5>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <strong>Date:</strong>
+            <span class="text-muted ms-2" th:text="${#temporals.format(appointment.appointmentDate, 'dd/MM/yyyy')}"></span>
+          </div>
+          <div class="col-md-6">
+            <strong>Time:</strong>
+            <span class="text-muted ms-2" th:text="${#temporals.format(appointment.appointmentTime, 'HH:mm')}"></span>
+          </div>
+        </div>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <strong>Status:</strong>
+            <span class="text-muted ms-2" th:text="${appointment.status}"></span>
+          </div>
+          <div class="col-md-6">
+            <strong>Reason:</strong>
+            <span class="text-muted ms-2" th:text="${appointment.reason}"></span>
+          </div>
+        </div>
+
+        <h5 class="mt-4">Actions</h5>
+
+        <!-- Cancel Form -->
+        <form method="post" th:action="@{/doctor/appointments/{id}/cancel(id=${appointment.id})}" class="d-inline-block me-2">
+          <button type="submit" class="btn btn-danger shadow-sm">
+            <i class="fas fa-times-circle me-2"></i>Cancel Appointment
+          </button>
+        </form>
+
+        <!-- Reschedule Form -->
+        <form method="post"
+              th:action="@{/doctor/appointments/{id}/reschedule(id=${appointment.id})}"
+              class="row mt-4">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">New Date:</label>
+            <input type="date"
+                   name="newDate"
+                   required
+                   class="form-control shadow-sm border-2">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">New Time:</label>
+            <input type="time"
+                   name="newTime"
+                   required
+                   class="form-control shadow-sm border-2">
+          </div>
+          <button type="submit" class="btn btn-warning shadow-sm">
+            <i class="fas fa-calendar-clock me-2"></i>Reschedule
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<div th:replace="~{dashboard_fragments/footer :: footer}"></div>
+</body>
+</html>
