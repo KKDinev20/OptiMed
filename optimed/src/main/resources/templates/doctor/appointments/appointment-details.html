@@ -12,9 +12,9 @@
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
   <div th:replace="~{doctor/fragments/navbar :: navbar}"></div>
   <div class="container-fluid py-4">
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 mb-4">
       <div class="card-header bg-gradient-primary-to-secondary">
-        <h4 class="text-white mb-0">Appointment Details</h4>
+        <h4 class="text-dark mb-0">Appointment Details</h4>
       </div>
       <div class="card-body">
         <h5 class="mb-4">Patient Information</h5>
@@ -57,16 +57,21 @@
           </div>
         </div>
 
-        <h5 class="mt-4">Actions</h5>
-
-        <!-- Cancel Form -->
-        <form method="post" th:action="@{/doctor/appointments/{id}/cancel(id=${appointment.id})}" class="d-inline-block me-2">
+        <form method="post"
+              th:action="@{/doctor/appointments/{id}/cancel(id=${appointment.id})}"
+              class="d-inline-block me-2">
           <button type="submit" class="btn btn-danger shadow-sm">
             <i class="fas fa-times-circle me-2"></i>Cancel Appointment
           </button>
         </form>
+      </div>
+    </div>
 
-        <!-- Reschedule Form -->
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-gradient-warning-to-info">
+        <h4 class="text-dark mb-0">Reschedule Appointment</h4>
+      </div>
+      <div class="card-body">
         <form method="post"
               th:action="@{/doctor/appointments/{id}/reschedule(id=${appointment.id})}"
               class="row mt-4">

@@ -1,4 +1,3 @@
-/*
 package com.optimed.exception;
 
 import org.springframework.ui.Model;
@@ -16,22 +15,15 @@ public class GlobalExceptionHandler {
         return new RedirectView("/login?error=true");
     }
 
-    @ExceptionHandler(Exception.class)
-    public RedirectView handleGeneralException(Exception ex, RedirectAttributes attributes) {
-        attributes.addFlashAttribute("errorMessage",
-                "Something went wrong. Please try again later.");
-        return new RedirectView("/error");
-    }
-
     @ExceptionHandler(NoSuchElementException.class)
     public String handleNotFoundException(NoSuchElementException e, Model model) {
         model.addAttribute("error", "Resource not found.");
-        return "error/404"; // Custom error page
+        return "error/error";
     }
 
     @ExceptionHandler(Exception.class)
     public String handleGeneralException(Exception e, Model model) {
         model.addAttribute("error", "Something went wrong. Please try again.");
-        return "error/500"; // Generic error page
+        return "error/error";
     }
-}*/
+}

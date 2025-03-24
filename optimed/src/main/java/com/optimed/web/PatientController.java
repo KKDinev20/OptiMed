@@ -198,5 +198,22 @@ public class PatientController {
         return "redirect:/patient/appointments";
     }
 
+    @GetMapping("/appointments/{appointmentId}")
+    public String getAppointmentDetails(@PathVariable UUID appointmentId, Model model) {
+        model.addAttribute("currentUserPage", "Appointment details");
 
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+            model.addAttribute("appointment", appointment);
+            return "doctor/appointments/appointment-details";
+        } catch (NoSuchElementException e) {
+            model.addAttribute("error", "Appointment not found.");
+            model.addAttribute("errorCode", 404);
+            return "error/error";
+        } catch (Exception e) {
+            model.addAttribute("error", "An unexpected error occurred.");
+            model.addAttribute("errorCode", 500);
+            return "error/error";
+        }
+    }
 }

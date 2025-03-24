@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="error-template">
+<head>
+  <title th:text="${errorCode == 404 ? 'Resource Not Found' : 'Error'}">Error</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="bg-gray-100">
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-gradient-danger-to-warning text-white">
+          <h2 class="mb-0">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${errorCode == 404 ? 'Resource Not Found' : 'Error'}">Error</span>
+          </h2>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-danger" role="alert">
+            <span th:text="${error}">Error message</span>
+          </div>
+          <a href="/doctor/settings" class="btn btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left me-2"></i>Go Back
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -119,6 +119,8 @@ public class DoctorController {
 
     @GetMapping("/appointments/{appointmentId}")
     public String getAppointmentDetails(@PathVariable UUID appointmentId, Model model) {
+        model.addAttribute ("currentUserPage", "Appointment details");
+
         try {
             Appointment appointment = appointmentService.getAppointmentById(appointmentId);
             model.addAttribute("appointment", appointment);

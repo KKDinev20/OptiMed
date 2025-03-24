@@ -149,8 +149,9 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
                                                 <li>
-                                                    <a class="dropdown-item"
-                                                       th:href="@{/patients/appointment-details/{id}(id=${appointment.id})}">Details</a>
+                                                    <a th:href="@{/patient/appointments/{id}(id=${appointment.id})}" class="dropdown-item">
+                                                        View Details
+                                                    </a>
                                                 </li>
                                                 <li th:if="${appointment.status != appointment.status.CANCELED}">
                                                     <form th:action="@{/patient/cancel-appointment/{id}(id=${appointment.id})}"
