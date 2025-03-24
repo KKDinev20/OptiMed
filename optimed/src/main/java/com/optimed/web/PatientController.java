@@ -10,6 +10,7 @@ import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -169,9 +171,6 @@ public class PatientController {
         return "patient/settings";
     }
 
-
-
-
     @PostMapping("/settings")
     public String completePatientProfile(
             @ModelAttribute EditPatientRequest editPatientRequest,
@@ -189,7 +188,25 @@ public class PatientController {
         return "redirect:/patient/dashboard";
     }
 
+    @GetMapping("/doctor")
+    public String listAvailableDoctors(Model model) {
+        model.addAttribute ("currentUserPage", "Available Doctors");
 
+        List<DoctorProfile> doctors = doctorProfileService.getAllDoctors();
+        model.addAttribute("doctors", doctors);
+        return "patient/doctor/doctor-list";
+    }
+
+    @GetMapping("/doctor/{doctorId}")
+    public String viewDoctorDetails(@PathVariable UUID doctorId, Model model) {
+        model.addAttribute ("currentUserPage", "Doctor Profile");
+        DoctorProfile doctor = doctorProfileService.getDoctorById(doctorId);
+        if (doctor == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found");
+        }
+        model.addAttribute("doctor", doctor);
+        return "patient/doctor/doctor-details";
+    }
     @PostMapping("/appointments/{appointmentId}/reschedule")
     public String rescheduleAppointment(@PathVariable UUID appointmentId,
                                         @RequestParam("newDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate newDate,

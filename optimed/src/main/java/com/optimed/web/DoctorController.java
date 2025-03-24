@@ -127,10 +127,10 @@ public class DoctorController {
             return "doctor/appointments/appointment-details";
         } catch (NoSuchElementException e) {
             model.addAttribute("error", "Appointment not found.");
-            return "error/404";
+            return "error/error";
         } catch (Exception e) {
             model.addAttribute("error", "An unexpected error occurred.");
-            return "error/500";
+            return "error/error";
         }
     }
 
