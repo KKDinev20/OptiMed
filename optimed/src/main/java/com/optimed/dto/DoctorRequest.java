@@ -2,10 +2,14 @@ package com.optimed.dto;
 
 import com.optimed.entity.enums.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DoctorRequest {
 
     @NotBlank(message = "Full name is required")

@@ -1,13 +1,17 @@
 package com.optimed.dto;
 
 import com.optimed.entity.enums.Specialization;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.*;
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AppointmentRequest {
     private UUID doctorId;
 
@@ -22,4 +26,5 @@ public class AppointmentRequest {
     private Specialization specialization;
 
     private String reason;
+
 }

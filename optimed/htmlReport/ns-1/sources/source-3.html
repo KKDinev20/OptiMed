@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DashboardService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.optimed.service</a>
+</div>
+
+<h1>Coverage Summary for Class: DashboardService (com.optimed.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DashboardService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.optimed.service;
+&nbsp;
+&nbsp;import com.optimed.dto.DashboardStats;
+&nbsp;import com.optimed.entity.enums.AppointmentStatus;
+&nbsp;import com.optimed.repository.*;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@Service
+&nbsp;@RequiredArgsConstructor
+&nbsp;public class DashboardService {
+&nbsp;
+&nbsp;    private final UserRepository userRepository;
+&nbsp;    private final DoctorRepository doctorRepository;
+&nbsp;    private final PatientRepository patientRepository;
+&nbsp;    private final AppointmentRepository appointmentRepository;
+&nbsp;    private final AppointmentService appointmentService;
+&nbsp;
+&nbsp;    public DashboardStats getDashboardStats() {
+<b class="nc">&nbsp;        DashboardStats stats = new DashboardStats();</b>
+&nbsp;
+<b class="nc">&nbsp;        stats.setTotalUsers(userRepository.count());</b>
+<b class="nc">&nbsp;        stats.setTotalDoctors(doctorRepository.count());</b>
+<b class="nc">&nbsp;        stats.setTotalPatients(patientRepository.count());</b>
+<b class="nc">&nbsp;        stats.setTotalAppointments(appointmentService.countAppointments());</b>
+&nbsp;
+<b class="nc">&nbsp;        Map&lt;String, Long&gt; statusCounts = appointmentService.countAppointmentsByStatus();</b>
+&nbsp;
+<b class="nc">&nbsp;        stats.setPendingAppointments(statusCounts.getOrDefault(&quot;Pending&quot;, 0L));</b>
+<b class="nc">&nbsp;        stats.setBookedAppointments(statusCounts.getOrDefault(&quot;Booked&quot;, 0L));</b>
+<b class="nc">&nbsp;        stats.setConfirmedAppointments(statusCounts.getOrDefault(&quot;Confirmed&quot;, 0L));</b>
+&nbsp;
+<b class="nc">&nbsp;        stats.setAppointmentsByStatus(statusCounts);</b>
+&nbsp;
+<b class="nc">&nbsp;        return stats;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-03-25 21:16</div>
+</div>
+</body>
+</html>

@@ -139,10 +139,6 @@ public class AppointmentService {
         return appointmentRepository.findTop3ByOrderByIdDesc();
     }
 
-    public Page<Appointment> getAppointmentsByDoctorId(UUID doctorId, Pageable pageable) {
-        return appointmentRepository.findByDoctorId(doctorId, pageable);
-    }
-
     public void updateAppointmentStatus(UUID appointmentId, AppointmentStatus status) {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
         appointment.setStatus(status);
@@ -157,6 +153,8 @@ public class AppointmentService {
         List<Appointment> existingAppointments = appointmentRepository.findByDoctorIdAndAppointmentDateAndAppointmentTime(doctorId, appointmentDate, appointmentTime);
         return existingAppointments.isEmpty();
     }
+
+
     public Appointment getAppointmentById (UUID appointmentId) {
         return appointmentRepository.findById(appointmentId).orElseThrow();
     }

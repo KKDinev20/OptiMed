@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UserService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.optimed.service</a>
+</div>
+
+<h1>Coverage Summary for Class: UserService (com.optimed.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/81)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.optimed.service;
+&nbsp;
+&nbsp;import com.optimed.dto.*;
+&nbsp;import com.optimed.entity.*;
+&nbsp;import com.optimed.entity.enums.Role;
+&nbsp;import com.optimed.repository.*;
+&nbsp;import jakarta.persistence.EntityNotFoundException;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.data.domain.*;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.multipart.MultipartFile;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.nio.file.Paths;
+&nbsp;import java.nio.file.StandardCopyOption;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;@Service
+&nbsp;@RequiredArgsConstructor
+&nbsp;public class UserService {
+&nbsp;
+&nbsp;    private final DoctorRepository doctorRepository;
+&nbsp;    private final PatientRepository patientRepository;
+&nbsp;    private final UserRepository userRepository;
+&nbsp;    private final PasswordEncoder passwordEncoder;
+&nbsp;
+&nbsp;    public Optional&lt;User&gt; findByUsername (String username) {
+<b class="nc">&nbsp;        return userRepository.findByUsername (username);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void registerUser(RegisterRequest registrationDto) {
+<b class="nc">&nbsp;        Role selectedRole = registrationDto.getRole () != null ? registrationDto.getRole () : Role.PATIENT;</b>
+&nbsp;
+<b class="nc">&nbsp;        User user = User.builder ()</b>
+<b class="nc">&nbsp;                .username (registrationDto.getUsername ())</b>
+<b class="nc">&nbsp;                .password (passwordEncoder.encode (registrationDto.getPassword ()))</b>
+<b class="nc">&nbsp;                .email (registrationDto.getEmail ())</b>
+<b class="nc">&nbsp;                .enabled (false)</b>
+<b class="nc">&nbsp;                .role (selectedRole)</b>
+<b class="nc">&nbsp;                .build ();</b>
+<b class="nc">&nbsp;        userRepository.save (user);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (selectedRole == Role.DOCTOR) {</b>
+<b class="nc">&nbsp;            DoctorProfile doctorProfile = DoctorProfile.builder ()</b>
+<b class="nc">&nbsp;                    .user (user)</b>
+<b class="nc">&nbsp;                    .build ();</b>
+<b class="nc">&nbsp;            doctorRepository.save (doctorProfile);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            PatientProfile patientProfile = PatientProfile.builder ()</b>
+<b class="nc">&nbsp;                    .user (user)</b>
+<b class="nc">&nbsp;                    .build ();</b>
+<b class="nc">&nbsp;            patientRepository.save (patientProfile);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    public long countUsers () {
+<b class="nc">&nbsp;        return userRepository.count ();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public List&lt;User&gt; getRecentUsers () {
+<b class="nc">&nbsp;        return userRepository.findTop10ByOrderByIdDesc ();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public User getUserById (UUID userId) {
+<b class="nc">&nbsp;        return userRepository.findById (userId)</b>
+<b class="nc">&nbsp;                .orElseThrow (() -&gt; new EntityNotFoundException (&quot;User not found with ID: &quot; + userId));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Page&lt;User&gt; getAllNonAdminUsers (Pageable pageable) {
+<b class="nc">&nbsp;        return userRepository.findAllNonAdminUsers (pageable);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void updateUser (UUID userId, UserRequest userRequest) {
+<b class="nc">&nbsp;        User existingUser = userRepository.findById (userId)</b>
+<b class="nc">&nbsp;                .orElseThrow (() -&gt; new EntityNotFoundException (&quot;User not found with ID: &quot; + userId));</b>
+&nbsp;
+<b class="nc">&nbsp;        existingUser.setUsername (userRequest.getUsername ());</b>
+<b class="nc">&nbsp;        existingUser.setEmail (userRequest.getEmail ());</b>
+<b class="nc">&nbsp;        existingUser.setRole (userRequest.getRole ());</b>
+&nbsp;
+<b class="nc">&nbsp;        userRepository.save (existingUser);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void completeDoctorProfile(String username, DoctorRequest request) {
+<b class="nc">&nbsp;        User user = findByUsername(username).orElseThrow();</b>
+<b class="nc">&nbsp;        DoctorProfile profile = doctorRepository.findByUserId(user.getId())</b>
+<b class="nc">&nbsp;                .orElseGet(() -&gt; {</b>
+<b class="nc">&nbsp;                    DoctorProfile newProfile = new DoctorProfile();</b>
+<b class="nc">&nbsp;                    newProfile.setUser(user);</b>
+<b class="nc">&nbsp;                    return newProfile;</b>
+&nbsp;                });
+<b class="nc">&nbsp;        profile.setFullName(request.getFullName());</b>
+<b class="nc">&nbsp;        profile.setEmail (user.getEmail ());</b>
+<b class="nc">&nbsp;        profile.setAvatarUrl(request.getAvatarUrl());</b>
+<b class="nc">&nbsp;        profile.setSpecialization(request.getSpecialization());</b>
+<b class="nc">&nbsp;        profile.setGender (request.getGender());</b>
+<b class="nc">&nbsp;        profile.setExperienceYears(request.getExperienceYears());</b>
+<b class="nc">&nbsp;        profile.setBio(request.getBio());</b>
+<b class="nc">&nbsp;        profile.setStartTime (request.getStartTime ());</b>
+<b class="nc">&nbsp;        profile.setEndTime (request.getEndTime ());</b>
+<b class="nc">&nbsp;        profile.setAvailableDays (request.getAvailableDays ());</b>
+<b class="nc">&nbsp;        profile.setContactInfo(request.getContactInfo());</b>
+&nbsp;
+<b class="nc">&nbsp;        user.setEnabled (true);</b>
+&nbsp;
+<b class="nc">&nbsp;        doctorRepository.save(profile);</b>
+<b class="nc">&nbsp;        userRepository.save(user);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void completePatientProfile(String username, PatientRequest request) {
+<b class="nc">&nbsp;        User user = findByUsername(username).orElseThrow(() -&gt; new EntityNotFoundException(&quot;User not found: &quot; + username));</b>
+&nbsp;
+<b class="nc">&nbsp;        PatientProfile profile = patientRepository.findByUserId(user.getId())</b>
+<b class="nc">&nbsp;                .orElseGet(() -&gt; {</b>
+<b class="nc">&nbsp;                    PatientProfile newProfile = new PatientProfile();</b>
+<b class="nc">&nbsp;                    newProfile.setUser(user);</b>
+<b class="nc">&nbsp;                    return newProfile;</b>
+&nbsp;                });
+&nbsp;
+<b class="nc">&nbsp;        profile.setFullName(request.getFullName());</b>
+<b class="nc">&nbsp;        profile.setAvatarUrl(request.getAvatarUrl());</b>
+<b class="nc">&nbsp;        profile.setEmail (user.getEmail ());</b>
+<b class="nc">&nbsp;        profile.setGender (request.getGender());</b>
+<b class="nc">&nbsp;        profile.setAddress(request.getAddress());</b>
+<b class="nc">&nbsp;        profile.setPhoneNumber(request.getPhoneNumber());</b>
+<b class="nc">&nbsp;        profile.setDateOfBirth (request.getDateOfBirth());</b>
+<b class="nc">&nbsp;        profile.setMedicalHistory(request.getMedicalHistory());</b>
+&nbsp;
+<b class="nc">&nbsp;        user.setEnabled (true);</b>
+&nbsp;
+<b class="nc">&nbsp;        patientRepository.save(profile);</b>
+<b class="nc">&nbsp;        userRepository.save(user);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void deleteUser(UUID userId) {
+<b class="nc">&nbsp;        userRepository.deleteById(userId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String storeImage(MultipartFile file) {
+<b class="nc">&nbsp;        if (file == null || file.isEmpty()) {</b>
+<b class="nc">&nbsp;            return &quot;/dashboard/img/default.png&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            String contentType = file.getContentType();</b>
+<b class="nc">&nbsp;            if (contentType == null || !contentType.startsWith(&quot;image/&quot;)) {</b>
+<b class="nc">&nbsp;                throw new IllegalArgumentException(&quot;Only image files are allowed.&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            String fileName = UUID.randomUUID() + &quot;-&quot; + file.getOriginalFilename();</b>
+<b class="nc">&nbsp;            Path uploadDir = Paths.get(&quot;D:/OptiMed/optimed/src/main/resources/static/dashboard/img&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (!Files.exists(uploadDir)) {</b>
+<b class="nc">&nbsp;                Files.createDirectories(uploadDir);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            Path filePath = uploadDir.resolve(fileName);</b>
+<b class="nc">&nbsp;            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);</b>
+&nbsp;
+<b class="nc">&nbsp;            return &quot;/dashboard/img/&quot; + fileName;</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;Failed to store image file&quot;, e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-03-25 21:16</div>
+</div>
+</body>
+</html>
