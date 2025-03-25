@@ -1,136 +1,142 @@
 <div th:fragment="charts-scripts">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <script>
-        async function loadDashboardStats() {
-            const response = await fetch('/admin/stats');
-            const stats = await response.json();
-
-            console.log("Fetched stats:", stats); // Debugging line
-
-            if (!stats || !stats.appointmentsByStatus) {
-                console.error("Error: appointmentsByStatus is undefined.");
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js is not loaded. Please include the Chart.js library.');
                 return;
             }
 
-            renderBarChart(stats.appointmentsByStatus);
-            renderLineChart(stats.bookedAppointments, "chart-booked-line", "Booked Appointments");
-            renderLineChart(stats.confirmedAppointments, "chart-line-tasks", "Confirmed Appointments");
-        }
+            async function loadDashboardStats() {
+                try {
+                    const response = await fetch('/admin/stats');
+                    const stats = await response.json();
 
+                    console.log("Fetched dashboard stats:", stats);
 
-        function renderBarChart(data) {
-            const ctx = document.getElementById("chart-bars").getContext("2d");
-            new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        label: "Appointments",
-                        data: Object.values(data),
-                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false,
-                        }
+                    renderBarChart(stats.appointmentsByStatus || {});
+
+                    renderLineChart(
+                        stats.bookedAppointments || {},
+                        'chart-booked-line',
+                        'Booked Appointments'
+                    );
+
+                    renderLineChart(
+                        stats.confirmedAppointments || {},
+                        'chart-line-tasks',
+                        'Confirmed Appointments'
+                    );
+                } catch (error) {
+                    console.error('Error fetching dashboard stats:', error);
+                }
+            }
+
+            function renderBarChart(data) {
+                const canvas = document.getElementById('appointment-bars');
+                if (!canvas) {
+                    console.error('Appointments bar chart canvas not found');
+                    return;
+                }
+
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+
+                new Chart(canvas, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Appointments by Status',
+                            data: values,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.6)',
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(75, 192, 192, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(75, 192, 192, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
                     },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index',
-                    },
-                    scales: {
-                        y: {
-                            grid: {
-                                drawBorder: false,
-                                display: true,
-                                drawOnChartArea: true,
-                                drawTicks: false,
-                                borderDash: [5, 5],
-                                color: '#e5e5e5'
-                            },
-                            ticks: {
-                                suggestedMin: 0,
-                                suggestedMax: 500,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
                                 beginAtZero: true,
-                                padding: 10,
-                                font: {
-                                    size: 14,
-                                    lineHeight: 2
-                                },
-                                color: "#737373"
-                            },
-                        },
-                        x: {
-                            grid: {
-                                drawBorder: false,
-                                display: false,
-                                drawOnChartArea: false,
-                                drawTicks: false,
-                                borderDash: [5, 5]
-                            },
-                            ticks: {
-                                display: true,
-                                color: '#737373',
-                                padding: 10,
-                                font: {
-                                    size: 14,
-                                    lineHeight: 2
-                                },
+                                title: {
+                                    display: true,
+                                    text: 'Number of Appointments'
+                                }
                             }
                         },
-                    },
-                },
-            });
-        }
-
-        function renderLineChart(data, chartId, label) {
-            const canvas = document.getElementById(chartId);
-            if (!canvas) {
-                console.error(`Error: Element with ID '${chartId}' not found.`);
-                return;
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Appointments by Status'
+                            },
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
             }
 
-            const ctx = canvas.getContext("2d");
-            new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        label: label,
-                        data: Object.values(data),
-                        borderColor: "#43A047",
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                    },
-                    interaction: { intersect: false, mode: 'index' },
-                    scales: {
-                        y: {
-                            grid: { drawBorder: false, color: '#e5e5e5' },
-                            ticks: { color: '#737373' },
-                        },
-                        x: {
-                            grid: { drawBorder: false },
-                            ticks: { color: '#737373' },
-                        },
-                    },
-                },
-            });
-        }
+            function renderLineChart(data, canvasId, label) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) {
+                    console.error(`Line chart canvas '${canvasId}' not found`);
+                    return;
+                }
 
+                const labels = Object.keys(data);
+                const values = Object.values(data);
 
-            document.addEventListener("DOMContentLoaded", loadDashboardStats);
-    </script>
+                new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: label,
+                            data: values,
+                            borderColor: 'rgba(67, 160, 71, 1)',
+                            backgroundColor: 'rgba(67, 160, 71, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Appointments'
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: label
+                            },
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            loadDashboardStats();
+        });
+</script>
 
 </div>

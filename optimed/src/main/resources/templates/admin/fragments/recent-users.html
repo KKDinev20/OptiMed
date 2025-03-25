@@ -24,23 +24,20 @@
                      <tr th:each="user : ${recentUsers}">
                          <td>
                              <div class="d-flex px-2 py-1">
-                                 <div>
-                                     <img src="../assets/img/small-logos/logo-xd.svg" class="avatar avatar-sm me-3" alt="xd">
-                                 </div>
                                  <div class="d-flex flex-column justify-content-center">
-                                     <h6 class="mb-0 text-sm" th:text="${user.username}">Material XD Version</h6>
+                                     <h6 class="mb-0 text-sm" th:text="${user.username}">User 1</h6>
                                  </div>
                              </div>
                          </td>
                          <td>
                              <div class="avatar-group mt-2">
                                  <div class="d-flex flex-column justify-content-center">
-                                     <h6 class="mb-0 text-sm" th:text="${user.email}">Material XD Version</h6>
+                                     <h6 class="mb-0 text-sm" th:text="${user.email}">Email</h6>
                                  </div>
                              </div>
                          </td>
                          <td class="align-middle text-center text-sm">
-                             <span class="text-xs font-weight-bold" th:text="${user.role}"> $14,000 </span>
+                             <span class="text-xs font-weight-bold" th:text="${user.role}"> Patoent </span>
                          </td>
                      </tr>
                      </tbody>

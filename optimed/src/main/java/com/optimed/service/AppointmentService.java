@@ -5,7 +5,9 @@ import com.optimed.dto.AppointmentRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -157,5 +159,9 @@ public class AppointmentService {
     }
     public Appointment getAppointmentById (UUID appointmentId) {
         return appointmentRepository.findById(appointmentId).orElseThrow();
+    }
+
+    public void deleteAppointment(UUID appointmentId) {
+        appointmentRepository.deleteById (appointmentId);
     }
 }

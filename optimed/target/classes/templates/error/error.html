@@ -19,7 +19,16 @@
         </div>
         <div class="card-body">
           <div class="alert alert-danger" role="alert">
-            <span th:text="${error}">Error message</span>
+            <strong th:text="${error}">Error message</strong>
+            <hr>
+            <p th:if="${errorDetails != null}">
+              <strong>Details:</strong>
+              <span th:text="${errorDetails}">Error details</span>
+            </p>
+            <p th:if="${errorType != null}">
+              <strong>Error Type:</strong>
+              <span th:text="${errorType}">Error type</span>
+            </p>
           </div>
           <a href="/doctor/settings" class="btn btn-secondary shadow-sm">
             <i class="fas fa-arrow-left me-2"></i>Go Back

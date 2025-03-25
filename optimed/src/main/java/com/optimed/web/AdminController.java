@@ -2,6 +2,7 @@ package com.optimed.web;
 
 import com.optimed.dto.*;
 import com.optimed.entity.*;
+import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.service.*;
 import com.optimed.client.NotificationClient;
 import jakarta.validation.Valid;
@@ -16,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.management.Notification;
 import java.util.*;
 
 
@@ -62,6 +62,14 @@ public class AdminController {
 
         return stats;
     }
+
+    @PostMapping("/delete-appointment/{appointmentId}")
+    public String deleteAppointment (@PathVariable UUID appointmentId) {
+        appointmentService.deleteAppointment (appointmentId);
+        return "redirect:/admin/manage-appointments";
+    }
+
+
 
 
     @GetMapping("/manage-users")
