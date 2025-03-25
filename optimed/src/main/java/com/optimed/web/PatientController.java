@@ -36,6 +36,8 @@ public class PatientController {
     private final AppointmentService appointmentService;
     private final DoctorProfileService doctorProfileService;
     private final UserService userService;
+    private final MedicalRecordService medicalRecordService;
+    private final PrescriptionService prescriptionService;
     private final PatientService patientService;
 
     @GetMapping("/appointments/new")
@@ -233,4 +235,21 @@ public class PatientController {
             return "error/error";
         }
     }
+
+    @GetMapping("/medical-history")
+    public String listMedicalHistory(Model model,  Principal principal) {
+        User user = userService.findByUsername (principal.getName ()).orElseThrow ();
+        PatientProfile patient = patientService.findByUser (user).orElseThrow ();
+
+        UUID patientId = patient.getId ();
+
+        List<Prescription> prescriptions = prescriptionService.getPrescriptionsForPatient(patientId);
+        List<MedicalRecord> records = medicalRecordService.getRecordsForPatient(patientId);
+
+        model.addAttribute("prescriptions", prescriptions);
+        model.addAttribute("medicalRecords", records);
+
+        return "patient/medical-history";
+    }
+
 }

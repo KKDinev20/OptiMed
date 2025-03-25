@@ -1,17 +1,114 @@
-<h3>My Prescriptions</h3>
-<ul>
-    <li th:each="prescription : ${prescriptions}">
-        <b th:text="${prescription.medicationDetails}"></b> -
-        <i th:text="${prescription.dosageInstructions}"></i>
-        <small>(Issued on <span th:text="${prescription.dateIssued}"></span>)</small>
-    </li>
-</ul>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Available Doctors</title>
+    <div th:replace="~{dashboard_fragments/head :: head}"></div>
+    <style>
+        .medical-history {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-<h3>My Medical History</h3>
-<ul>
-    <li th:each="record : ${medicalRecords}">
-        <b th:text="${record.diagnosis}"></b> -
-        <i th:text="${record.treatmentPlan}"></i>
-        <small>(Recorded on <span th:text="${record.recordDate}"></span>)</small>
-    </li>
-</ul>
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .prescription-card { border-left: 4px solid #4CAF50; }
+        .record-card { border-left: 4px solid #2196F3; }
+
+        .card-content h4 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .date {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+
+</head>
+<body class="g-sidenav-show bg-gray-100">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2">
+    <div th:replace="~{patient/fragments/sidebar :: sidebar}"></div>
+</aside>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <div th:replace="~{patient/fragments/navbar :: navbar}"></div>
+
+    <div class="container-fluid py-2">
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">Medical History</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-4 pb-2">
+                        <div class="medical-history">
+                            <div class="section-header">
+                                <i class="fas fa-prescription"></i>
+                                <h4>My Prescriptions</h4>
+                            </div>
+
+                            <div class="cards-container">
+                                <div th:each="prescription : ${prescriptions}"
+                                     class="card prescription-card">
+                                    <div class="card-content">
+                                        <h4 th:text="${prescription.medicationDetails}"></h4>
+                                        <p class="dosage" th:text="${prescription.dosageInstructions}"></p>
+                                        <small class="date" th:text="${prescription.dateIssued}"></small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class=>
+                                <i class="fas fa-file-medical"></i>
+                                <h4>My Medical History</h4>
+                            </div>
+
+                            <div class="cards-container">
+                                <div th:each="record : ${medicalRecords}"
+                                     class="card record-card">
+                                    <div class="card-content">
+                                        <h4 th:text="${record.diagnosis}"></h4>
+                                        <p class="treatment" th:text="${record.treatmentPlan}"></p>
+                                        <small class="date" th:text="${record.recordDate}"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-center mt-3">
+                            <a href="/patient/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
+</main>
+
+<div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+</body>
+</html>
