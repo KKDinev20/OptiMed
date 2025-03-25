@@ -3,81 +3,196 @@
 <head>
     <title>Patient Details</title>
     <div th:replace="~{dashboard_fragments/head :: head}"></div>
-    <style>
-        .avatar {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="g-sidenav-show bg-gray-100">
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2" id="sidenav-main">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2 shadow-sm" id="sidenav-main">
     <div th:replace="~{doctor/fragments/sidebar :: sidebar}"></div>
 </aside>
 
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
     <div th:replace="~{doctor/fragments/navbar :: navbar}"></div>
+
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
-                <div class="card my-4">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Patient Details</h6>
+                <div class="card border-radius-lg shadow-sm mb-4">
+                    <div class="card-header bg-gradient-dark position-relative overflow-hidden">
+                        <div class="position-relative z-index-2 text-white">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <img th:src="${patient.avatarUrl ?: '/assets/img/default-avatar.png'}"
+                                         class="avatar rounded-circle border shadow-lg bg-white"
+                                         alt="Patient Avatar">
+                                </div>
+                                <div class="col ps-3">
+                                    <h4 class="mb-1 font-weight-bold text-white" th:text="${patient.fullName}">
+                                        John Doe</h4>
+                                    <div class="small text-muted">
+                                        Patient Profile
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="card-body px-4 pb-2">
-                        <div class="row d-flex align-items-center">
-                            <div class="col-md-4 text-center">
-                                <img th:src="${patient.avatarUrl ?: '/assets/img/default-avatar.png'}"
-                                     class="avatar rounded-circle border shadow-lg"
-                                     alt="Patient Avatar">
-                            </div>
-
-                            <div class="col-md-8">
-                                <h4 class="mb-2 font-weight-bold" th:text="${patient.fullName}">John Doe</h4>
-
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <div class="mb-2">
-                                            <span class="text-muted fw-bold">Phone:</span>
-                                            <span class="text-dark" th:text="${patient.phoneNumber}"></span>
-                                        </div>
-                                        <div class="mb-2">
-                                            <span class="text-muted fw-bold">Email:</span>
-                                            <span class="text-dark" th:text="${patient.email}"></span>
-                                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3 rounded-lg">
+                                    <h6 class="mb-2">Contact Details</h6>
+                                    <div class="small mb-2">
+                                        <span class="text-muted">Phone:</span>
+                                        <span class="ms-2" th:text="${patient.phoneNumber}"></span>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-2">
-                                            <span class="text-muted fw-bold">Gender:</span>
-                                            <span class="text-dark" th:text="${patient.gender}"></span>
-                                        </div>
-                                        <div class="mb-2">
-                                            <span class="text-muted fw-bold">Birthdate:</span>
-                                            <span class="text-dark" th:text="${patient.dateOfBirth}"></span>
-                                        </div>
+                                    <div class="small mb-2">
+                                        <span class="text-muted">Email:</span>
+                                        <span class="ms-2" th:text="${patient.email}"></span>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="mt-4">
-                                    <a href="/doctor/patients" class="btn btn-sm bg-gradient-primary">
-                                        <i class="fas fa-arrow-left me-2"></i>
-                                        Back to Patients
-                                    </a>
+                            <div class="col-md-6">
+                                <div class="p-3 rounded-lg">
+                                    <h6 class="mb-2">Personal Details</h6>
+                                    <div class="small mb-2">
+                                        <span class="text-muted">Gender:</span>
+                                        <span class="ms-2" th:text="${patient.gender}"></span>
+                                    </div>
+                                    <div class="small mb-2">
+                                        <span class="text-muted">Birthdate:</span>
+                                        <span class="ms-2" th:text="${patient.dateOfBirth}"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="card border-radius-lg shadow-sm mb-4">
+                    <div class="card-header bg-gradient-dark position-relative overflow-hidden">
+                        <div class="position-relative z-index-2 text-white">
+                            <h6 class="mb-0 text-white">Update Medical History</h6>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <form th:action="@{/doctor/medical-record}" method="post">
+                            <input type="hidden" name="patientId" th:value="${patient.id}" />
+
+                            <label>Diagnosis:</label>
+                            <input type="text" name="diagnosis" required class="form-control">
+
+                            <label>Treatment Plan:</label>
+                            <input type="text" name="treatmentPlan" required class="form-control">
+
+                            <label>Notes:</label>
+                            <textarea name="notes" class="form-control"></textarea>
+
+                            <button type="submit" class="btn btn-primary mt-3">Save</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card border-radius-lg shadow-sm mb-4">
+                    <div class="card-header bg-gradient-dark position-relative overflow-hidden">
+                        <div class="position-relative z-index-2 text-white">
+                            <h6 class="mb-0 text-white">Medical History</h6>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <ul class="timeline">
+                            <li th:each="record : ${medicalRecords}" class="timeline-item mb-3">
+                                <div class="rounded-lg p-3">
+                                    <div class="fw-bold mb-1" th:text="${record.diagnosis}"></div>
+                                    <small class="text-muted">
+                                        Treatment Plan: <span th:text="${record.treatmentPlan}"></span>
+                                    </small>
+                                    <div class="small text-muted mt-1">
+                                        Recorded on <span th:text="${record.recordDate}"></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card border-radius-lg shadow-sm mb-4">
+                    <div class="card-header bg-gradient-dark position-relative overflow-hidden">
+                        <div class="position-relative z-index-2 text-white">
+                            <h6 class="mb-0 text-white">Prescribe Medication</h6>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <form action="/doctor/prescription" method="post" class="needs-validation" novalidate>
+                            <input type="hidden" name="patientId" th:value="${patient.id}" />
+                            <input type="hidden" name="doctorId" th:value="${doctorId}" />
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Medication Details:</label>
+                                <input type="text"
+                                       name="medicationDetails"
+                                       required
+                                       class="form-control border-2"
+                                       placeholder="Enter medication details">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Dosage Instructions:</label>
+                                <input type="text"
+                                       name="dosageInstructions"
+                                       required
+                                       class="form-control border-2"
+                                       placeholder="Enter dosage instructions">
+                            </div>
+
+                            <button type="submit" class="btn btn-gradient-primary w-100 py-2">
+                                Save Prescription
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card border-radius-lg shadow-sm mb-4">
+                    <div class="card-header bg-gradient-dark position-relative overflow-hidden">
+                        <div class="position-relative z-index-2 text-white">
+                            <h6 class="mb-0 text-white">Past Prescriptions</h6>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <ul class="timeline">
+                            <li th:each="prescription : ${prescriptions}" class="timeline-item mb-3">
+                                <div class="rounded-lg p-3">
+                                    <div class="fw-bold mb-1" th:text="${prescription.medicationDetails}"></div>
+                                    <small class="text-muted">
+                                        Dosage: <span th:text="${prescription.dosageInstructions}"></span>
+                                    </small>
+                                    <div class="small text-muted mt-1">
+                                        Issued on <span th:text="${prescription.dateIssued}"></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="/doctor/patients" class="btn btn-sm bg-gradient-primary">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Back to Patients
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+
     <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
 </main>
 
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

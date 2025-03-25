@@ -31,6 +31,8 @@ public class DoctorController {
     private final AppointmentService appointmentService;
     private final DoctorService doctorService;
     private final UserService userService;
+    private final MedicalRecordService medicalRecordService;
+    private final PrescriptionService prescriptionService;
     private final PatientService patientService;
 
     @GetMapping("/dashboard")
@@ -177,8 +179,12 @@ public class DoctorController {
     @GetMapping("/patient/{id}")
     public String viewPatientDetails(@PathVariable UUID id, Model model) {
         PatientProfile patient = patientService.getPatientById(id);
+        List<Prescription> prescriptions = prescriptionService.getPrescriptionsForPatient (id);
+        List<MedicalRecord> records = medicalRecordService.getRecordsForPatient (id);
         model.addAttribute ("currentUserPage", "Patients");
         model.addAttribute("patient", patient);
+        model.addAttribute("prescriptions", prescriptions);
+        model.addAttribute("medicalRecords", records);
         return "doctor/patients/patient-details";
     }
 

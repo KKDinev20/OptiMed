@@ -136,7 +136,7 @@ public class AppointmentService {
 
 
     public List<Appointment> getRecentAppointments () {
-        return appointmentRepository.findTop10ByOrderByIdDesc();
+        return appointmentRepository.findTop3ByOrderByIdDesc();
     }
 
     public Page<Appointment> getAppointmentsByDoctorId(UUID doctorId, Pageable pageable) {

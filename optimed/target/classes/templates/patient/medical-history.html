@@ -1,0 +1,17 @@
+<h3>My Prescriptions</h3>
+<ul>
+    <li th:each="prescription : ${prescriptions}">
+        <b th:text="${prescription.medicationDetails}"></b> -
+        <i th:text="${prescription.dosageInstructions}"></i>
+        <small>(Issued on <span th:text="${prescription.dateIssued}"></span>)</small>
+    </li>
+</ul>
+
+<h3>My Medical History</h3>
+<ul>
+    <li th:each="record : ${medicalRecords}">
+        <b th:text="${record.diagnosis}"></b> -
+        <i th:text="${record.treatmentPlan}"></i>
+        <small>(Recorded on <span th:text="${record.recordDate}"></span>)</small>
+    </li>
+</ul>

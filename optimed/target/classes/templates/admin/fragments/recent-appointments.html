@@ -24,7 +24,8 @@
                             Status: Pending
                         </p>
                         <p class="text-secondary font-weight-bold text-xs mt-1 mb-0"
-                           th:text="${#temporals.format(appointment.appointmentTime, 'dd MMM yyyy hh:mm a')}">
+                           th:text="${#temporals.format(appointment.appointmentDate, 'dd MMM yyyy')} +
+           ${#temporals.format(appointment.appointmentTime, 'hh:mm a')}">
                             22 DEC 7:20 PM
                         </p>
                     </div>

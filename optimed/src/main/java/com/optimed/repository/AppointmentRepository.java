@@ -26,7 +26,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             @Param("threshold") LocalDateTime threshold
     );
 
-    List<Appointment> findTop10ByOrderByIdDesc();
+    List<Appointment> findTop3ByOrderByIdDesc();
     Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);
 
     Page<Appointment> findByDoctorId(UUID doctorId, Pageable pageable);
