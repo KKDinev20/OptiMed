@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.Authenticator;
 import java.time.*;
 import java.util.*;
 
@@ -177,12 +178,15 @@ public class DoctorController {
 
 
     @GetMapping("/patient/{id}")
-    public String viewPatientDetails(@PathVariable UUID id, Model model) {
+    public String viewPatientDetails(@PathVariable UUID id, Model model, Authentication authentication) {
         PatientProfile patient = patientService.getPatientById(id);
+        String username = authentication.getName();
+        DoctorProfile doctor = doctorService.findByUsername(username).orElseThrow();
         List<Prescription> prescriptions = prescriptionService.getPrescriptionsForPatient (id);
         List<MedicalRecord> records = medicalRecordService.getRecordsForPatient (id);
         model.addAttribute ("currentUserPage", "Patients");
         model.addAttribute("patient", patient);
+        model.addAttribute("doctor", doctor);
         model.addAttribute("prescriptions", prescriptions);
         model.addAttribute("medicalRecords", records);
         return "doctor/patients/patient-details";
