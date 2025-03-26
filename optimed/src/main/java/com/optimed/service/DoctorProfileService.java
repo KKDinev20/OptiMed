@@ -20,6 +20,19 @@ public class DoctorProfileService {
         return doctorProfileRepository.findBySpecialization(specialization);
     }
 
+    public List<DoctorProfile> findDoctors(Specialization specialization, Integer minReviews) {
+        if (specialization != null && minReviews != null) {
+            return doctorProfileRepository.findBySpecializationAndReviewsGreaterThanEqual(specialization, minReviews);
+        } else if (specialization != null) {
+            return doctorProfileRepository.findBySpecialization(specialization);
+        } else if (minReviews != null) {
+            return doctorProfileRepository.findByReviewsGreaterThanEqual(minReviews);
+        } else {
+            return doctorProfileRepository.findAll();
+        }
+    }
+
+
     public List<DoctorProfile> getAllDoctors() {
         return doctorProfileRepository.findAll();
     }

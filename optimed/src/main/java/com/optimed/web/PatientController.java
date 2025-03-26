@@ -192,13 +192,20 @@ public class PatientController {
     }
 
     @GetMapping("/doctor")
-    public String listAvailableDoctors(Model model) {
-        model.addAttribute ("currentUserPage", "Available Doctors");
+    public String listAvailableDoctors(
+            @RequestParam(required = false) Specialization specialization,
+            @RequestParam(required = false) Integer minReviews,
+            Model model) {
 
-        List<DoctorProfile> doctors = doctorProfileService.getAllDoctors();
+        List<DoctorProfile> doctors = doctorProfileService.findDoctors(specialization, minReviews);
+
         model.addAttribute("doctors", doctors);
+        model.addAttribute("specializations", Specialization.values());
+        model.addAttribute("currentUserPage", "Available Doctors");
+
         return "patient/doctor/doctor-list";
     }
+
 
     @GetMapping("/doctor/{doctorId}")
     public String viewDoctorDetails(@PathVariable UUID doctorId, Model model, Principal principal) {

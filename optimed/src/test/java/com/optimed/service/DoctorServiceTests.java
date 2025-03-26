@@ -49,7 +49,6 @@ public class DoctorServiceTests {
                 .specialization(Specialization.CARDIOLOGY)
                 .experienceYears(10)
                 .bio("Cardiology specialist")
-                .availableDays(Collections.singletonList (DayOfWeek.MONDAY))
                 .contactInfo("123-456-7890")
                 .build();
 
