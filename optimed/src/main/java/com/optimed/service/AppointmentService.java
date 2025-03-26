@@ -105,13 +105,17 @@ public class AppointmentService {
     }
 
     public void cancelAppointment(UUID appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (appointment.getCancellationDeadline().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Cancellation deadline has passed.");
+        }
+
         appointment.setStatus(AppointmentStatus.CANCELED);
         appointmentRepository.save(appointment);
-
-        notificationClient.sendNotification(appointment.getPatient().getEmail(),
-                "Your appointment on " + appointment.getAppointmentDate() + " has been canceled.");
     }
+
 
     public void rescheduleAppointment(UUID appointmentId, LocalDate newDate, LocalTime newTime) {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();

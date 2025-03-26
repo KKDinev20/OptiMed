@@ -1,11 +1,14 @@
 package com.optimed.dto;
 
+import com.optimed.entity.TimeSlot;
 import com.optimed.entity.enums.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.*;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -36,17 +39,16 @@ public class DoctorRequest {
     @Size(max = 500, message = "Bio cannot exceed 500 characters")
     private String bio;
 
-    @NotBlank(message = "Available days cannot be empty")
-    private String availableDays;
+    @NotEmpty(message = "Available days cannot be empty")
+    private Set<DayOfWeek> availableDays;
 
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "Invalid time format (HH:mm)")
-    private String startTime;
+    @NotEmpty(message = "Available time slots cannot be empty")
+    private List<TimeSlot> availableTimeSlots;
 
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "Invalid time format (HH:mm)")
-    private String endTime;
 
     @Size(max = 255, message = "Contact info cannot exceed 255 characters")
     private String contactInfo;
 
     private String avatarUrl;
+
 }

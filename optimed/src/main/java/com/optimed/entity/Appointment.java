@@ -35,6 +35,9 @@ public class Appointment {
     private LocalTime appointmentTime;
 
     @Column(nullable = false)
+    private LocalDateTime cancellationDeadline;
+
+    @Column(nullable = false)
     private int durationMinutes;
 
     @Enumerated(EnumType.STRING)

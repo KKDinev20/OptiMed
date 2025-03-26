@@ -9,6 +9,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +44,7 @@ public class DoctorService {
         doctor.setSpecialization(request.getSpecialization());
         doctor.setExperienceYears(request.getExperienceYears());
         doctor.setBio(request.getBio());
-        doctor.setAvailableDays(request.getAvailableDays());
-        doctor.setStartTime(request.getStartTime());
-        doctor.setEndTime(request.getEndTime());
+        doctor.setAvailableDays(request.getAvailableDays() != null ? new HashSet<> (request.getAvailableDays()) : new HashSet<>());
         doctor.setContactInfo(request.getContactInfo());
 
         if (request.getAvatarUrl() != null) {

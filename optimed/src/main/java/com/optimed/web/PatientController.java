@@ -37,6 +37,7 @@ public class PatientController {
     private final DoctorProfileService doctorProfileService;
     private final UserService userService;
     private final MedicalRecordService medicalRecordService;
+    private final ReviewService reviewService;
     private final PrescriptionService prescriptionService;
     private final PatientService patientService;
 
@@ -200,15 +201,19 @@ public class PatientController {
     }
 
     @GetMapping("/doctor/{doctorId}")
-    public String viewDoctorDetails(@PathVariable UUID doctorId, Model model) {
-        model.addAttribute ("currentUserPage", "Doctor Profile");
+    public String viewDoctorDetails(@PathVariable UUID doctorId, Model model, Principal principal) {
         DoctorProfile doctor = doctorProfileService.getDoctorById(doctorId);
         if (doctor == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found");
         }
+        User user = userService.findByUsername (principal.getName ()).orElseThrow ();
+        PatientProfile patient = patientService.findByUser (user).orElseThrow ();        List<Review> reviews = reviewService.getDoctorReviews(doctorId);
         model.addAttribute("doctor", doctor);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("patient", patient);
         return "patient/doctor/doctor-details";
     }
+
     @PostMapping("/appointments/{appointmentId}/reschedule")
     public String rescheduleAppointment(@PathVariable UUID appointmentId,
                                         @RequestParam("newDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate newDate,

@@ -72,6 +72,11 @@
                                     <span class="info-value" th:text="${doctor.getAvailableDays()}"></span>
                                 </div>
 
+                                <div class="mb-3">
+                                    <span class="info-label">Availability:</span>
+                                    <span class="info-value" th:text="${doctor.getAvailableTimeSlots()}"></span>
+                                </div>
+
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <div class="mb-2">
@@ -91,6 +96,42 @@
                                 </div>
 
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header bg-gradient-primary text-white">
+                            <h5>Reviews</h5>
+                        </div>
+                        <div class="card-body">
+                            <div th:each="review : ${doctor.reviews}" class="mb-3 p-3 border rounded">
+                                <p class="mb-1"><strong th:text="${review.patient.fullName}">Patient Name</strong></p>
+                                <p class="text-muted mb-1" th:text="'Rating: ' + ${review.rating} + ' ⭐'">Rating</p>
+                                <p class="mb-0" th:text="${review.comment}">Review Comment</p>
+                            </div>
+
+                            <form th:action="@{/reviews}" method="post">
+                                <input type="hidden" name="doctorId" th:value="${doctor.id}">
+                                <input type="hidden" name="patientId" th:value="${patient.id}" />
+
+                                <div class="mb-3">
+                                    <label for="rating" class="form-label">Rating (1-5):</label>
+                                    <select name="rating" id="rating" class="form-select" required>
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Good</option>
+                                        <option value="3">3 - Average</option>
+                                        <option value="2">2 - Poor</option>
+                                        <option value="1">1 - Terrible</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="comment" class="form-label">Review:</label>
+                                    <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Submit Review</button>
+                            </form>
                         </div>
                     </div>
                 </div>

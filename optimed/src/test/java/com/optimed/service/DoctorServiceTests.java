@@ -10,8 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -50,9 +49,7 @@ public class DoctorServiceTests {
                 .specialization(Specialization.CARDIOLOGY)
                 .experienceYears(10)
                 .bio("Cardiology specialist")
-                .availableDays("MONDAY TUESDAY WEDNESDAY")
-                .startTime ("08:30")
-                .endTime("15:30")
+                .availableDays(Collections.singletonList (DayOfWeek.MONDAY))
                 .contactInfo("123-456-7890")
                 .build();
 

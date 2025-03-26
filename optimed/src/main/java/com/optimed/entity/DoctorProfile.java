@@ -4,6 +4,8 @@ import com.optimed.entity.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.*;
 
 @Entity
@@ -20,39 +22,41 @@ public class DoctorProfile {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
-    @Column(nullable = false)
+    @Column
     private String fullName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Specialization specialization;
 
-    @Column(nullable = false)
+    @Column
     private int experienceYears;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Gender gender;
 
     @Column(length = 2000, nullable = true)
     private String bio;
 
-    @Column(nullable = false)
-    private String availableDays;
+    @ElementCollection
+    @CollectionTable(name = "doctor_available_days", joinColumns = @JoinColumn(name = "doctor_id"))
+    @Column(name = "available_day")
+    @Enumerated(EnumType.STRING)
+    private Set<DayOfWeek> availableDays;
 
-    @Column(nullable = false)
-    private String startTime;
+    @ElementCollection
+    @CollectionTable(name = "doctor_available_slots", joinColumns = @JoinColumn(name = "doctor_id"))
+    private List<TimeSlot> availableTimeSlots;
 
-    @Column(nullable = false)
-    private String endTime;
 
-    @Column(nullable = false)
+    @Column
     private String contactInfo;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
 
     @ManyToMany
@@ -65,7 +69,6 @@ public class DoctorProfile {
     @Column(nullable = true)
     private String avatarUrl;
 
-    public String getAvailableDays() {
-        return "Available on " + availableDays + ", from " + startTime + " to " + endTime;
-    }
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private List<Review> reviews;
 }

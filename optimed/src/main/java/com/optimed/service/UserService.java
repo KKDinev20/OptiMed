@@ -100,9 +100,8 @@ public class UserService {
         profile.setGender (request.getGender());
         profile.setExperienceYears(request.getExperienceYears());
         profile.setBio(request.getBio());
-        profile.setStartTime (request.getStartTime ());
-        profile.setEndTime (request.getEndTime ());
         profile.setAvailableDays (request.getAvailableDays ());
+        profile.setAvailableTimeSlots (request.getAvailableTimeSlots());
         profile.setContactInfo(request.getContactInfo());
 
         user.setEnabled (true);

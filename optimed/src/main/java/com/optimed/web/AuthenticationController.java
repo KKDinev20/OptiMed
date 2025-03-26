@@ -54,7 +54,7 @@ public class AuthenticationController {
 
         userService.registerUser (registerRequest);
         session.setAttribute ("currentUser", registerRequest.getUsername ());
-        modelAndView.setViewName ("redirect:/dashboard");
+        modelAndView.setViewName ("redirect:/login");
         return modelAndView;
     }
 }

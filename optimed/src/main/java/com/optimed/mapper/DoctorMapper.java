@@ -15,8 +15,7 @@ public class DoctorMapper {
                 .email(doctorProfile.getUser().getEmail())
                 .bio(doctorProfile.getBio())
                 .availableDays(doctorProfile.getAvailableDays())
-                .startTime(doctorProfile.getStartTime())
-                .endTime(doctorProfile.getEndTime())
+                .availableTimeSlots (doctorProfile.getAvailableTimeSlots())
                 .contactInfo(doctorProfile.getContactInfo())
                 .avatarUrl(doctorProfile.getAvatarUrl())
                 .build();
