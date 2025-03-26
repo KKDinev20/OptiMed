@@ -100,14 +100,20 @@
                                     <div class="col-12 mb-3">
                                         <label class="ms-0">Available Time Slots</label>
                                         <div id="timeSlotsContainer">
-                                            <div class="row time-slot">
+                                            <div class="row time-slot" th:each="slot, iterStat : ${doctorRequest.availableTimeSlots}">
                                                 <div class="col-md-5">
                                                     <label>Start Time</label>
-                                                    <input type="time" name="startTimes" class="form-control" required/>
+                                                    <input type="time"
+                                                           th:name="'availableTimeSlots[' + ${iterStat.index} + '].startTime'"
+                                                           th:field="*{availableTimeSlots[__${iterStat.index}__].startTime}"
+                                                           class="form-control" required/>
                                                 </div>
                                                 <div class="col-md-5">
                                                     <label>End Time</label>
-                                                    <input type="time" name="endTimes" class="form-control" required/>
+                                                    <input type="time"
+                                                           th:name="'availableTimeSlots[' + ${iterStat.index} + '].endTime'"
+                                                           th:field="*{availableTimeSlots[__${iterStat.index}__].endTime}"
+                                                           class="form-control" required/>
                                                 </div>
                                                 <div class="col-md-2 d-flex align-items-end">
                                                     <button type="button" class="btn btn-danger" onclick="removeTimeSlot(this)">-</button>
@@ -117,6 +123,7 @@
                                         <button type="button" class="btn btn-outline-primary mt-2" onclick="addTimeSlot()">Add Time Slot</button>
                                     </div>
                                 </div>
+
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
@@ -143,6 +150,8 @@
 </main>
 
 <script>
+    let timeSlotIndex = 0;
+
     function addTimeSlot() {
         let container = document.getElementById("timeSlotsContainer");
         let newSlot = document.createElement("div");
@@ -150,23 +159,25 @@
         newSlot.innerHTML = `
             <div class="col-md-5">
                 <label>Start Time</label>
-                <input type="time" name="startTimes" class="form-control" required/>
+                <input type="time" name="availableTimeSlots[${timeSlotIndex}].startTime" class="form-control" required/>
             </div>
             <div class="col-md-5">
                 <label>End Time</label>
-                <input type="time" name="endTimes" class="form-control" required/>
+                <input type="time" name="availableTimeSlots[${timeSlotIndex}].endTime" class="form-control" required/>
             </div>
             <div class="col-md-2 d-flex align-items-end">
                 <button type="button" class="btn btn-danger" onclick="removeTimeSlot(this)">-</button>
             </div>
         `;
         container.appendChild(newSlot);
+        timeSlotIndex++;
     }
 
     function removeTimeSlot(button) {
         button.parentElement.parentElement.remove();
     }
 </script>
+
 
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
 </body>

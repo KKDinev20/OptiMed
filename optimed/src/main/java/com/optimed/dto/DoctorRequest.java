@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -43,8 +44,7 @@ public class DoctorRequest {
     private Set<DayOfWeek> availableDays;
 
     @NotEmpty(message = "Available time slots cannot be empty")
-    private List<TimeSlot> availableTimeSlots;
-
+    private List<TimeSlot> availableTimeSlots = new ArrayList<> ();
 
     @Size(max = 255, message = "Contact info cannot exceed 255 characters")
     private String contactInfo;

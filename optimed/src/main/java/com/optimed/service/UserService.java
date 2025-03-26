@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -93,22 +94,26 @@ public class UserService {
                     newProfile.setUser(user);
                     return newProfile;
                 });
+
         profile.setFullName(request.getFullName());
-        profile.setEmail (user.getEmail ());
+        profile.setEmail(user.getEmail());
         profile.setAvatarUrl(request.getAvatarUrl());
         profile.setSpecialization(request.getSpecialization());
-        profile.setGender (request.getGender());
+        profile.setGender(request.getGender());
         profile.setExperienceYears(request.getExperienceYears());
         profile.setBio(request.getBio());
-        profile.setAvailableDays (request.getAvailableDays ());
-        profile.setAvailableTimeSlots (request.getAvailableTimeSlots());
+        profile.setAvailableDays(request.getAvailableDays());
         profile.setContactInfo(request.getContactInfo());
 
-        user.setEnabled (true);
+        profile.setAvailableTimeSlots(request.getAvailableTimeSlots());
+
+        user.setEnabled(true);
 
         doctorRepository.save(profile);
         userRepository.save(user);
     }
+
+
 
     public void completePatientProfile(String username, PatientRequest request) {
         User user = findByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found: " + username));

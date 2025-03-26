@@ -67,14 +67,29 @@
                                     <span class="info-value" th:text="${doctor.experienceYears}"></span> years
                                 </div>
 
+                                <!-- Available Days -->
                                 <div class="mb-3">
-                                    <span class="info-label">Availability:</span>
-                                    <span class="info-value" th:text="${doctor.getAvailableDays()}"></span>
+                                    <span class="info-label">Available Days:</span>
+                                    <span class="info-value" th:text="${doctor.availableDays}"></span>
                                 </div>
 
+                                <!-- Available Time Slots Table -->
                                 <div class="mb-3">
-                                    <span class="info-label">Availability:</span>
-                                    <span class="info-value" th:text="${doctor.getAvailableTimeSlots()}"></span>
+                                    <span class="info-label">Available Time Slots:</span>
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Start Time</th>
+                                            <th>End Time</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="timeSlot : ${doctor.availableTimeSlots}">
+                                            <td th:text="${timeSlot.startTime}"></td>
+                                            <td th:text="${timeSlot.endTime}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
 
                                 <div class="row mt-3">
@@ -94,7 +109,6 @@
                                     <h5 class="font-weight-bold mb-2">More information</h5>
                                     <p th:text="${doctor.bio}"></p>
                                 </div>
-
                             </div>
                         </div>
                     </div>

@@ -46,6 +46,8 @@ public class DoctorService {
         doctor.setBio(request.getBio());
         doctor.setAvailableDays(request.getAvailableDays() != null ? new HashSet<> (request.getAvailableDays()) : new HashSet<>());
         doctor.setContactInfo(request.getContactInfo());
+        doctor.setAvailableTimeSlots(request.getAvailableTimeSlots());
+
 
         if (request.getAvatarUrl() != null) {
             doctor.setAvatarUrl(request.getAvatarUrl());
