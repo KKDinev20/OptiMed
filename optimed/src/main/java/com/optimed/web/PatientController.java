@@ -1,7 +1,7 @@
 package com.optimed.web;
 
-import com.optimed.dto.AppointmentRequest;
-import com.optimed.dto.EditPatientRequest;
+import com.optimed.client.NotificationClient;
+import com.optimed.dto.*;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.entity.enums.Specialization;
@@ -10,6 +10,7 @@ import com.optimed.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -38,6 +39,7 @@ public class PatientController {
     private final UserService userService;
     private final MedicalRecordService medicalRecordService;
     private final ReviewService reviewService;
+    private final NotificationClient notificationClient;
     private final PrescriptionService prescriptionService;
     private final PatientService patientService;
 
@@ -108,13 +110,17 @@ public class PatientController {
 
 
     @GetMapping("/dashboard")
-    public String dashboard (Model model, Principal principal) {
-        User user = userService.findByUsername (principal.getName ()).orElseThrow ();
-        PatientProfile patient = patientService.findByUser (user).orElseThrow ();
+    public String dashboard(Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName()).orElseThrow();
+        PatientProfile patient = patientService.findByUser(user).orElseThrow();
 
-        UUID patientId = patient.getId ();
-        model.addAttribute ("currentUserPage", "Dashboard");
-        model.addAttribute ("patientId", patientId);
+        String email = user.getEmail();
+        model.addAttribute("currentUserPage", "Dashboard");
+        model.addAttribute("patientId", patient.getId());
+
+        CollectionModel<NotificationRequest> notifications = notificationClient.getNotificationsByEmail(email);
+
+        model.addAttribute("notifications", notifications.getContent());
 
         return "patient/dashboard";
     }

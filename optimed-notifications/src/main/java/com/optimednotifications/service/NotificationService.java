@@ -5,7 +5,6 @@ import com.optimednotifications.repository.*;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class NotificationService {
@@ -29,13 +28,15 @@ public class NotificationService {
                 .recipient(recipient)
                 .message(message)
                 .createdAt(LocalDateTime.now())
-                .isReceived (false)
+                .isReceived(false)
                 .build();
 
         return notificationRepository.save(notification);
     }
 
-    public List<Notification> getNotificationsForRecipient(UUID recipientId) {
-        return notificationRepository.findByRecipientId(recipientId);
+    public List<Notification> getNotificationsForRecipient(String email) {
+        Recipient recipient = recipientRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Recipient not found for email: " + email));
+        return notificationRepository.findByRecipientId(recipient.getId());
     }
 }

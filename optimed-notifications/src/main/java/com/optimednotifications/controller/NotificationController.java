@@ -22,14 +22,13 @@ public class NotificationController {
     public EntityModel<Notification> sendNotification(@RequestParam String email, @RequestParam String message) {
         Notification notification = notificationService.createNotification(email, message);
         return EntityModel.of(notification,
-                linkTo(methodOn(NotificationController.class).getNotifications(notification.getRecipient().getId())).withRel("recipient-notifications"));
+                linkTo(methodOn(NotificationController.class).getNotifications(email)).withRel("recipient-notifications"));
     }
 
-    @GetMapping("/{recipientId}")
-    public CollectionModel<Notification> getNotifications(@PathVariable UUID recipientId) {
-        List<Notification> notifications = notificationService.getNotificationsForRecipient(recipientId);
+    @GetMapping("/email/{email}")
+    public CollectionModel<Notification> getNotifications(@PathVariable String email) {
+        List<Notification> notifications = notificationService.getNotificationsForRecipient(email);
         return CollectionModel.of(notifications,
-                linkTo(methodOn(NotificationController.class).getNotifications(recipientId)).withSelfRel());
+                linkTo(methodOn(NotificationController.class).getNotifications(email)).withSelfRel());
     }
-
 }

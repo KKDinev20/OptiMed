@@ -57,7 +57,7 @@ public class DoctorService {
     }
 
 
-    @Scheduled(cron = "0 0 8 * * ?")
+    /*@Scheduled(cron = "0 0 8 * * ?")
     public void notifyDoctorsOfUpcomingAppointments() {
         LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
         List<Appointment> appointments = appointmentRepository.findByAppointmentDate(tomorrow.toLocalDate());
@@ -66,5 +66,5 @@ public class DoctorService {
             notificationClient.sendNotification(appointment.getDoctor().getEmail(),
                     "Reminder: You have an appointment tomorrow at " + appointment.getAppointmentTime());
         }
-    }
+    }*/
 }

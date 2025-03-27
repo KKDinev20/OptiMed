@@ -165,12 +165,6 @@
                                                         <button type="submit" class="dropdown-item">Cancel</button>
                                                     </form>
                                                 </li>
-                                                <li th:if="${appointment.status == appointment.status.BOOKED}">
-                                                    <form th:action="@{/patient/appointments/{appointmentId}/approve(appointmentId=${appointment.id})}"
-                                                          method="post">
-                                                        <button type="submit" class="dropdown-item">Approve</button>
-                                                    </form>
-                                                </li>
                                                 <li th:if="${appointment.status == appointment.status.CONFIRMED}">
                                                     <form th:action="@{/patient/appointments/{appointmentId}/reschedule(appointmentId=${appointment.id})}" method="get">
                                                         <button type="submit" class="dropdown-item text-warning">Reschedule</button>

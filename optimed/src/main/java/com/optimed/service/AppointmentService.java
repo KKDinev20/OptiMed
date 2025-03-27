@@ -5,9 +5,7 @@ import com.optimed.dto.AppointmentRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.*;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -129,15 +127,12 @@ public class AppointmentService {
     }
 
     public void cancelAppointment(UUID appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
-
-        if (appointment.getCancellationDeadline().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Cancellation deadline has passed.");
-        }
-
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow();
         appointment.setStatus(AppointmentStatus.CANCELED);
         appointmentRepository.save(appointment);
+
+        notificationClient.sendNotification(appointment.getPatient().getEmail(),
+                "Your appointment on " + appointment.getAppointmentDate() + " has been canceled.");
     }
 
 
