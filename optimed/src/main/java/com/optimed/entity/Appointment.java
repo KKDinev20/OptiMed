@@ -56,4 +56,9 @@ public class Appointment {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void setCancellationDeadline() {
+        this.cancellationDeadline = LocalDateTime.of(appointmentDate, appointmentTime).plusHours(24);
+    }
 }

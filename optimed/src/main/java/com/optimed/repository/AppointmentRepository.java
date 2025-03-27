@@ -26,6 +26,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             @Param("threshold") LocalDateTime threshold
     );
 
+    @Query("SELECT COUNT(a) FROM Appointment a WHERE a.doctor.id = :doctorId AND a.appointmentDate = :date AND a.appointmentTime = :time AND a.status = :status")
+    int countByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatus(UUID doctorId, LocalDate date, LocalTime time, AppointmentStatus status);
+
+
     List<Appointment> findTop3ByOrderByIdDesc();
     Page<Appointment> findByPatientId(UUID patientId, Pageable pageable);
 

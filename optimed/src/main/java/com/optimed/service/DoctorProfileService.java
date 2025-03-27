@@ -7,7 +7,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,10 +34,16 @@ public class DoctorProfileService {
         }
     }
 
+    public boolean doesDoctorHaveTimeSlot(UUID doctorId, LocalTime timeSlot) {
+        Optional<DoctorProfile> doctor = doctorProfileRepository.findById(doctorId);
 
-    public List<DoctorProfile> getAllDoctors() {
-        return doctorProfileRepository.findAll();
+        return doctor.map(profile -> profile.getAvailableTimeSlots()
+                        .stream()
+                        .anyMatch(slot -> !timeSlot.isBefore(slot.getStartTime()) && !timeSlot.isAfter(slot.getEndTime())))
+                .orElse(false);
     }
+
+
 
     public DoctorProfile getDoctorById(UUID doctorId) {
         return doctorProfileRepository.findById(doctorId)

@@ -53,39 +53,63 @@ public class AppointmentService {
         );
     }
 
+    public boolean isAppointmentSlotAvailable(UUID doctorId, LocalDate date, LocalTime time) {
+        return appointmentRepository.countByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatus(
+                doctorId, date, time, AppointmentStatus.CONFIRMED) == 0;
+    }
+
+
 
     public void createAppointment(AppointmentRequest request) {
         Optional<DoctorProfile> doctor = doctorRepository.findById(request.getDoctorId());
         Optional<PatientProfile> patient = patientRepository.findById(request.getPatientId());
 
-        if (doctor.isPresent() && patient.isPresent()) {
-            boolean doctorBooked = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(
-                    request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());
-
-            if (doctorBooked) {
-                throw new RuntimeException("This doctor is already booked at the selected date and time.");
-            }
-
-            boolean patientBooked = appointmentRepository.existsByPatientIdAndDoctorIdAndAppointmentDateAndAppointmentTime(
-                    request.getPatientId(), request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());
-
-            if (patientBooked) {
-                throw new RuntimeException("You have already booked an appointment with this doctor at the selected date and time.");
-            }
-
-            Appointment appointment = Appointment.builder()
-                    .doctor(doctor.get())
-                    .patient(patient.get())
-                    .appointmentDate(request.getAppointmentDate())
-                    .appointmentTime(request.getAppointmentTime())
-                    .reason(request.getReason())
-                    .status(AppointmentStatus.BOOKED)
-                    .build();
-
-            appointmentRepository.save(appointment);
-        } else {
-            throw new RuntimeException("Doctor or Patient not found");
+        if (!isAppointmentSlotAvailable(request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime())) {
+            throw new RuntimeException("The doctor already has an appointment at this time.");
         }
+
+        if (doctor.isEmpty() || patient.isEmpty()) {
+            throw new RuntimeException("Doctor or Patient not found.");
+        }
+
+        DoctorProfile doctorProfile = doctor.get();
+
+        boolean slotExists = doctorProfile.getAvailableTimeSlots().stream()
+                .anyMatch(slot -> !request.getAppointmentTime().isBefore(slot.getStartTime()) &&
+                        !request.getAppointmentTime().isAfter(slot.getEndTime()));
+
+
+        if (!slotExists) {
+            throw new RuntimeException("The selected time slot is not available for this doctor.");
+        }
+
+        boolean doctorBooked = appointmentRepository.existsByDoctorIdAndAppointmentDateAndAppointmentTime(
+                request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());
+
+        if (doctorBooked) {
+            throw new RuntimeException("This doctor is already booked at the selected date and time.");
+        }
+
+        boolean patientBooked = appointmentRepository.existsByPatientIdAndDoctorIdAndAppointmentDateAndAppointmentTime(
+                request.getPatientId(), request.getDoctorId(), request.getAppointmentDate(), request.getAppointmentTime());
+
+        if (patientBooked) {
+            throw new RuntimeException("You have already booked an appointment with this doctor at the selected date and time.");
+        }
+
+        LocalDateTime cancellationDeadline = LocalDateTime.of(request.getAppointmentDate(), request.getAppointmentTime()).minusHours(24);
+
+        Appointment appointment = Appointment.builder()
+                .doctor(doctor.get())
+                .patient(patient.get())
+                .appointmentDate(request.getAppointmentDate())
+                .appointmentTime(request.getAppointmentTime())
+                .cancellationDeadline(cancellationDeadline)
+                .reason(request.getReason())
+                .status(AppointmentStatus.BOOKED)
+                .build();
+
+        appointmentRepository.save(appointment);
     }
 
 
@@ -125,6 +149,19 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    public void approveAppointment(UUID appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new NoSuchElementException("Appointment not found"));
+
+        if (appointment.getStatus() != AppointmentStatus.BOOKED) {
+            throw new IllegalStateException("Only pending appointments can be approved.");
+        }
+
+        appointment.setStatus(AppointmentStatus.CONFIRMED);
+        appointmentRepository.save(appointment);
+    }
+
+
 
     public Page<Appointment> getUpcomingAppointmentsForMonth(Pageable pageable) {
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
@@ -157,7 +194,6 @@ public class AppointmentService {
         List<Appointment> existingAppointments = appointmentRepository.findByDoctorIdAndAppointmentDateAndAppointmentTime(doctorId, appointmentDate, appointmentTime);
         return existingAppointments.isEmpty();
     }
-
 
     public Appointment getAppointmentById (UUID appointmentId) {
         return appointmentRepository.findById(appointmentId).orElseThrow();

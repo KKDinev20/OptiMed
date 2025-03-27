@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.Authenticator;
 import java.time.*;
@@ -86,10 +87,16 @@ public class DoctorController {
 
 
     @PostMapping("/appointments/{appointmentId}/approve")
-    public String approveAppointment(@PathVariable UUID appointmentId) {
-        appointmentService.updateAppointmentStatus(appointmentId, AppointmentStatus.CONFIRMED);
+    public String approveAppointment(@PathVariable UUID appointmentId, RedirectAttributes redirectAttributes) {
+        try {
+            appointmentService.approveAppointment(appointmentId);
+            redirectAttributes.addFlashAttribute("success", "Appointment approved successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
         return "redirect:/doctor/appointments";
     }
+
 
     @PostMapping("/appointments/{appointmentId}/reject")
     public String rejectAppointment(@PathVariable UUID appointmentId) {

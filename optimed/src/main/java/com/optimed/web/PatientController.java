@@ -50,47 +50,61 @@ public class PatientController {
     }
 
     @PostMapping("/appointments")
-    public String addAppointment (@ModelAttribute AppointmentRequest request,
-                                  Authentication authentication,
-                                  Model model,
-                                  RedirectAttributes redirectAttributes) {
+    public String addAppointment(@ModelAttribute AppointmentRequest request,
+                                 Authentication authentication,
+                                 Model model,
+                                 RedirectAttributes redirectAttributes) {
         try {
-            Optional<PatientProfile> patient = patientService.getPatientByUsername (authentication.getName ());
+            Optional<PatientProfile> patient = patientService.getPatientByUsername(authentication.getName());
 
-            if (patient.isEmpty ()) {
-                model.addAttribute ("error", "Patient not found.");
-                model.addAttribute ("specializations", Specialization.values ());
+            if (patient.isEmpty()) {
+                model.addAttribute("error", "Patient not found.");
+                model.addAttribute("specializations", Specialization.values());
                 return "patient/appointments/create";
             }
 
-            boolean isAvailable = appointmentService.isDoctorAvailable (request.getDoctorId (),
-                    request.getAppointmentDate (),
-                    request.getAppointmentTime ());
+            boolean isAvailable = appointmentService.isDoctorAvailable(request.getDoctorId(),
+                    request.getAppointmentDate(),
+                    request.getAppointmentTime());
+
             if (!isAvailable) {
-                model.addAttribute ("error", "Doctor is not available at the selected time.");
-                model.addAttribute ("specializations", Specialization.values ());
-                if (request.getSpecialization () != null) {
-                    model.addAttribute ("doctors",
-                            doctorProfileService.findDoctorsBySpecialization (request.getSpecialization ()));
+                model.addAttribute("error", "Doctor is not available at the selected time.");
+                model.addAttribute("specializations", Specialization.values());
+                if (request.getSpecialization() != null) {
+                    model.addAttribute("doctors", doctorProfileService.findDoctorsBySpecialization(request.getSpecialization()));
                 }
                 return "patient/appointments/create";
             }
 
-            request.setPatientId (patient.get ().getId ());
-            appointmentService.createAppointment (request);
+            boolean timeSlotExists = doctorProfileService.doesDoctorHaveTimeSlot(request.getDoctorId(),
+                    request.getAppointmentTime());
 
-            redirectAttributes.addFlashAttribute ("success", "Appointment created successfully.");
+            if (!timeSlotExists) {
+                model.addAttribute("error", "The selected time slot does not exist for this doctor.");
+                return "patient/appointments/create";
+            }
+
+            request.setPatientId(patient.get().getId());
+            appointmentService.createAppointment(request);
+
+            redirectAttributes.addFlashAttribute("success", "Appointment created successfully.");
             return "redirect:/patient/appointments";
+
         } catch (IllegalArgumentException e) {
-            model.addAttribute ("error", "Invalid doctor ID format. Please select a doctor from the dropdown.");
-            model.addAttribute ("specializations", Specialization.values ());
+            model.addAttribute("error", "Invalid doctor ID format. Please select a doctor from the dropdown.");
+            model.addAttribute("specializations", Specialization.values());
+            return "patient/appointments/create";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("specializations", Specialization.values());
             return "patient/appointments/create";
         } catch (Exception e) {
-            model.addAttribute ("error", "An error occurred: " + e.getMessage ());
-            model.addAttribute ("specializations", Specialization.values ());
+            model.addAttribute("error", "An error occurred: " + e.getMessage());
+            model.addAttribute("specializations", Specialization.values());
             return "patient/appointments/create";
         }
     }
+
 
 
     @GetMapping("/dashboard")
@@ -141,7 +155,6 @@ public class PatientController {
 
         return "patient/appointments/list-appointments";
     }
-
 
     @PostMapping("/cancel-appointment/{appointmentId}")
     public String cancelAppointment(@PathVariable UUID appointmentId, RedirectAttributes redirectAttrs) {
