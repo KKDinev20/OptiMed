@@ -89,14 +89,18 @@
                                                 <input type="time"
                                                        th:name="'availableTimeSlots[' + ${iterStat.index} + '].startTime'"
                                                        th:field="*{availableTimeSlots[__${iterStat.index}__].startTime}"
-                                                       class="form-control" required/>
+                                                       class="form-control" required
+                                                       th:value="${#temporals.format(slot.startTime, 'HH:mm')}"/>
+
                                             </div>
                                             <div class="col-md-5">
                                                 <label>End Time</label>
                                                 <input type="time"
-                                                       th:name="'availableTimeSlots[' + ${iterStat.index} + '].endTime'"
-                                                       th:field="*{availableTimeSlots[__${iterStat.index}__].endTime}"
-                                                       class="form-control" required/>
+                                                       th:name="'availableTimeSlots[' + ${iterStat.index} + '].startTime'"
+                                                       th:field="*{availableTimeSlots[__${iterStat.index}__].startTime}"
+                                                       class="form-control" required
+                                                       th:value="${#temporals.format(slot.startTime, 'HH:mm')}"/>
+
                                             </div>
                                             <div class="col-md-2 d-flex align-items-end">
                                                 <button type="button" class="btn btn-danger" onclick="removeTimeSlot(this)">-</button>

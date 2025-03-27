@@ -67,11 +67,16 @@
                                     <span class="info-value" th:text="${doctor.experienceYears}"></span> years
                                 </div>
 
-                                <!-- Available Days -->
                                 <div class="mb-3">
                                     <span class="info-label">Available Days:</span>
-                                    <span class="info-value" th:text="${doctor.availableDays}"></span>
+                                    <span class="info-value">
+                                        <span th:each="day, iterStat : ${doctor.availableDays}">
+                                            <span th:text="${day}"></span>
+                                            <span th:if="${!iterStat.last}">, </span>
+                                        </span>
+                                    </span>
                                 </div>
+
 
                                 <!-- Available Time Slots Table -->
                                 <div class="mb-3">
