@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.Authenticator;
+import java.security.Principal;
 import java.time.*;
 import java.util.*;
 
@@ -39,6 +40,7 @@ public class DoctorController {
     private final MedicalRecordService medicalRecordService;
     private final PrescriptionService prescriptionService;
     private final PatientService patientService;
+    private final ReviewService reviewService;
     private final NotificationClient notificationClient;
 
     @GetMapping("/dashboard")
@@ -169,9 +171,6 @@ public class DoctorController {
         return "doctor/settings";
     }
 
-
-
-
     @PostMapping("/settings")
     public String completeDoctorProfile(
             @ModelAttribute EditDoctorRequest editDoctorRequest,
@@ -188,10 +187,6 @@ public class DoctorController {
         doctorService.updateDoctorProfile(userDetails.getUsername(), editDoctorRequest);
         return "redirect:/doctor/dashboard";
     }
-
-
-
-
 
 
     @GetMapping("/patient/{id}")
@@ -220,4 +215,24 @@ public class DoctorController {
 
         return "doctor/patients/patient-list";
     }
+
+    @GetMapping("/reviews")
+    public String viewDoctorReviews(Model model, Authentication authentication) {
+        String username = authentication.getName();
+        DoctorProfile doctor = doctorService.findByUsername(username).orElseThrow();
+
+        List<Review> reviews = reviewService.getDoctorReviews(doctor.getId());
+
+        model.addAttribute("reviews", reviews);
+        return "doctor/reviews";
+    }
+
+
+    @PostMapping("/reviews/delete/{reviewId}")
+    public String deleteReview(@PathVariable UUID reviewId, RedirectAttributes redirectAttrs) {
+        reviewService.deleteReview(reviewId);
+        redirectAttrs.addFlashAttribute("success", "Review deleted successfully.");
+        return "redirect:/doctor/reviews";
+    }
+
 }

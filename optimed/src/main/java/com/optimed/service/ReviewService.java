@@ -6,10 +6,8 @@ import com.optimed.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +35,9 @@ public class ReviewService {
 
     public List<Review> getDoctorReviews(UUID doctorId) {
         return reviewRepository.findByDoctorId(doctorId);
+    }
+
+    public void deleteReview(UUID reviewId) {
+        reviewRepository.deleteById(reviewId);
     }
 }
