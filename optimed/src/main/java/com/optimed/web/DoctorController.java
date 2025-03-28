@@ -52,6 +52,7 @@ public class DoctorController {
 
             notificationClient.registerDoctorIfNotExists(doctorEmail);
             CollectionModel<NotificationRequest> notifications = notificationClient.getNotificationsByEmail(doctorEmail);
+            model.addAttribute("recentPatients", patientService.getRecentPatients(doctorEmail));
             model.addAttribute("notifications", notifications);
         }
 

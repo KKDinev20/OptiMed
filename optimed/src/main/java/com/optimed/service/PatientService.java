@@ -2,9 +2,12 @@ package com.optimed.service;
 
 import com.optimed.dto.EditDoctorRequest;
 import com.optimed.dto.EditPatientRequest;
+import com.optimed.entity.Appointment;
 import com.optimed.entity.DoctorProfile;
 import com.optimed.entity.PatientProfile;
 import com.optimed.entity.User;
+import com.optimed.repository.AppointmentRepository;
+import com.optimed.repository.DoctorRepository;
 import com.optimed.repository.PatientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PatientService {
     private final PatientRepository patientRepository;
+    private final AppointmentRepository appointmentRepository;
 
     public long countPatients () {
         return patientRepository.count ();
@@ -68,4 +72,11 @@ public class PatientService {
         patientRepository.save(patient);
     }
 
+    public List<PatientProfile> getRecentPatients(String doctorEmail) {
+        return appointmentRepository.findTop5ByDoctorEmailOrderByAppointmentDateDesc(doctorEmail)
+                .stream()
+                .map(Appointment::getPatient)
+                .distinct()
+                .toList();
+    }
 }

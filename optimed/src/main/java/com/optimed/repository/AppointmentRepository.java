@@ -67,7 +67,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     List<PatientProfile> findPatientsByDoctor(@Param("doctorId") UUID doctorId);
 
     List<Appointment> findByDoctorIdAndAppointmentDateAndAppointmentTime(UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
-
+    List<Appointment> findTop5ByDoctorEmailOrderByAppointmentDateDesc(String doctorEmail);
     boolean existsByPatientIdAndDoctorIdAndAppointmentDateAndAppointmentTime(UUID patientId, UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
     boolean existsByDoctorIdAndAppointmentDateAndAppointmentTime(UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
     List<Appointment> findByAppointmentDateBetween(LocalDate startDate, LocalDate endDate);
