@@ -133,6 +133,9 @@ public class AppointmentService {
 
         notificationClient.sendNotification(appointment.getPatient().getEmail(),
                 "Your appointment on " + appointment.getAppointmentDate() + " has been canceled.");
+
+        notificationClient.sendNotification(appointment.getDoctor().getUser().getEmail(),
+                "An appointment on " + appointment.getAppointmentDate() + " with patient " + appointment.getPatient().getFullName() + " has been canceled.");
     }
 
 
@@ -155,8 +158,6 @@ public class AppointmentService {
         appointment.setStatus(AppointmentStatus.CONFIRMED);
         appointmentRepository.save(appointment);
     }
-
-
 
     public Page<Appointment> getUpcomingAppointmentsForMonth(Pageable pageable) {
         LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);

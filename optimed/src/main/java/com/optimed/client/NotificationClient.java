@@ -11,6 +11,9 @@ public interface NotificationClient {
     @PostMapping
     void sendNotification(@RequestParam String email, @RequestParam String message);
 
+    @PostMapping("/register")
+    void registerDoctorIfNotExists(@RequestParam String email);
+
     @GetMapping("/email/{email}")
     CollectionModel<NotificationRequest> getNotificationsByEmail(@PathVariable String email);
 }

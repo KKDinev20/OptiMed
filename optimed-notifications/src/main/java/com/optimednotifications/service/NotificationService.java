@@ -36,7 +36,19 @@ public class NotificationService {
 
     public List<Notification> getNotificationsForRecipient(String email) {
         Recipient recipient = recipientRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Recipient not found for email: " + email));
+                .orElseGet(() -> {
+                    Recipient newRecipient = new Recipient();
+                    newRecipient.setEmail(email);
+                    return recipientRepository.save(newRecipient);
+                });
         return notificationRepository.findByRecipientId(recipient.getId());
+    }
+
+    public void ensureRecipientExists(String email) {
+        if (recipientRepository.findByEmail(email).isEmpty()) {
+            Recipient newRecipient = new Recipient();
+            newRecipient.setEmail(email);
+            recipientRepository.save(newRecipient);
+        }
     }
 }

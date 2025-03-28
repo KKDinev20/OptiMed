@@ -1,6 +1,8 @@
 package com.optimed.web;
 
+import com.optimed.client.NotificationClient;
 import com.optimed.dto.EditDoctorRequest;
+import com.optimed.dto.NotificationRequest;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.*;
 import com.optimed.mapper.DoctorMapper;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,14 +39,20 @@ public class DoctorController {
     private final MedicalRecordService medicalRecordService;
     private final PrescriptionService prescriptionService;
     private final PatientService patientService;
+    private final NotificationClient notificationClient;
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, @PageableDefault(size = 10, sort = "appointmentDate", direction = Sort.Direction.ASC) Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth != null && auth.getPrincipal() instanceof UserDetails userDetails) {
-            String doctor = doctorService.getDoctorFullName(userDetails.getUsername());
-            model.addAttribute("doctor", doctor);
+            String doctorEmail = userService.findByUsername(userDetails.getUsername()).orElseThrow().getEmail();
+            String doctorName = doctorService.getDoctorFullName(userDetails.getUsername());
+            model.addAttribute("doctor", doctorName);
+
+            notificationClient.registerDoctorIfNotExists(doctorEmail);
+            CollectionModel<NotificationRequest> notifications = notificationClient.getNotificationsByEmail(doctorEmail);
+            model.addAttribute("notifications", notifications);
         }
 
         model.addAttribute("cancelledAppointments", appointmentService.getCanceledAppointments());

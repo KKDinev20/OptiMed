@@ -13,5 +13,6 @@ public class NotificationRequest {
     private String message;
     private LocalDateTime createdAt;
     private boolean isReceived;
+    private String recipientType;
 }
 

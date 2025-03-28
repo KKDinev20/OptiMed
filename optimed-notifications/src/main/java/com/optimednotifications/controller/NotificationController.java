@@ -31,4 +31,9 @@ public class NotificationController {
         return CollectionModel.of(notifications,
                 linkTo(methodOn(NotificationController.class).getNotifications(email)).withSelfRel());
     }
+
+    @PostMapping("/register")
+    public void registerDoctorIfNotExists(@RequestParam String email) {
+        notificationService.ensureRecipientExists(email);
+    }
 }

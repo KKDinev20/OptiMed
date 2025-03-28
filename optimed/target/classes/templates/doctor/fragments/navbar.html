@@ -33,9 +33,30 @@
             <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="material-symbols-rounded">notifications</i>
             </a>
-            <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+            <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+              <li th:each="notification : ${notifications}" class="mb-2">
+                <a class="dropdown-item border-radius-md" href="javascript:;">
+                  <div class="d-flex py-1">
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="text-sm font-weight-normal mb-1">
+                        <span class="font-weight-bold" th:text="${notification.message}"></span>
+                      </h6>
+                      <p class="text-xs text-secondary mb-0">
+                        <i class="fa fa-clock me-1"></i>
+                        <span th:text="${notification.email}">13 minutes ago</span>
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="/patient/notifications" class="dropdown-item text-center text-primary">View All</a>
+              </li>
             </ul>
+
           </li>
+
+
           <li class="nav-item d-flex align-items-center">
             <a th:href="@{/logout}" class="nav-link text-body font-weight-bold px-0">
               <i class="material-symbols-rounded">account_circle</i>

@@ -236,6 +236,7 @@ public class PatientController {
         PatientProfile patient = patientService.findByUser (user).orElseThrow ();        List<Review> reviews = reviewService.getDoctorReviews(doctorId);
         model.addAttribute("doctor", doctor);
         model.addAttribute("reviews", reviews);
+        model.addAttribute("currentUserPage", "Doctor Details");
         model.addAttribute("patient", patient);
         return "patient/doctor/doctor-details";
     }
@@ -279,6 +280,7 @@ public class PatientController {
 
         model.addAttribute("prescriptions", prescriptions);
         model.addAttribute("medicalRecords", records);
+        model.addAttribute("currentUserPage", "Medical History");
 
         return "patient/medical-history";
     }

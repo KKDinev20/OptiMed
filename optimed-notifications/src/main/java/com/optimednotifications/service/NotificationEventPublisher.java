@@ -13,6 +13,6 @@ public class NotificationEventPublisher {
     }
 
     public void publishNotificationEvent(String email, String message) {
-        publisher.publishEvent(new NotificationEvent (this, email, message));
+        publisher.publishEvent(new NotificationEvent(this, email, message));
     }
 }
