@@ -7,6 +7,7 @@ import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
@@ -144,6 +145,12 @@ public class AppointmentService {
         appointment.setAppointmentDate(newDate);
         appointment.setAppointmentTime(newTime);
         appointment.setStatus(AppointmentStatus.RESCHEDULED);
+
+        notificationClient.sendNotification(
+                appointment.getDoctor().getEmail(),
+                "Your appointment with " + appointment.getPatient().getFullName() + " has been rescheduled to " + newDate + " at " + newTime + "."
+        );
+
         appointmentRepository.save(appointment);
     }
 
@@ -159,17 +166,34 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
-    public Page<Appointment> getUpcomingAppointmentsForMonth(Pageable pageable) {
-        LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        LocalDate lastDayOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+    public List<Appointment> getUpcomingAppointmentsForMonth() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
 
-        return appointmentRepository.findByAppointmentDateBetween (firstDayOfMonth, lastDayOfMonth, pageable);
+
+        return appointmentRepository.findByAppointmentDateBetween (tomorrow, tomorrow);
     }
 
     public Page<Appointment> searchAppointments(UUID doctorId, AppointmentStatus status, String patientName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         return appointmentRepository.searchAppointments(doctorId, status, patientName, startDate, endDate, pageable);
     }
 
+    @Scheduled(cron = "0 0 8 * * ?")  // Runs every day at 8 AM
+    public void notifyDoctorsAboutUpcomingAppointments() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        List<Appointment> upcomingAppointments = appointmentRepository.findByAppointmentDateBetween(
+                tomorrow,
+                tomorrow
+        );
+
+        for (Appointment appointment : upcomingAppointments) {
+            notificationClient.sendNotification(
+                    appointment.getDoctor().getEmail(),
+                    "Reminder: You have an appointment with " + appointment.getPatient().getFullName() +
+                            " on " + appointment.getAppointmentDate()
+            );
+        }
+    }
 
 
     public List<Appointment> getRecentAppointments () {

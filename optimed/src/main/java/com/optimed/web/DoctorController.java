@@ -59,9 +59,9 @@ public class DoctorController {
         model.addAttribute("todaysAppointments", appointmentService.getTodaysAppointments());
         model.addAttribute("bookedAppointments", appointmentService.getBookedAppointments());
 
-        Page<Appointment> upcomingAppointments = appointmentService.getUpcomingAppointmentsForMonth(pageable);
+        List<Appointment> upcomingAppointments = appointmentService.getUpcomingAppointmentsForMonth();
         model.addAttribute ("currentUserPage", "Dashboard");
-        model.addAttribute("upcomingAppointments", upcomingAppointments.getContent());
+        model.addAttribute("upcomingAppointments", upcomingAppointments);
 
         return "doctor/dashboard";
     }

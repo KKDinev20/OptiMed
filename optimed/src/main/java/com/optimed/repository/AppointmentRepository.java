@@ -70,7 +70,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
 
     boolean existsByPatientIdAndDoctorIdAndAppointmentDateAndAppointmentTime(UUID patientId, UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
     boolean existsByDoctorIdAndAppointmentDateAndAppointmentTime(UUID doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
-    Page<Appointment> findByAppointmentDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
-
+    List<Appointment> findByAppointmentDateBetween(LocalDate startDate, LocalDate endDate);
     List<Appointment> findByAppointmentDate (LocalDate localDate);
 }
