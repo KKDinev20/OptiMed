@@ -2,170 +2,182 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{dashboard_fragments/head :: head}"></div>
 <title>
-    Dashboard
+    Patient Dashboard
 </title>
-<body class="g-sidenav-show  bg-gray-100">
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2  bg-white my-2" id="sidenav-main">
+<body class="g-sidenav-show bg-gray-100">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2"
+       id="sidenav-main">
     <div th:replace="~{patient/fragments/sidebar :: sidebar}"></div>
-
 </aside>
-<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-    <!-- Navbar -->
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
     <div th:replace="~{patient/fragments/navbar :: navbar}"></div>
-    <!-- End Navbar -->
+
     <div class="container-fluid py-2">
         <div class="row">
             <div class="ms-3">
-                <h3 class="mb-0 h4 font-weight-bolder">Dashboard</h3>
+                <h3 class="mb-0 h4 font-weight-bolder">Welcome, <span th:text="${patient.fullName}">Patient</span></h3>
                 <p class="mb-4">
-                    Monitor appointments, patient engagement, and practice metrics across all locations.
+                    Monitor your appointments, medical records, and health-related notifications here.
                 </p>
             </div>
-            <!-- Today's Money -->
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-header p-2 ps-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="text-sm mb-0 text-capitalize">Today's Money</p>
-                                <h4 class="mb-0">$53k</h4>
-                            </div>
-                            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                                <i class="material-symbols-rounded opacity-10">weekend</i>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="dark horizontal my-0">
-                    <div class="card-footer p-2 ps-3">
-                        <p class="mb-0 text-sm"><span class="text-success font-weight-bolder">+55% </span>than last week</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Today's Users -->
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-header p-2 ps-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="text-sm mb-0 text-capitalize">Today's Users</p>
-                                <h4 class="mb-0">2300</h4>
-                            </div>
-                            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                                <i class="material-symbols-rounded opacity-10">person</i>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="dark horizontal my-0">
-                    <div class="card-footer p-2 ps-3">
-                        <p class="mb-0 text-sm"><span class="text-success font-weight-bolder">+3% </span>than last month</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Ads View -->
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-header p-2 ps-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="text-sm mb-0 text-capitalize">Ads Views</p>
-                                <h4 class="mb-0">3,462</h4>
-                            </div>
-                            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                                <i class="material-symbols-rounded opacity-10">leaderboard</i>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="dark horizontal my-0">
-                    <div class="card-footer p-2 ps-3">
-                        <p class="mb-0 text-sm"><span class="text-danger font-weight-bolder">-2% </span>than yesterday</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Sales -->
-            <div class="col-xl-3 col-sm-6">
-                <div class="card">
-                    <div class="card-header p-2 ps-3">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="text-sm mb-0 text-capitalize">Sales</p>
-                                <h4 class="mb-0">$103,430</h4>
-                            </div>
-                            <div class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                                <i class="material-symbols-rounded opacity-10">weekend</i>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="dark horizontal my-0">
-                    <div class="card-footer p-2 ps-3">
-                        <p class="mb-0 text-sm"><span class="text-success font-weight-bolder">+5% </span>than yesterday</p>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-6 mt-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="mb-0 ">Website Views</h6>
-                        <p class="text-sm ">Last Campaign Performance</p>
-                        <div class="pe-2">
-                            <div class="chart">
-                                <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
-                            </div>
-                        </div>
-                        <hr class="dark horizontal">
-                        <div class="d-flex ">
-                            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-                            <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mt-4 mb-4">
-                <div class="card ">
-                    <div class="card-body">
-                        <h6 class="mb-0 "> Daily Sales </h6>
-                        <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
-                        <div class="pe-2">
-                            <div class="chart">
-                                <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
-                            </div>
-                        </div>
-                        <hr class="dark horizontal">
-                        <div class="d-flex ">
-                            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-                            <p class="mb-0 text-sm"> updated 4 min ago </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mt-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="mb-0 ">Completed Tasks</h6>
-                        <p class="text-sm ">Last Campaign Performance</p>
-                        <div class="pe-2">
-                            <div class="chart">
-                                <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
-                            </div>
-                        </div>
-                        <hr class="dark horizontal">
-                        <div class="d-flex ">
-                            <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
-                            <p class="mb-0 text-sm">just updated</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div class="row mb-4">
-            <div th:replace="~{admin/fragments/recent-users :: recent-users}"></div>
-            <div th:replace="~{admin/fragments/recent-appointments :: recent-appointments}"></div>
+            <!-- Next Appointment Card -->
+            <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header p-2 ps-3">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="text-sm mb-0 text-capitalize">Next Appointment</p>
+                                <h4 class="mb-0" th:text="${nextAppointment.appointmentDate}">Date & Time</h4>
+                            </div>
+                            <div class="icon icon-md icon-shape bg-gradient-primary shadow text-center border-radius-lg">
+                                <i class="material-symbols-rounded opacity-10">event_available</i>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-2 ps-3">
+                        <p class="mb-0 text-sm" th:text="${nextAppointment.doctor.fullName}">Doctor Name</p>
+                    </div>
+                    <div class="card-footer p-2 ps-3">
+                        <p class="mb-0 text-sm" th:text="${nextAppointment.doctor.specialization}">Specialization</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Appointments Card -->
+            <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-header p-2 ps-3">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="text-sm mb-0 text-capitalize">Recent Appointments</p>
+                                <h4 class="mb-0" th:text="${recentAppointments.size()}">Number</h4>
+                            </div>
+                            <div class="icon icon-md icon-shape bg-gradient-info shadow text-center border-radius-lg">
+                                <i class="material-symbols-rounded opacity-10">history</i>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-body p-2 ps-3">
+                        <ul class="list-unstyled">
+                            <li th:each="appointment : ${recentAppointments}" class="mb-2">
+                                <a class="dropdown-item border-radius-md" href="javascript:;">
+                                    <div class="d-flex py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="text-sm font-weight-normal mb-1">
+                                                <span class="font-weight-bold"
+                                                      th:text="${appointment.doctor.fullName}"></span>
+                                            </h6>
+                                            <p class="text-xs text-secondary mb-0">
+                                                <i class="fa fa-clock me-1"></i>
+                                                <span th:text="${appointment.doctor.specialization}">Date</span>
+                                            </p>
+                                            <p class="text-xs text-secondary mb-0">
+                                                <i class="fa fa-clock me-1"></i>
+                                                <span th:text="${appointment.appointmentDate}">Date</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-6">
+                <div class="card">
+                    <div class="card-header p-2 ps-3">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="text-sm mb-0 text-capitalize">Notifications</p>
+                                <h4 class="mb-0" th:text="${notificationsCount}">3</h4>
+                            </div>
+                            <div class="icon icon-md icon-shape bg-gradient-success shadow text-center border-radius-lg">
+                                <i class="material-symbols-rounded opacity-10">notifications</i>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-body p-2 ps-3">
+                        <ul class="list-unstyled">
+                            <li th:each="notification : ${notifications}" class="mb-2">
+                                <a class="dropdown-item border-radius-md" href="javascript:;">
+                                    <div class="d-flex py-1">
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="text-sm font-weight-normal mb-1">
+                                                <span class="font-weight-bold" th:text="${notification.message}"></span>
+                                            </h6>
+                                            <p class="text-xs text-secondary mb-0">
+                                                <i class="fa fa-clock me-1"></i>
+                                                <span th:text="${notification.email}">13 minutes ago</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <hr class="dark horizontal my-0">
+                    <div class="card-footer p-2 ps-3">
+                        <p class="mb-0 text-sm" th:text="${latestNotification}">You have a new notification</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="mb-0">Recent Prescriptions</h6>
+                    <p class="text-sm">Check your latest prescriptions.</p>
+                    <div class="pe-2">
+                        <ul class="list-group">
+                            <li th:each="prescription : ${prescriptions}" class="list-group-item">
+                                <span th:text="${prescription.medicationDetails}"></span> - <span
+                                    th:text="${prescription.dosageInstructions}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="mb-0">Medical History</h6>
+                    <p class="text-sm">Recent medical records.</p>
+                    <div class="pe-2">
+                        <ul class="list-group">
+                            <li th:each="record : ${medicalRecords}" class="list-group-item">
+                                <span th:text="${record.diagnosis}"></span> - <span
+                                    th:text="${record.recordDate}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mt-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="mb-0">Book a New Appointment</h6>
+                    <p class="text-sm">Need a new appointment? Click here to schedule one.</p>
+                    <a href="/patient/appointments/new" class="btn btn-primary">Book Appointment</a>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
-<!--   Core JS Files   -->
-<div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
+
+<div th:replace="~{dashboard_fragments/footer :: footer}"></div>
 </body>
 </html>

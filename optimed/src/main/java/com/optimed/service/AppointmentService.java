@@ -46,7 +46,7 @@ public class AppointmentService {
 
     public Map<String, Long> countAppointmentsByStatus() {
         return Map.of(
-                "Pending", countAppointmentsByStatus(AppointmentStatus.CANCELED),
+                "Canceled", countAppointmentsByStatus(AppointmentStatus.CANCELED),
                 "Booked", countAppointmentsByStatus(AppointmentStatus.BOOKED),
                 "Confirmed", countAppointmentsByStatus(AppointmentStatus.CONFIRMED)
         );
@@ -56,8 +56,6 @@ public class AppointmentService {
         return appointmentRepository.countByDoctorIdAndAppointmentDateAndAppointmentTimeAndStatus(
                 doctorId, date, time, AppointmentStatus.CONFIRMED) == 0;
     }
-
-
 
     public void createAppointment(AppointmentRequest request) {
         Optional<DoctorProfile> doctor = doctorRepository.findById(request.getDoctorId());
@@ -111,6 +109,13 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    public Appointment getNextAppointment(UUID patientId) {
+        return appointmentRepository.findTopByPatientIdOrderByAppointmentDateAsc(patientId);
+    }
+
+    public List<Appointment> getRecentAppointments(UUID patientId) {
+        return appointmentRepository.findTop5ByPatientIdOrderByAppointmentDateDesc(patientId);
+    }
 
 
     public long getCanceledAppointments() {
@@ -177,7 +182,7 @@ public class AppointmentService {
         return appointmentRepository.searchAppointments(doctorId, status, patientName, startDate, endDate, pageable);
     }
 
-    @Scheduled(cron = "0 0 8 * * ?")  // Runs every day at 8 AM
+    @Scheduled(cron = "0 0 8 * * ?")
     public void notifyDoctorsAboutUpcomingAppointments() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
 

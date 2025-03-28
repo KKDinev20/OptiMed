@@ -170,10 +170,5 @@ public class AdminController {
 
         return "redirect:/admin/dashboard";
     }
-
-    /*@GetMapping("/{recipientId}")
-    public List<Notification> getNotifications(@PathVariable UUID recipientId) {
-        return notificationClient.getNotificationsForRecipient(recipientId);
-    }*/
 }
 

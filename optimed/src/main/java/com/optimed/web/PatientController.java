@@ -119,11 +119,24 @@ public class PatientController {
         model.addAttribute("patientId", patient.getId());
 
         CollectionModel<NotificationRequest> notifications = notificationClient.getNotificationsByEmail(email);
+        List<Prescription> prescriptions = prescriptionService.getPrescriptionsForPatient(patient.getId());
+        List<MedicalRecord> records = medicalRecordService.getRecordsForPatient(patient.getId());
 
+        Appointment nextAppointment = appointmentService.getNextAppointment(patient.getId());
+        List<Appointment> recentAppointments = appointmentService.getRecentAppointments(patient.getId());
+
+        model.addAttribute("prescriptions", prescriptions);
+        model.addAttribute("medicalRecords", records);
         model.addAttribute("notifications", notifications.getContent());
+
+        model.addAttribute("nextAppointment", nextAppointment);
+        model.addAttribute("recentAppointments", recentAppointments);
+        model.addAttribute("patient", patient);
 
         return "patient/dashboard";
     }
+
+
 
     @GetMapping("/doctors/{specialization}")
     @ResponseBody
