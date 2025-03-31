@@ -8,6 +8,7 @@ import com.optimed.client.NotificationClient;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 
@@ -169,6 +172,29 @@ public class AdminController {
         userService.updateUser (user.getId (), userRequest);
 
         return "redirect:/admin/dashboard";
+    }
+
+    @GetMapping("/appointments/{appointmentId}/reschedule")
+    public String showRescheduleForm(@PathVariable("appointmentId") UUID appointmentId, Model model) {
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+        model.addAttribute ("currentUserPage", "Reschedule Appointment");
+        model.addAttribute("appointment", appointment);
+        return "admin/manage-appointments";
+    }
+
+
+    @PostMapping("/appointments/{appointmentId}/reschedule")
+    public String rescheduleAppointment(@PathVariable UUID appointmentId,
+                                        @RequestParam("newDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate newDate,
+                                        @RequestParam("newTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime newTime) {
+        appointmentService.rescheduleAppointment(appointmentId, newDate, newTime);
+        return "redirect:/admin/manage-appointments";
+    }
+
+    @PostMapping("/appointments/{appointmentId}/cancel")
+    public String cancelAppointment(@PathVariable UUID appointmentId) {
+        appointmentService.cancelAppointment(appointmentId);
+        return "redirect:/admin/manage-appointments";
     }
 }
 

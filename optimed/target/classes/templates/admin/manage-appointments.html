@@ -93,21 +93,31 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary" type="button"
+                                            <button class="btn btn-secondary dropdown-toggle" type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false">
-                                                Actions
                                                 <i class="material-symbols-rounded">more_vert</i>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
                                                 <li>
-                                                    <form th:action="@{/admin/delete-appointment/{appointmentId}(appointmentId=${appointment.id})}"
-                                                          method="post"
-                                                          style="display:inline;">
-                                                        <button type="submit" class="dropdown-item">
-                                                            <i class="fas fa-trash"></i> Delete
-                                                        </button>
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/approve">
+                                                        <button type="submit">Approve</button>
                                                     </form>
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reject">
+                                                        <button type="submit">Reject</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/cancel">
+                                                        <button type="submit">Cancel</button>
+                                                    </form>
+
+                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reschedule">
+                                                        <input type="date" name="newDate" required>
+                                                        <input type="time" name="newTime" required>
+                                                        <button type="submit">Reschedule</button>
+                                                    </form>
+
                                                 </li>
                                             </ul>
                                         </div>
@@ -116,7 +126,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- <div th:replace="~{admin/fragments/pagination :: pagination}"></div> -->
                     </div>
                 </div>
             </div>
