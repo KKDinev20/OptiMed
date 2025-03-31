@@ -1,4 +1,3 @@
-/*
 package com.optimed.service;
 
 import com.optimed.dto.*;
@@ -17,9 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
@@ -326,4 +323,4 @@ public class UserServiceTests {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Only image files are allowed");
     }
-}*/
+}

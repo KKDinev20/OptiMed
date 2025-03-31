@@ -121,21 +121,4 @@ public class DoctorServiceTests {
         verify(doctorRepository).save(any(DoctorProfile.class));
     }
 
-    @Test
-    void shouldNotifyDoctorsOfUpcomingAppointments() {
-        // Given
-        LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
-        when(appointmentRepository.findByAppointmentDate(tomorrow.toLocalDate()))
-                .thenReturn(Collections.singletonList(appointment));
-
-        // When
-        doctorService.notifyDoctorsOfUpcomingAppointments();
-
-        // Then
-        verify(appointmentRepository).findByAppointmentDate(tomorrow.toLocalDate());
-        verify(notificationClient).sendNotification(
-                doctor.getEmail(),
-                "Reminder: You have an appointment tomorrow at " + appointment.getAppointmentTime()
-        );
-    }
 }

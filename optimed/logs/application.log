@@ -17865,3 +17865,196 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 2025-03-31T17:52:05.073+03:00  INFO 2652 --- [OptiMed] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-03-31T17:52:05.075+03:00  INFO 2652 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-03-31T17:52:05.079+03:00  INFO 2652 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-03-31T17:52:08.845+03:00  INFO 736 --- [OptiMed] [main] com.optimed.OptimedApplication           : Starting OptimedApplication using Java 19.0.2 with PID 736 (D:\OptiMed\optimed\target\classes started by NITRO 5 in D:\OptiMed\optimed)
+2025-03-31T17:52:08.846+03:00 DEBUG 736 --- [OptiMed] [main] com.optimed.OptimedApplication           : Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-31T17:52:08.846+03:00  INFO 736 --- [OptiMed] [main] com.optimed.OptimedApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-03-31T17:52:09.513+03:00  INFO 736 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-31T17:52:09.569+03:00  INFO 736 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 48 ms. Found 8 JPA repository interfaces.
+2025-03-31T17:52:09.781+03:00  INFO 736 --- [OptiMed] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=fc2cdb1e-f241-3afd-b2bd-23014f6683ff
+2025-03-31T17:52:10.152+03:00  INFO 736 --- [OptiMed] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-03-31T17:52:10.162+03:00  INFO 736 --- [OptiMed] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-03-31T17:52:10.162+03:00  INFO 736 --- [OptiMed] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-03-31T17:52:10.209+03:00  INFO 736 --- [OptiMed] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-03-31T17:52:10.209+03:00  INFO 736 --- [OptiMed] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1327 ms
+2025-03-31T17:52:10.309+03:00  INFO 736 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-31T17:52:10.519+03:00  INFO 736 --- [OptiMed] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4cb00fa5
+2025-03-31T17:52:10.520+03:00  INFO 736 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-31T17:52:10.612+03:00  INFO 736 --- [OptiMed] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-31T17:52:10.657+03:00  INFO 736 --- [OptiMed] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-03-31T17:52:10.687+03:00  INFO 736 --- [OptiMed] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-31T17:52:10.893+03:00  INFO 736 --- [OptiMed] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-31T17:52:10.944+03:00  WARN 736 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-31T17:52:10.945+03:00  WARN 736 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-03-31T17:52:10.955+03:00  INFO 736 --- [OptiMed] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-03-31T17:52:11.864+03:00  INFO 736 --- [OptiMed] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-03-31T17:52:11.973+03:00  INFO 736 --- [OptiMed] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T17:52:12.186+03:00  INFO 736 --- [OptiMed] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-03-31T17:52:13.540+03:00  WARN 736 --- [OptiMed] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-31T17:52:13.829+03:00  INFO 736 --- [OptiMed] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-03-31T17:52:14.546+03:00  INFO 736 --- [OptiMed] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-03-31T17:52:14.653+03:00  INFO 736 --- [OptiMed] [main] com.optimed.OptimedApplication           : Started OptimedApplication in 6.354 seconds (process running for 7.024)
+2025-03-31T17:53:28.483+03:00  INFO 736 --- [OptiMed] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-31T17:53:28.483+03:00  INFO 736 --- [OptiMed] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-03-31T17:53:28.485+03:00  INFO 736 --- [OptiMed] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-03-31T18:39:21.592+03:00  INFO 736 --- [OptiMed] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-31T18:39:21.978+03:00  INFO 736 --- [OptiMed] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-03-31T18:39:22.003+03:00  INFO 736 --- [OptiMed] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T18:39:22.011+03:00  INFO 736 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-03-31T18:39:22.016+03:00  INFO 736 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-03-31T18:39:26.805+03:00  INFO 92 --- [OptiMed] [main] com.optimed.OptimedApplication           : Starting OptimedApplication using Java 19.0.2 with PID 92 (D:\OptiMed\optimed\target\classes started by NITRO 5 in D:\OptiMed\optimed)
+2025-03-31T18:39:26.808+03:00 DEBUG 92 --- [OptiMed] [main] com.optimed.OptimedApplication           : Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-31T18:39:26.809+03:00  INFO 92 --- [OptiMed] [main] com.optimed.OptimedApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-03-31T18:39:27.733+03:00  INFO 92 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-31T18:39:27.902+03:00  INFO 92 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 159 ms. Found 8 JPA repository interfaces.
+2025-03-31T18:39:28.176+03:00  INFO 92 --- [OptiMed] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=fc2cdb1e-f241-3afd-b2bd-23014f6683ff
+2025-03-31T18:39:28.644+03:00  INFO 92 --- [OptiMed] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-03-31T18:39:28.679+03:00  INFO 92 --- [OptiMed] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-03-31T18:39:28.680+03:00  INFO 92 --- [OptiMed] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-03-31T18:39:28.789+03:00  INFO 92 --- [OptiMed] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-03-31T18:39:28.790+03:00  INFO 92 --- [OptiMed] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1910 ms
+2025-03-31T18:39:28.927+03:00  INFO 92 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-31T18:39:29.124+03:00  INFO 92 --- [OptiMed] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6704df84
+2025-03-31T18:39:29.125+03:00  INFO 92 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-31T18:39:29.228+03:00  INFO 92 --- [OptiMed] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-31T18:39:29.273+03:00  INFO 92 --- [OptiMed] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-03-31T18:39:29.301+03:00  INFO 92 --- [OptiMed] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-31T18:39:29.616+03:00  INFO 92 --- [OptiMed] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-31T18:39:29.670+03:00  WARN 92 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-31T18:39:29.671+03:00  WARN 92 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-03-31T18:39:29.685+03:00  INFO 92 --- [OptiMed] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-03-31T18:39:30.591+03:00  INFO 92 --- [OptiMed] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-03-31T18:39:30.705+03:00  INFO 92 --- [OptiMed] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T18:39:30.936+03:00  INFO 92 --- [OptiMed] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-03-31T18:39:32.551+03:00  WARN 92 --- [OptiMed] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-31T18:39:32.859+03:00  INFO 92 --- [OptiMed] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-03-31T18:39:34.165+03:00  INFO 92 --- [OptiMed] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-03-31T18:39:34.289+03:00  INFO 92 --- [OptiMed] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-31T18:39:34.289+03:00  INFO 92 --- [OptiMed] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-03-31T18:39:34.291+03:00  INFO 92 --- [OptiMed] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-03-31T18:39:34.313+03:00  INFO 92 --- [OptiMed] [main] com.optimed.OptimedApplication           : Started OptimedApplication in 8.249 seconds (process running for 9.293)
+2025-03-31T18:56:54.510+03:00  INFO 92 --- [OptiMed] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-31T18:56:54.708+03:00  INFO 92 --- [OptiMed] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-03-31T18:56:54.715+03:00  INFO 92 --- [OptiMed] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T18:56:54.717+03:00  INFO 92 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-03-31T18:56:54.724+03:00  INFO 92 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-03-31T18:57:03.008+03:00  INFO 4120 --- [OptiMed] [main] com.optimed.OptimedApplication           : Starting OptimedApplication using Java 19.0.2 with PID 4120 (D:\OptiMed\optimed\target\classes started by NITRO 5 in D:\OptiMed\optimed)
+2025-03-31T18:57:03.010+03:00 DEBUG 4120 --- [OptiMed] [main] com.optimed.OptimedApplication           : Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-31T18:57:03.010+03:00  INFO 4120 --- [OptiMed] [main] com.optimed.OptimedApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-03-31T18:57:04.009+03:00  INFO 4120 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-31T18:57:04.067+03:00  INFO 4120 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 50 ms. Found 8 JPA repository interfaces.
+2025-03-31T18:57:04.393+03:00  INFO 4120 --- [OptiMed] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=fc2cdb1e-f241-3afd-b2bd-23014f6683ff
+2025-03-31T18:57:05.017+03:00  INFO 4120 --- [OptiMed] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-03-31T18:57:05.029+03:00  INFO 4120 --- [OptiMed] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-03-31T18:57:05.029+03:00  INFO 4120 --- [OptiMed] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-03-31T18:57:05.079+03:00  INFO 4120 --- [OptiMed] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-03-31T18:57:05.081+03:00  INFO 4120 --- [OptiMed] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2021 ms
+2025-03-31T18:57:05.185+03:00  INFO 4120 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-31T18:57:05.430+03:00  INFO 4120 --- [OptiMed] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1d6f77d7
+2025-03-31T18:57:05.432+03:00  INFO 4120 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-31T18:57:05.534+03:00  INFO 4120 --- [OptiMed] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-31T18:57:05.577+03:00  INFO 4120 --- [OptiMed] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-03-31T18:57:05.602+03:00  INFO 4120 --- [OptiMed] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-31T18:57:05.810+03:00  INFO 4120 --- [OptiMed] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-31T18:57:05.863+03:00  WARN 4120 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-31T18:57:05.864+03:00  WARN 4120 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-03-31T18:57:05.873+03:00  INFO 4120 --- [OptiMed] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-03-31T18:57:07.169+03:00  INFO 4120 --- [OptiMed] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-03-31T18:57:07.287+03:00  INFO 4120 --- [OptiMed] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T18:57:07.513+03:00  INFO 4120 --- [OptiMed] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-03-31T18:57:09.367+03:00  WARN 4120 --- [OptiMed] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-31T18:57:09.654+03:00  INFO 4120 --- [OptiMed] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-03-31T18:57:10.410+03:00  INFO 4120 --- [OptiMed] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-03-31T18:57:10.514+03:00  INFO 4120 --- [OptiMed] [main] com.optimed.OptimedApplication           : Started OptimedApplication in 8.892 seconds (process running for 9.955)
+2025-03-31T18:57:19.899+03:00  INFO 4120 --- [OptiMed] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-31T18:57:19.899+03:00  INFO 4120 --- [OptiMed] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-03-31T18:57:19.902+03:00  INFO 4120 --- [OptiMed] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-03-31T18:58:10.084+03:00  INFO 4120 --- [OptiMed] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-31T18:58:10.283+03:00  INFO 4120 --- [OptiMed] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-03-31T18:58:10.290+03:00  INFO 4120 --- [OptiMed] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T18:58:10.292+03:00  INFO 4120 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-03-31T18:58:10.297+03:00  INFO 4120 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-03-31T19:00:13.728+03:00  INFO 17720 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : Starting OptimedApplicationTests using Java 19.0.2 with PID 17720 (started by NITRO 5 in D:\OptiMed\optimed)
+2025-03-31T19:00:13.730+03:00 DEBUG 17720 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-31T19:00:13.731+03:00  INFO 17720 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2025-03-31T19:00:14.655+03:00  INFO 17720 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-31T19:00:14.752+03:00  INFO 17720 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 8 JPA repository interfaces.
+2025-03-31T19:00:15.120+03:00  INFO 17720 --- [OptiMed] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=c680aa8c-4d8e-3ec3-9d84-288709eccb17
+2025-03-31T19:00:15.407+03:00  INFO 17720 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-31T19:00:15.739+03:00  INFO 17720 --- [OptiMed] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@55071497
+2025-03-31T19:00:15.741+03:00  INFO 17720 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-31T19:00:15.860+03:00  INFO 17720 --- [OptiMed] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-31T19:00:15.916+03:00  INFO 17720 --- [OptiMed] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-03-31T19:00:15.955+03:00  INFO 17720 --- [OptiMed] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-31T19:00:16.231+03:00  INFO 17720 --- [OptiMed] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-31T19:00:16.292+03:00  WARN 17720 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-31T19:00:16.293+03:00  WARN 17720 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-03-31T19:00:16.304+03:00  INFO 17720 --- [OptiMed] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-03-31T19:00:17.317+03:00  INFO 17720 --- [OptiMed] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-03-31T19:00:17.445+03:00  INFO 17720 --- [OptiMed] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T19:00:17.712+03:00  INFO 17720 --- [OptiMed] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-03-31T19:00:19.119+03:00  WARN 17720 --- [OptiMed] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-31T19:00:19.449+03:00  INFO 17720 --- [OptiMed] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-03-31T19:00:20.433+03:00  INFO 17720 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : Started OptimedApplicationTests in 7.128 seconds (process running for 8.421)
+2025-03-31T19:00:20.972+03:00  INFO 17720 --- [OptiMed] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T19:00:20.975+03:00  INFO 17720 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-03-31T19:00:20.985+03:00  INFO 17720 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-03-31T19:00:46.727+03:00  INFO 15164 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : Starting OptimedApplicationTests using Java 19.0.2 with PID 15164 (started by NITRO 5 in D:\OptiMed\optimed)
+2025-03-31T19:00:46.729+03:00 DEBUG 15164 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : Running with Spring Boot v3.4.2, Spring v6.2.2
+2025-03-31T19:00:46.730+03:00  INFO 15164 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2025-03-31T19:00:47.602+03:00  INFO 15164 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-31T19:00:47.702+03:00  INFO 15164 --- [OptiMed] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 88 ms. Found 8 JPA repository interfaces.
+2025-03-31T19:00:48.067+03:00  INFO 15164 --- [OptiMed] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=c680aa8c-4d8e-3ec3-9d84-288709eccb17
+2025-03-31T19:00:48.372+03:00  INFO 15164 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-31T19:00:48.689+03:00  INFO 15164 --- [OptiMed] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5341e71a
+2025-03-31T19:00:48.691+03:00  INFO 15164 --- [OptiMed] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-31T19:00:48.823+03:00  INFO 15164 --- [OptiMed] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-31T19:00:48.875+03:00  INFO 15164 --- [OptiMed] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.5.Final
+2025-03-31T19:00:48.921+03:00  INFO 15164 --- [OptiMed] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-31T19:00:49.207+03:00  INFO 15164 --- [OptiMed] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-31T19:00:49.276+03:00  WARN 15164 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-31T19:00:49.277+03:00  WARN 15164 --- [OptiMed] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-03-31T19:00:49.291+03:00  INFO 15164 --- [OptiMed] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-03-31T19:00:50.357+03:00  INFO 15164 --- [OptiMed] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-03-31T19:00:50.472+03:00  INFO 15164 --- [OptiMed] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T19:00:50.764+03:00  INFO 15164 --- [OptiMed] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-03-31T19:00:52.198+03:00  WARN 15164 --- [OptiMed] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-31T19:00:52.529+03:00  INFO 15164 --- [OptiMed] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-03-31T19:00:53.547+03:00  INFO 15164 --- [OptiMed] [main] com.optimed.OptimedApplicationTests      : Started OptimedApplicationTests in 7.27 seconds (process running for 8.563)
+2025-03-31T19:00:54.070+03:00  INFO 15164 --- [OptiMed] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-31T19:00:54.073+03:00  INFO 15164 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-03-31T19:00:54.084+03:00  INFO 15164 --- [OptiMed] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

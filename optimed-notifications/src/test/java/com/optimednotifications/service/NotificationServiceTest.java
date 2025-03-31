@@ -156,4 +156,23 @@ public class NotificationServiceTest {
         verify(recipientRepository, times(1)).findByEmail(eq(email));
         verify(recipientRepository, times(1)).save(any(Recipient.class));
     }
+
+    @Test
+    void getNotificationsForRecipient_NewRecipient_ShouldCreateAndReturnEmptyList() {
+        // Given
+        String email = "new@example.com";
+        when(recipientRepository.findByEmail(eq(email))).thenReturn(Optional.empty());
+        when(notificationRepository.findByRecipientId(eq(newRecipientId)))
+                .thenReturn(Collections.emptyList());
+
+        // When
+        List<Notification> notifications = notificationService.getNotificationsForRecipient(email);
+
+        // Then
+        assertTrue(notifications.isEmpty());
+        verify(recipientRepository, times(1)).findByEmail(eq(email));
+        verify(recipientRepository, times(1)).save(any(Recipient.class));
+        verify(notificationRepository, times(1)).findByRecipientId(eq(newRecipientId));
+    }
+
 }

@@ -100,24 +100,15 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
                                                 <li>
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/approve">
-                                                        <button type="submit">Approve</button>
-                                                    </form>
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reject">
-                                                        <button type="submit">Reject</button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/cancel">
+                                                    <form method="post" th:action="@{'/admin/appointments/' + ${appointment.id} + '/cancel'}">
                                                         <button type="submit">Cancel</button>
                                                     </form>
 
-                                                    <form method="post" action="/doctor/appointments/{appointmentId}/reschedule">
+                                                    <form method="post" th:action="@{'/admin/appointments/' + ${appointment.id} + '/reschedule'}">
                                                         <input type="date" name="newDate" required>
                                                         <input type="time" name="newTime" required>
                                                         <button type="submit">Reschedule</button>
                                                     </form>
-
                                                 </li>
                                             </ul>
                                         </div>
