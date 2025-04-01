@@ -6,12 +6,11 @@ import com.optimed.service.MedicalRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Controller
+@RestController
 @RequestMapping("/doctor")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ROLE_DOCTOR')")

@@ -18,43 +18,47 @@ public class AuthenticationController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String login () {
-        return "auth/login";
+    public ModelAndView login(@RequestParam(required = false) String error) {
+        ModelAndView modelAndView = new ModelAndView("auth/login");
+        if (error != null) {
+            modelAndView.addObject("error", "Invalid username or password");
+        }
+        return modelAndView;
     }
 
     @GetMapping("/logout")
-    public String logoutPage (HttpSession session) {
-        session.invalidate ();
+    public String logoutPage(HttpSession session) {
+        session.invalidate();
         return "redirect:/";
     }
 
     @GetMapping("/register")
-    public ModelAndView register () {
-        ModelAndView modelAndView = new ModelAndView ("auth/register");
-        modelAndView.addObject ("registerRequest", new RegisterRequest ());
+    public ModelAndView register() {
+        ModelAndView modelAndView = new ModelAndView("auth/register");
+        modelAndView.addObject("registerRequest", new RegisterRequest());
         return modelAndView;
     }
 
     @PostMapping("/register")
-    public ModelAndView registerUser (@Valid @ModelAttribute("registerRequest") RegisterRequest registerRequest,
-                                      BindingResult bindingResult,
-                                      HttpSession session) {
-        ModelAndView modelAndView = new ModelAndView ();
+    public ModelAndView registerUser(@Valid @ModelAttribute("registerRequest") RegisterRequest registerRequest,
+                                     BindingResult bindingResult,
+                                     HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
 
-        if (bindingResult.hasErrors ()) {
-            modelAndView.setViewName ("auth/register");
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("auth/register");
             return modelAndView;
         }
 
-        if (userService.findByUsername (registerRequest.getUsername ()).isPresent ()) {
-            modelAndView.setViewName ("auth/register");
-            modelAndView.addObject ("errorMessage", "Username already exists");
+        if (userService.findByUsername(registerRequest.getUsername()).isPresent()) {
+            modelAndView.setViewName("auth/register");
+            modelAndView.addObject("errorMessage", "Username already exists. Please choose another username.");
             return modelAndView;
         }
 
-        userService.registerUser (registerRequest);
-        session.setAttribute ("currentUser", registerRequest.getUsername ());
-        modelAndView.setViewName ("redirect:/login");
+        userService.registerUser(registerRequest);
+        session.setAttribute("currentUser", registerRequest.getUsername());
+        modelAndView.setViewName("redirect:/auth/login");
         return modelAndView;
     }
 }
