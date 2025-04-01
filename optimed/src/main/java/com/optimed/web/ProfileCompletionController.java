@@ -66,6 +66,4 @@ public class ProfileCompletionController {
         userService.completePatientProfile(userDetails.getUsername(), patientRequest);
         return "redirect:/patient/dashboard";
     }
-
-
 }
