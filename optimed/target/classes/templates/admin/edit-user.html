@@ -25,24 +25,34 @@
                             <form th:action="@{/admin/edit-user/{userId}(userId=${user.id})}" th:object="${user}" method="post">
                                 <div class="p-3">
                                     <div class="input-group input-group-outline mb-3">
-                                        <input type="text" id="username" th:field="*{username}" class="form-control">
-                                        <small class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</small>
+                                        <input type="text" id="username" th:field="*{username}"
+                                               class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''">
                                     </div>
-                                    <div class="input-group input-group-outline mb-3">
-                                        <input type="email" id="email" th:field="*{email}" class="form-control">
-                                        <small class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Username error</small>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                                        Username error
                                     </div>
+
                                     <div class="input-group input-group-outline mb-3">
-                                        <select id="role" th:field="*{role}" class="form-control" >
+                                        <input type="email" id="email" th:field="*{email}"
+                                               class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+                                    </div>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                        Email error
+                                    </div>
+
+                                    <div class="input-group input-group-outline mb-3">
+                                        <select id="role" th:field="*{role}" class="form-control"
+                                                th:classappend="${#fields.hasErrors('role')} ? 'is-invalid' : ''">
                                             <option value="">Select Role</option>
                                             <option th:each="role : ${T(com.optimed.entity.enums.Role).values()}"
-                                                    th:value="${role}"
-                                                    th:text="${role}"
-                                                    th:selected="${role == user.role}">
+                                                    th:value="${role}" th:text="${role}" th:selected="${role == user.role}">
                                             </option>
-                                            <small class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Username error</small>
                                         </select>
                                     </div>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}" th:errors="*{role}">
+                                        Role error
+                                    </div>
+
                                     <div class="form-group text-center">
                                         <button type="submit" class="btn btn-primary">Update User</button>
                                     </div>

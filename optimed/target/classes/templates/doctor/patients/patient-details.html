@@ -126,7 +126,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form action="/doctor/prescription" method="post" class="needs-validation" novalidate>
+                        <form action="/doctor/prescription" method="post" class="needs-validation">
                             <input type="hidden" name="patientId" th:value="${patient.id}" />
                             <input type="hidden" name="doctorId" th:value="${doctor.id}" />
 

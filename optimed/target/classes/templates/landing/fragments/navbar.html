@@ -1,6 +1,8 @@
 <div class="col-lg-12" th:fragment="navbar">
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" th:href="@{/}"> <img src="/landing/img/logo.png" alt="logo"> </a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" th:href="@{/}">
+            <img src="/landing/img/logo.png" alt="Healthcare Clinic Logo" height="40">
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -14,24 +16,25 @@
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.html">about</a>
+                    <a class="nav-link" href="#aboutus" onclick="scrollToSection('aboutus')">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="doctor.html">Doctors</a>
+                    <a class="nav-link" href="#features" onclick="scrollToSection('features')">Our Services</a>
                 </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown"
-                       role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Pages
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="services.html">services</a>
-                        <a class="dropdown-item" href="dep.html">departments</a>
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="#departments" onclick="scrollToSection('departments')">Departments</a>
                 </li>
             </ul>
         </div>
-        <a class="btn_2 d-none d-lg-block" href="/auth/login">GET STARTED</a>
+        <a class="btn_2 d-none d-lg-block" th:href="@{/auth/login}">Patient Portal</a>
     </nav>
 </div>
+
+<script th:inline="javascript">
+    function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+</script>

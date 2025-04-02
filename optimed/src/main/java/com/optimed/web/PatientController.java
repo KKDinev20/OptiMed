@@ -7,17 +7,20 @@ import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.entity.enums.Specialization;
 import com.optimed.mapper.PatientMapper;
 import com.optimed.service.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -208,9 +211,15 @@ public class PatientController {
 
     @PostMapping("/settings")
     public String completePatientProfile(
-            @ModelAttribute EditPatientRequest editPatientRequest,
+            @Valid @ModelAttribute EditPatientRequest editPatientRequest,
+            BindingResult bindingResult,
             @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
             @AuthenticationPrincipal UserDetails userDetails) {
+
+
+        if (bindingResult.hasErrors()) {
+            return "patient/complete-profile";
+        }
 
         if (avatarFile != null && !avatarFile.isEmpty()) {
             String imageUrl = userService.storeImage(avatarFile);
@@ -263,22 +272,15 @@ public class PatientController {
     }
 
     @GetMapping("/appointments/{appointmentId}")
-    public String getAppointmentDetails(@PathVariable UUID appointmentId, Model model) {
-        model.addAttribute("currentUserPage", "Appointment details");
+    public String getAppointmentDetails(@PathVariable UUID appointmentId, Model model, Principal principal) {
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
 
-        try {
-            Appointment appointment = appointmentService.getAppointmentById(appointmentId);
-            model.addAttribute("appointment", appointment);
-            return "doctor/appointments/appointment-details";
-        } catch (NoSuchElementException e) {
-            model.addAttribute("error", "Appointment not found.");
-            model.addAttribute("errorCode", 404);
-            return "error/error";
-        } catch (Exception e) {
-            model.addAttribute("error", "An unexpected error occurred.");
-            model.addAttribute("errorCode", 500);
-            return "error/error";
+        if (!appointment.getPatient().getUser().getUsername().equals(principal.getName())) {
+            throw new AccessDeniedException ("You are not authorized to view this appointment.");
         }
+
+        model.addAttribute("appointment", appointment);
+        return "doctor/appointments/appointment-details";
     }
 
     @GetMapping("/medical-history")

@@ -121,8 +121,8 @@ public class AdminController {
             BindingResult bindingResult,
             Model model) {
 
-        if (bindingResult.hasErrors ()) {
-            model.addAttribute ("errors", bindingResult.getAllErrors ());
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
             return "admin/edit-user";
         }
 
@@ -143,6 +143,11 @@ public class AdminController {
         String username = userDetails.getUsername ();
         User user = userService.findByUsername (username)
                 .orElseThrow (() -> new RuntimeException ("User not found"));
+
+        if (user == null) {
+            model.addAttribute("errorMessage", "User not found.");
+            return "redirect:/admin/users";
+        }
 
         UserRequest userRequest = new UserRequest ();
         userRequest.setUsername (user.getUsername ());
