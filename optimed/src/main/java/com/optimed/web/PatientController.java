@@ -223,7 +223,7 @@ public class PatientController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found");
         }
 
-        return doctorProfile.getAvailableTimeSlots(); // Assuming this returns a List<TimeSlot>
+        return doctorProfile.getAvailableTimeSlots();
     }
 
 
@@ -290,7 +290,7 @@ public class PatientController {
         try {
             Appointment appointment = appointmentService.getAppointmentById(appointmentId);
             model.addAttribute("appointment", appointment);
-            return "doctor/appointments/appointment-details";
+            return "patient/appointments/appointment-details";
         } catch (NoSuchElementException e) {
             model.addAttribute("error", "Appointment not found.");
             model.addAttribute("errorCode", 404);
