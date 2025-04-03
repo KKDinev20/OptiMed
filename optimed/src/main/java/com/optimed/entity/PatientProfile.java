@@ -43,7 +43,6 @@ public class PatientProfile {
     @Column(nullable = true)
     private String avatarUrl;
 
-    @ManyToMany(mappedBy = "patients")
-    private List<DoctorProfile> doctors;
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment> appointments;
 }
-

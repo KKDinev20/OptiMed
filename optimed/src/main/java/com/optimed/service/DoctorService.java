@@ -9,10 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +51,10 @@ public class DoctorService {
         }
 
         doctorRepository.save(doctor);
+    }
+
+    public DoctorProfile getById (UUID doctorId) {
+        return doctorRepository.getById(doctorId);
     }
 
 

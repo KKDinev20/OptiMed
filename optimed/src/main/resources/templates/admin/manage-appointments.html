@@ -28,7 +28,7 @@
                                 <button type="submit" class="btn btn-primary">Search</button>
                             </div>
                         </form>
-                        <div class="table-responsive p-0">
+                        <div class="table p-0">
                             <table class="table align-items-center mb-0">
                                 <thead>
                                 <tr>
@@ -91,26 +91,61 @@
                                         <span class="text-secondary text-xs font-weight-bold"
                                               th:text="${appointment.status}"></span>
                                     </td>
+                                    <!-- Improved Admin Actions Dropdown -->
                                     <td class="align-middle text-center">
                                         <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            <button class="btn btn-secondary" type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false">
-                                                <i class="material-symbols-rounded">more_vert</i>
+                                                Actions
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="actionsDropdown">
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a th:href="@{/admin/appointments/{id}(id=${appointment.id})}" class="dropdown-item">
+                                                        View Details
+                                                    </a>
+                                                </li>
                                                 <li>
                                                     <form method="post" th:action="@{'/admin/appointments/' + ${appointment.id} + '/cancel'}">
-                                                        <button type="submit">Cancel</button>
-                                                    </form>
-
-                                                    <form method="post" th:action="@{'/admin/appointments/' + ${appointment.id} + '/reschedule'}">
-                                                        <input type="date" name="newDate" required>
-                                                        <input type="time" name="newTime" required>
-                                                        <button type="submit">Reschedule</button>
+                                                        <button type="submit" class="dropdown-item text-danger">Cancel Appointment</button>
                                                     </form>
                                                 </li>
+                                                <li>
+                                                    <a href="#" class="dropdown-item text-warning"
+                                                       data-bs-toggle="modal"
+                                                       th:data-bs-target="'#rescheduleModal' + ${appointment.id}">
+                                                        Reschedule
+                                                    </a>
+                                                </li>
                                             </ul>
+                                        </div>
+
+                                        <!-- Reschedule Modal -->
+                                        <div class="modal fade" th:id="'rescheduleModal' + ${appointment.id}" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="rescheduleModalLabel">Reschedule Appointment</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form method="post" th:action="@{'/admin/appointments/' + ${appointment.id} + '/reschedule'}">
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <label for="newDate" class="form-label">New Date</label>
+                                                                <input type="date" class="form-control" id="newDate" name="newDate" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="newTime" class="form-label">New Time</label>
+                                                                <input type="time" class="form-control" id="newTime" name="newTime" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>

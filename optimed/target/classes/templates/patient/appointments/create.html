@@ -23,56 +23,83 @@
                 <div th:if="${success}" class="alert alert-success">
                     <span th:text="${success}"></span>
                 </div>
+
                 <div class="card my-4">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Create Appointment</h6>
+                    <div class="card-header bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                        <h6 class="text-white text-capitalize ps-3">Available Time Slots</h6>
+                    </div>
+                    <div id="availableTimeSlots">
+                        <div th:if="${availableTimeSlots != null and not #lists.isEmpty(availableTimeSlots)}">
+                            <ul class="list-group">
+                                <li class="list-group-item" th:each="slot : ${availableTimeSlots}">
+                                    <span th:text="${slot.startTime} + ' - ' + ${slot.endTime}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div th:if="${availableTimeSlots == null or #lists.isEmpty(availableTimeSlots)}" class="text-muted">
+                            No available time slots for the selected doctor.
                         </div>
                     </div>
-                    <div class="card-body px-0 pb-2">
-                        <div class="table-responsive p-0">
-                            <form th:action="@{/patient/appointments}" th:object="${appointmentRequest}" method="post">
-                                <div class="p-3">
-                                    <div class="input-group input-group-outline mb-3">
-                                        <select id="specialization" th:field="*{specialization}" class="form-control" onchange="loadDoctors()">
-                                            <option value="">Select Specialization</option>
-                                            <option th:each="spec : ${specializations}" th:value="${spec}" th:text="${spec}"></option>
-                                        </select>
-                                    </div>
+                </div>
 
-                                    <div class="input-group input-group-outline mb-3">
-                                        <select id="doctor" th:field="*{doctorId}" class="form-control">
-                                            <option value="">Select Doctor</option>
-                                        </select>
-                                    </div>
 
-                                    <div class="input-group input-group-outline mb-3">
-                                        <input type="date" id="appointmentDate" th:field="*{appointmentDate}" class="form-control">
-                                    </div>
+            </div>
+                    <div class="card my-4">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                                <h6 class="text-white text-capitalize ps-3">Create Appointment</h6>
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <form th:action="@{/patient/appointments}" th:object="${appointmentRequest}"
+                                      method="post">
+                                    <div class="p-3">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select id="specialization" th:field="*{specialization}"
+                                                    class="form-control" onchange="loadDoctors()">
+                                                <option value="">Select Specialization</option>
+                                                <option th:each="spec : ${specializations}" th:value="${spec}"
+                                                        th:text="${spec}"></option>
+                                            </select>
+                                        </div>
 
-                                    <div class="input-group input-group-outline mb-3">
-                                        <input type="time" id="appointmentTime" th:field="*{appointmentTime}" class="form-control">
-                                    </div>
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select id="doctor" th:field="*{doctorId}" class="form-control">
+                                                <option value="">Select Doctor</option>
+                                            </select>
+                                        </div>
 
-                                    <div class="input-group input-group-outline mb-3">
-                                        <textarea id="reason" th:field="*{reason}" class="form-control" placeholder="Reason for appointment"></textarea>
-                                    </div>
+                                        <div class="input-group input-group-outline mb-3">
+                                            <input type="date" id="appointmentDate" th:field="*{appointmentDate}"
+                                                   class="form-control">
+                                        </div>
 
-                                    <div class="form-group text-center">
-                                        <button type="submit" class="btn btn-primary">Create Appointment</button>
-                                    </div>
+                                        <div class="input-group input-group-outline mb-3">
+                                            <input type="time" id="appointmentTime" th:field="*{appointmentTime}"
+                                                   class="form-control">
+                                        </div>
 
-                                    <div th:if="${success != null}" class="alert alert-success">
-                                        <p th:text="${success}"></p>
+                                        <div class="input-group input-group-outline mb-3">
+                                            <textarea id="reason" th:field="*{reason}" class="form-control"
+                                                      placeholder="Reason for appointment"></textarea>
+                                        </div>
+
+                                        <div class="form-group text-center">
+                                            <button type="submit" class="btn btn-primary">Create Appointment</button>
+                                        </div>
+
+                                        <div th:if="${success != null}" class="alert alert-success">
+                                            <p th:text="${success}"></p>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     <div th:replace="~{dashboard_fragments/footer :: footer}"></div>
 </main>
 <div th:replace="~{dashboard_fragments/scripts :: scripts}"></div>
@@ -116,7 +143,48 @@
                     alert("Failed to load doctors. Please try again.");
                 });
         }
-    }zz
+    }
+    
+    function loadAvailableTimeSlots() {
+        let doctorId = document.getElementById("doctor").value;
+        let timeSlotsContainer = document.getElementById("availableTimeSlots");
+
+        timeSlotsContainer.innerHTML = "<p class='text-muted'>Loading available time slots...</p>";
+
+        if (doctorId) {
+            fetch(`/patient/doctor/${doctorId}/available-time-slots`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!Array.isArray(data)) {
+                        throw new Error("Invalid response format");
+                    }
+
+                    if (data.length === 0) {
+                        timeSlotsContainer.innerHTML = "<p class='text-muted'>No available time slots for this doctor.</p>";
+                    } else {
+                        let slotsHtml = "<ul class='list-group'>";
+                        data.forEach(slot => {
+                            slotsHtml += `<li class='list-group-item'>${slot.startTime} - ${slot.endTime}</li>`;
+                        });
+                        slotsHtml += "</ul>";
+                        timeSlotsContainer.innerHTML = slotsHtml;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching time slots:", error);
+                    timeSlotsContainer.innerHTML = "<p class='text-danger'>Failed to load time slots.</p>";
+                });
+        } else {
+            timeSlotsContainer.innerHTML = "<p class='text-muted'>Select a doctor to see available time slots.</p>";
+        }
+    }
+
+    document.getElementById("doctor").addEventListener("change", loadAvailableTimeSlots);
 </script>
 
 </body>

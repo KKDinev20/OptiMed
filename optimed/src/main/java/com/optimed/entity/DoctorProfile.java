@@ -1,5 +1,8 @@
 package com.optimed.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.optimed.entity.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +30,7 @@ public class DoctorProfile {
 
     @Enumerated(EnumType.STRING)
     @Column
+    @JsonIgnore
     private Specialization specialization;
 
     @Column
@@ -57,14 +61,8 @@ public class DoctorProfile {
     private String contactInfo;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Appointment> appointments;
-
-    @ManyToMany
-    @JoinTable(
-            name = "patient_doctor_appointments",
-            joinColumns = @JoinColumn(name = "doctor_id"),
-            inverseJoinColumns = @JoinColumn(name = "patient_id"))
-    private List<PatientProfile> patients;
 
     @Column(nullable = true)
     private String avatarUrl;

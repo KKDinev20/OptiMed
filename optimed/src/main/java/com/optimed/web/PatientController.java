@@ -5,22 +5,20 @@ import com.optimed.dto.*;
 import com.optimed.entity.*;
 import com.optimed.entity.enums.AppointmentStatus;
 import com.optimed.entity.enums.Specialization;
+import com.optimed.mapper.DoctorMapper;
 import com.optimed.mapper.PatientMapper;
 import com.optimed.service.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,18 +39,33 @@ public class PatientController {
     private final DoctorProfileService doctorProfileService;
     private final UserService userService;
     private final MedicalRecordService medicalRecordService;
+    private final DoctorService doctorService;
     private final ReviewService reviewService;
     private final NotificationClient notificationClient;
     private final PrescriptionService prescriptionService;
     private final PatientService patientService;
 
     @GetMapping("/appointments/new")
-    public String showAppointmentForm (Model model) {
-        model.addAttribute ("appointmentRequest", new AppointmentRequest ());
-        model.addAttribute ("currentUserPage", "Add Appointment");
-        model.addAttribute ("specializations", Specialization.values ());
+    public String showAppointmentForm(@RequestParam(required = false) UUID doctorId, Model model) {
+        model.addAttribute("appointmentRequest", new AppointmentRequest());
+        model.addAttribute("currentUserPage", "Add Appointment");
+        model.addAttribute("specializations", Specialization.values());
+        model.addAttribute("availableTimeSlots", new ArrayList<>());
+
+        if (doctorId != null) {
+            DoctorProfile doctorProfile = doctorService.getById(doctorId);
+            if (doctorProfile != null) {
+                model.addAttribute("availableDays", doctorProfile.getAvailableDays());
+                model.addAttribute("availableTimeSlots", doctorProfile.getAvailableTimeSlots());
+            } else {
+                model.addAttribute("error", "Doctor not found.");
+            }
+        }
+
         return "patient/appointments/create";
     }
+
+
 
     @PostMapping("/appointments")
     public String addAppointment(@ModelAttribute AppointmentRequest request,
@@ -110,8 +123,6 @@ public class PatientController {
         }
     }
 
-
-
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName()).orElseThrow();
@@ -132,23 +143,18 @@ public class PatientController {
         model.addAttribute("medicalRecords", records);
         model.addAttribute("notifications", notifications.getContent());
 
-        model.addAttribute("nextAppointment", nextAppointment);
+        model.addAttribute("nextAppointment", nextAppointment != null ? nextAppointment : new Appointment());
         model.addAttribute("recentAppointments", recentAppointments);
         model.addAttribute("patient", patient);
 
         return "patient/dashboard";
     }
 
-
-
     @GetMapping("/doctors/{specialization}")
     @ResponseBody
-    public List<DoctorProfile> getDoctorsBySpecialization (
-            @PathVariable Specialization specialization) {
-
-        return doctorProfileService.findDoctorsBySpecialization (specialization);
+    public List<DoctorProfile> getDoctorsBySpecialization(@PathVariable Specialization specialization) {
+        return doctorProfileService.findDoctorsBySpecialization(specialization);
     }
-
 
     @GetMapping("/appointments")
     public String getPatientAppointments (
@@ -209,17 +215,23 @@ public class PatientController {
         return "patient/settings";
     }
 
+    @GetMapping("/doctor/{doctorId}/available-time-slots")
+    @ResponseBody
+    public List<TimeSlot> getDoctorAvailableTimeSlots(@PathVariable UUID doctorId) {
+        DoctorProfile doctorProfile = doctorService.getById(doctorId);
+        if (doctorProfile == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found");
+        }
+
+        return doctorProfile.getAvailableTimeSlots(); // Assuming this returns a List<TimeSlot>
+    }
+
+
     @PostMapping("/settings")
     public String completePatientProfile(
-            @Valid @ModelAttribute EditPatientRequest editPatientRequest,
-            BindingResult bindingResult,
+            @ModelAttribute EditPatientRequest editPatientRequest,
             @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
             @AuthenticationPrincipal UserDetails userDetails) {
-
-
-        if (bindingResult.hasErrors()) {
-            return "patient/complete-profile";
-        }
 
         if (avatarFile != null && !avatarFile.isEmpty()) {
             String imageUrl = userService.storeImage(avatarFile);
@@ -272,15 +284,22 @@ public class PatientController {
     }
 
     @GetMapping("/appointments/{appointmentId}")
-    public String getAppointmentDetails(@PathVariable UUID appointmentId, Model model, Principal principal) {
-        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+    public String getAppointmentDetails(@PathVariable UUID appointmentId, Model model) {
+        model.addAttribute("currentUserPage", "Appointment details");
 
-        if (!appointment.getPatient().getUser().getUsername().equals(principal.getName())) {
-            throw new AccessDeniedException ("You are not authorized to view this appointment.");
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+            model.addAttribute("appointment", appointment);
+            return "doctor/appointments/appointment-details";
+        } catch (NoSuchElementException e) {
+            model.addAttribute("error", "Appointment not found.");
+            model.addAttribute("errorCode", 404);
+            return "error/error";
+        } catch (Exception e) {
+            model.addAttribute("error", "An unexpected error occurred.");
+            model.addAttribute("errorCode", 500);
+            return "error/error";
         }
-
-        model.addAttribute("appointment", appointment);
-        return "doctor/appointments/appointment-details";
     }
 
     @GetMapping("/medical-history")

@@ -31,7 +31,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <p class="text-sm mb-0 text-capitalize">Next Appointment</p>
-                                <h4 class="mb-0" th:text="${nextAppointment.appointmentDate}">Date & Time</h4>
+                                <h4 class="mb-0" th:text="${nextAppointment.appointmentDate != null ? nextAppointment.appointmentDate : 'No upcoming appointment'}">Date & Time</h4>
                             </div>
                             <div class="icon icon-md icon-shape bg-gradient-primary shadow text-center border-radius-lg">
                                 <i class="material-symbols-rounded opacity-10">event_available</i>
@@ -40,13 +40,16 @@
                     </div>
                     <hr class="dark horizontal my-0">
                     <div class="card-footer p-2 ps-3">
-                        <p class="mb-0 text-sm" th:text="${nextAppointment.doctor.fullName}">Doctor Name</p>
+                        <p class="mb-0 text-sm" th:if="${nextAppointment.doctor != null}" th:text="${nextAppointment.doctor.fullName}">Doctor Name</p>
+                        <p class="mb-0 text-sm" th:unless="${nextAppointment.doctor != null}">No assigned doctor</p>
                     </div>
                     <div class="card-footer p-2 ps-3">
-                        <p class="mb-0 text-sm" th:text="${nextAppointment.doctor.specialization}">Specialization</p>
+                        <p class="mb-0 text-sm" th:if="${nextAppointment.doctor != null}" th:text="${nextAppointment.doctor.specialization}">Specialization</p>
+                        <p class="mb-0 text-sm" th:unless="${nextAppointment.doctor != null}">No specialization</p>
                     </div>
                 </div>
             </div>
+
 
             <!-- Recent Appointments Card -->
             <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">

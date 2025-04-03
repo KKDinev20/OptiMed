@@ -1,5 +1,6 @@
 package com.optimed.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.optimed.entity.enums.AppointmentStatus;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ public class Appointment {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name = "doctor_id", nullable = false)
     private DoctorProfile doctor;
 

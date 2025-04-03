@@ -26,7 +26,7 @@
                                 <div class="p-3">
                                     <div class="input-group input-group-outline mb-3">
                                         <input type="text" id="username" th:field="*{username}"
-                                               class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''">
+                                               class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''" required>
                                     </div>
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
                                         Username error
@@ -34,7 +34,7 @@
 
                                     <div class="input-group input-group-outline mb-3">
                                         <input type="email" id="email" th:field="*{email}"
-                                               class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+                                               class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" required>
                                     </div>
                                     <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
                                         Email error
@@ -43,9 +43,9 @@
                                     <div class="input-group input-group-outline mb-3">
                                         <select id="role" th:field="*{role}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('role')} ? 'is-invalid' : ''">
-                                            <option value="">Select Role</option>
+                                            <p>Change Role</p>
                                             <option th:each="role : ${T(com.optimed.entity.enums.Role).values()}"
-                                                    th:value="${role}" th:text="${role}" th:selected="${role == user.role}">
+                                                    th:value="${role}" th:text="${role}" th:selected="${role == user.role}" required>
                                             </option>
                                         </select>
                                     </div>

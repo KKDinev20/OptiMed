@@ -83,31 +83,23 @@
                                 <div class="col-12 mb-3">
                                     <label class="ms-0">Available Time Slots</label>
                                     <div id="timeSlotsContainer">
-                                        <div class="row time-slot" th:each="slot, iterStat : ${doctor.availableTimeSlots}">
+                                        <div class="row time-slot mb-2" th:each="slot, iterStat : ${availableTimeSlots}">
                                             <div class="col-md-5">
                                                 <label>Start Time</label>
                                                 <input type="time"
                                                        th:name="'availableTimeSlots[' + ${iterStat.index} + '].startTime'"
-                                                       th:field="*{availableTimeSlots[__${iterStat.index}__].startTime}"
-                                                       class="form-control" required
-                                                       th:value="${#temporals.format(slot.startTime, 'HH:mm')}"/>
-
+                                                       th:value="${#temporals.format(slot.startTime, 'HH:mm')}"
+                                                       class="form-control" required/>
                                             </div>
                                             <div class="col-md-5">
                                                 <label>End Time</label>
                                                 <input type="time"
-                                                       th:name="'availableTimeSlots[' + ${iterStat.index} + '].startTime'"
-                                                       th:field="*{availableTimeSlots[__${iterStat.index}__].startTime}"
-                                                       class="form-control" required
-                                                       th:value="${#temporals.format(slot.startTime, 'HH:mm')}"/>
-
-                                            </div>
-                                            <div class="col-md-2 d-flex align-items-end">
-                                                <button type="button" class="btn btn-danger" onclick="removeTimeSlot(this)">-</button>
+                                                       th:name="'availableTimeSlots[' + ${iterStat.index} + '].endTime'"
+                                                       th:value="${#temporals.format(slot.endTime, 'HH:mm')}"
+                                                       class="form-control" required/>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-outline-primary mt-2" onclick="addTimeSlot()">Add Time Slot</button>
                                 </div>
                             </div>
 
